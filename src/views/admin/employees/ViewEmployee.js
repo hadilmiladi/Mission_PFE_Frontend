@@ -36,11 +36,11 @@ function ViewEmployee() {
   const [passports, setPassports] = useState([]);
   const [match, setMatch] = useState(true);
   // ** fetching data
-  /* useEffect(() => {
+  useEffect(() => {
     if (id) {
-        fetchEmployee();
-      }
-  }, [id]); */
+      fetchEmployee();
+    }
+  }, [id]);
   // fetch function
   const fetchEmployee = async () => {
     try {
@@ -53,7 +53,6 @@ function ViewEmployee() {
         setEmployee({ ...res?.data?.item });
         setPassports([...res?.data?.passports]);
       }
-      console.log("ress: ", res.data);
     } catch (error) {
       // not found
       if (error?.response?.status === 404) {
@@ -62,22 +61,6 @@ function ViewEmployee() {
         });
         setMatch(false);
       }
-      /* // not token
-      else if (error?.response?.status === 401) {
-        cleanUserLocalStorage();
-        navigate("/login");
-        toast.error(sessionExpired, {
-          duration: 5000,
-        });
-      }
-      // token invalide
-      else if (error?.response?.status === 403) {
-        cleanUserLocalStorage();
-        navigate("/login");
-        toast.error(sessionExpired, {
-          duration: 5000,
-        });
-      } */
       //  server error
       else if (error?.response?.status === 500) {
         toast.error(serverErrorMessage, {
@@ -128,7 +111,7 @@ function ViewEmployee() {
         ) : (
           <h6 className="text-capitalize">
             We're sorry but it seems to be that this employee doesn't exist or
-            was deleted
+            was deleted.
           </h6>
         )}
       </div>

@@ -19,7 +19,6 @@ import { useLayout } from "@hooks/useLayout";
 // ** components
 const Error = lazy(() => import("../views/Error"));
 const Login = lazy(() => import("../views/Auth/Login"));
-/* const Scans = lazy(() => import("../views/scans/index")); */
 const Router = () => {
   // ** Hooks
   const { layout } = useLayout();
@@ -27,14 +26,7 @@ const Router = () => {
   const allRoutes = getRoutes(layout);
 
   const getHomeRoute = () => {
-    /* const user = getAuthedUserRole();
-    console.log("user: ", user);
-    if (user) {
-      return "/admin/dashboard";
-    } else {
-      return "/login";
-    } */
-    return "/";
+    return "/login";
   };
 
   const routes = useRoutes([

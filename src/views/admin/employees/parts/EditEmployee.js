@@ -1,15 +1,8 @@
-// ** styles
-import 'cleave.js/dist/addons/cleave-phone.us';
-
 // ** React Imports
-import {
-  useEffect,
-  useState,
-} from 'react';
-
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 // ** toast
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import toast from "react-hot-toast";
 // ** Reactstrap Imports
 import {
   Button,
@@ -22,20 +15,20 @@ import {
   ModalHeader,
   Row,
   Spinner,
-} from 'reactstrap';
-
-// ** api config
-import axios from '../../../../service/axios';
+} from "reactstrap";
 // ** utilies functions
-import { cleanUserLocalStorage } from '../../../../utility/Auth';
+import { cleanUserLocalStorage } from "../../../../utility/Auth";
 // ** utily messages
 import {
   badRequestMessage,
   requiredField,
   serverErrorMessage,
   sessionExpired,
-} from '../../../../utility/messages';
-
+} from "../../../../utility/messages";
+// ** api config
+import axios from "../../../../service/axios";
+// ** styles
+import "cleave.js/dist/addons/cleave-phone.us";
 // ** --------------------------------------------------------------------------
 function EditEmployeeModal(props) {
   // ** props
@@ -52,14 +45,14 @@ function EditEmployeeModal(props) {
     lastname: "",
     registration: "",
     email: "",
-    activated:false
+    activated: false,
   };
-   // ** states
-   const [spinning, setSpinning] = useState(false);
-   const [errors, setErrors] = useState({});
-   const [employee, setEmployee] = useState({ ...initialCompany });
-   // ** set data
-   useEffect(() => {
+  // ** states
+  const [spinning, setSpinning] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [employee, setEmployee] = useState({ ...initialCompany });
+  // ** set data
+  useEffect(() => {
     if (visibility) {
       setEmployee((prev) => ({
         ...prev,
@@ -67,7 +60,7 @@ function EditEmployeeModal(props) {
         lastname: row?.lastname,
         registration: row?.registration,
         email: row?.email,
-        activated:row?.activated
+        activated: row?.activated,
       }));
     }
   }, [visibility]);
@@ -76,10 +69,10 @@ function EditEmployeeModal(props) {
     const { name, value } = event.target;
     setEmployee((prev) => ({ ...prev, [name]: value }));
   };
-  const onChangeCheck=(event)=>{
-    const {checked}=event.target;
-    setEmployee(prev=>({...prev,activated:checked}))
-  }
+  const onChangeCheck = (event) => {
+    const { checked } = event.target;
+    setEmployee((prev) => ({ ...prev, activated: checked }));
+  };
   // ** on submit
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -184,21 +177,21 @@ function EditEmployeeModal(props) {
       /* className="modal-lg" */
       onClosed={resetForm}
     >
-    <ModalHeader
-    toggle={closeModal}
-    className="text-center text-capitalize"
-  ></ModalHeader>
-  <ModalBody className="px-sm-2 pb-2">
-    <div className="text-center mb-1">
-      <h4 className="mb-1">Update {row?.firstname}</h4>
-      <p>Please fill all the required informations.</p>
-    </div>
-    <Row tag="form" className="gy-1 pt-75" onSubmit={onSubmit}>
-      <Col md={12} xs={12}>
-        <Label className="form-label text-capitalize" for="firstname">
-          First Name{": "} <span className="text-danger">*</span>
-        </Label>
-        <Input
+      <ModalHeader
+        toggle={closeModal}
+        className="text-center text-capitalize"
+      ></ModalHeader>
+      <ModalBody className="px-sm-2 pb-2">
+        <div className="text-center mb-1">
+          <h4 className="mb-1">Update {row?.firstname}</h4>
+          <p>Please fill all the required informations.</p>
+        </div>
+        <Row tag="form" className="gy-1 pt-75" onSubmit={onSubmit}>
+          <Col md={12} xs={12}>
+            <Label className="form-label text-capitalize" for="firstname">
+              First Name{": "} <span className="text-danger">*</span>
+            </Label>
+            <Input
               id="fisrtname"
               type="text"
               name="fisrtname"
@@ -215,26 +208,26 @@ function EditEmployeeModal(props) {
             )}
           </Col>
           <Col md={12} xs={12}>
-          <Label className="form-label text-capitalize" for="lastname">
-            Last Name{": "} <span className="text-danger">*</span>
-          </Label>
-          <Input
-                id="lastname"
-                type="text"
-                name="lastname"
-                value={employee.lastname}
-                onChange={onChange}
-                invalid={true && errors.lastname}
-                placeholder="Example: ESB ..."
-                required
-              />
-              {errors.employee && (
-                <FormFeedback className="d-block text-capitalize fw-bold">
-                  {errors.lastname}
-                </FormFeedback>
-              )}
-            </Col>
-            <Col md={12} xs={12}>
+            <Label className="form-label text-capitalize" for="lastname">
+              Last Name{": "} <span className="text-danger">*</span>
+            </Label>
+            <Input
+              id="lastname"
+              type="text"
+              name="lastname"
+              value={employee.lastname}
+              onChange={onChange}
+              invalid={true && errors.lastname}
+              placeholder="Example: ESB ..."
+              required
+            />
+            {errors.employee && (
+              <FormFeedback className="d-block text-capitalize fw-bold">
+                {errors.lastname}
+              </FormFeedback>
+            )}
+          </Col>
+          <Col md={12} xs={12}>
             <Label className="form-label" for="email">
               E-mail{": "} <span className="text-danger">*</span>
             </Label>
@@ -255,30 +248,27 @@ function EditEmployeeModal(props) {
             )}
           </Col>
           <Col md={12} xs={12}>
-          <Label
-            className="form-label text-capitalize"
-            for="registration"
-          >
-            employee registration{": "}
-            <span className="text-danger">*</span>
-          </Label>
-          <Input
-            id="registration"
-            type="number"
-            name="registration"
-            value={employee.registration}
-            onChange={onChange}
-            invalid={true && errors.registration}
-            placeholder="Example: John..."
-            required
-          />
-          {errors.registration && (
-            <FormFeedback className="d-block text-capitalize fw-bold">
-              {errors.registration}
-            </FormFeedback>
-          )}
-        </Col>
-        <Col md={12} xs={12}>
+            <Label className="form-label text-capitalize" for="registration">
+              employee registration{": "}
+              <span className="text-danger">*</span>
+            </Label>
+            <Input
+              id="registration"
+              type="number"
+              name="registration"
+              value={employee.registration}
+              onChange={onChange}
+              invalid={true && errors.registration}
+              placeholder="Example: John..."
+              required
+            />
+            {errors.registration && (
+              <FormFeedback className="d-block text-capitalize fw-bold">
+                {errors.registration}
+              </FormFeedback>
+            )}
+          </Col>
+          <Col md={12} xs={12}>
             <div className="d-flex align-items-center pt-0 flex-row-reverse">
               <div className="form-switch w-100 form-check-success ps-0">
                 <Label
@@ -299,24 +289,24 @@ function EditEmployeeModal(props) {
             </div>
           </Col>
           <Col xs={12} className="text-center mt-0 pt-50 mb-1 mt-2">
-          <Button type="submit" className="me-1" color="primary">
-            {!spinning ? (
-              "Update"
-            ) : (
-              <>
-                <Spinner size="sm" />
-                <span className="ms-50">Loading...</span>
-              </>
-            )}
-          </Button>
-          <Button type="reset" color="danger" outline onClick={closeModal}>
-            Cancel
-          </Button>
-        </Col>
-      </Row>
-    </ModalBody>
-  </Modal>
-);
+            <Button type="submit" className="me-1" color="primary">
+              {!spinning ? (
+                "Update"
+              ) : (
+                <>
+                  <Spinner size="sm" />
+                  <span className="ms-50">Loading...</span>
+                </>
+              )}
+            </Button>
+            <Button type="reset" color="danger" outline onClick={closeModal}>
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+      </ModalBody>
+    </Modal>
+  );
 }
 
 export default EditEmployeeModal;

@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from "react";
-
+import { Link, useNavigate } from "react-router-dom";
 // ** Toast
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
 // ** Reactstrap Imports
 import { Badge, Card, Col, Form, Input, Row, Table } from "reactstrap";
-
 // ** Custom Components
 import Breadcrumbs from "@components/breadcrumbs";
-
-// ** api config
-import axios from "../../../service/axios";
-// ** parts
+// ** sections
+import AddCompanySection from "../companies/section/AddCompanySection";
+import CompaniesCountDashboard from "../companies/section/CompaniesCountDashboard";
 // ** modals
+import CreateEmployeeModal from "./modals/CreateEmployeeModal";
 // ** utils
 import { cleanUserLocalStorage } from "../../../utility/Auth";
 import { serverErrorMessage, sessionExpired } from "../../../utility/messages";
 import { paginationOptions } from "../../../utility/Static";
-import AddCompanySection from "../companies/section/AddCompanySection";
-import CompaniesCountDashboard from "../companies/section/CompaniesCountDashboard";
-import CreateEmployeeModal from "./modals/CreateEmployeeModal";
-
+// ** api config
+import axios from "../../../service/axios";
 // ** -----------------------------------------------------------------------
 function Employees() {
   // ** router
@@ -47,16 +43,7 @@ function Employees() {
 
   // ** fetching data
   useEffect(() => {
-    // there's a token
-    /* if (accesToken) {
-      fetchEmplyees();
-    }
-    // no token
-    else {
-      cleanUserLocalStorage(); 
-      navigate("/login");
-    } */
-    /* fetchEmplyees() */
+    fetchEmplyees();
   }, []);
   // ** fetch function
   const fetchEmplyees = async () => {
@@ -71,13 +58,11 @@ function Employees() {
           authorization: `Bearer ${accesToken}`,
         }, */
       });
-      console.log("res: ", res.data);
       if (res?.status === 200) {
         setEmployees([...res?.data?.items]);
         setSize(res?.data?.size);
       }
     } catch (error) {
-      console.log("err: ", error);
       // not token
       if (error?.response?.status === 401) {
         cleanUserLocalStorage();

@@ -1,12 +1,8 @@
 // ** React Imports
-import { useState } from 'react';
-
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 // ** toast
-import toast from 'react-hot-toast';
-import {
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import toast from "react-hot-toast";
 // ** Reactstrap Imports
 import {
   Button,
@@ -19,27 +15,25 @@ import {
   ModalHeader,
   Row,
   Spinner,
-} from 'reactstrap';
-
-// ** api config
-import axios from '../../../../../service/axios';
+} from "reactstrap";
 // ** utilies functions
-import { cleanUserLocalStorage } from '../../../../../utility/Auth';
+import { cleanUserLocalStorage } from "../../../../../utility/Auth";
 // ** utily messages
 import {
   badRequestMessage,
   requiredField,
   serverErrorMessage,
   sessionExpired,
-} from '../../../../../utility/messages';
-
+} from "../../../../../utility/messages";
+// ** api config
+import axios from "../../../../../service/axios";
 // ** --------------------------------------------------------------------------
 function CreatePassportModal(props) {
   // ** props
   const { visibility, closeModal, refresh } = props;
   // ** router
   const navigate = useNavigate();
-  const{id}=useParams()
+  const { id } = useParams();
   // ** access token
   const accesToken = localStorage.getItem(
     `${process.env.REACT_APP_ACCESS_TOKEN}`
@@ -55,14 +49,6 @@ function CreatePassportModal(props) {
   const [spinning, setSpinning] = useState(false);
   const [errors, setErrors] = useState({});
   const [passport, setPassport] = useState({ ...initialPassport });
-  //const [ranks, setRank]=useState([])
-  /*  
-  // fetch ranks
-  useEffect(()=>{
-    if(visibility){
-      fetchRank()
-    }
-  },[visibility])*/
   // ** on change
   const onChange = (event) => {
     const { name, value } = event.target;
@@ -85,14 +71,18 @@ function CreatePassportModal(props) {
       });
       if (res?.status === 201) {
         toast.success(
-          `${passport.registration.toLowerCase()+" "+passport.nationality.toLowerCase()} was created successfully`
+          `${
+            passport.registration.toLowerCase() +
+            " " +
+            passport.nationality.toLowerCase()
+          } was created successfully`
         );
         refresh();
         closeModal();
       }
     } catch (error) {
-      console.log("err: ",error)
-        // failed to create for some reason
+      console.log("err: ", error);
+      // failed to create for some reason
       if (error?.response?.status === 400) {
         toast.error(badRequestMessage, {
           duration: 5000,
@@ -106,8 +96,8 @@ function CreatePassportModal(props) {
           duration: 5000,
         });
       }
-       // token invalide
-       else if (error?.response?.status === 403) {
+      // token invalide
+      else if (error?.response?.status === 403) {
         cleanUserLocalStorage();
         navigate("/login");
         toast.error(sessionExpired, {
@@ -120,7 +110,8 @@ function CreatePassportModal(props) {
         error?.response?.data?.code === "registration"
       ) {
         setErrors((prev) => ({
-          registration: "registration already used by an other in another passport",
+          registration:
+            "registration already used by an other in another passport",
         }));
       }
       // this email already exist
@@ -132,8 +123,8 @@ function CreatePassportModal(props) {
           createdAt: "create date must be before the expires date",
         }));
       }
-       // server error
-       else if (error?.response?.status === 500) {
+      // server error
+      else if (error?.response?.status === 500) {
         toast.error(serverErrorMessage, {
           duration: 5000,
         });
@@ -141,8 +132,8 @@ function CreatePassportModal(props) {
     }
     setSpinning(false);
   };
-   // ** validate form
-   const validate = (values) => {
+  // ** validate form
+  const validate = (values) => {
     const errors = {};
     if (values.registration === "") {
       errors.registration = requiredField;
@@ -158,8 +149,8 @@ function CreatePassportModal(props) {
     }
     return errors;
   };
-   // ** reset form on close
-   const resetForm = () => {
+  // ** reset form on close
+  const resetForm = () => {
     setSpinning(false);
     setErrors({});
     setPassport({ ...initialPassport });
@@ -167,131 +158,123 @@ function CreatePassportModal(props) {
   // ** ==>
   return (
     <Modal
-    isOpen={visibility}
-    toggle={closeModal}
-    modalClassName="modal-danger"
-    /* className="bg-dark" */
-    onClosed={resetForm}
-    /* backdrop={false} */
-    backdropClassName="bg-dark"
-  >
-  <ModalHeader
-  toggle={closeModal}
-  className="text-center text-capitalize"
-></ModalHeader>
-<ModalBody className="px-sm-2 pb-2">
-      <div className="text-center mb-1">
-        <h4 className="mb-1">Add a new passport</h4>
-        <p>Please fill all the required informations.</p>
-      </div>
-      <Row tag="form" className="gy-1 pt-75" onSubmit={onSubmit}>
-        <Col md={12} xs={12}>
-          <Label className="form-label text-capitalize" for="registration">
-            register{": "} <span className="text-danger">*</span>
-          </Label>
-          <Input
-          id="registration"
-          type="text"
-          name="registration"
-          value={passport.registration}
-          onChange={onChange}
-          invalid={true && errors.registration}
-          placeholder="Example: ESB ..."
-          required
-        />
-        {errors.registration && (
-            <FormFeedback className="d-block text-capitalize fw-bold">
-              {errors.registration}
-            </FormFeedback>
-          )}
+      isOpen={visibility}
+      toggle={closeModal}
+      modalClassName="modal-danger"
+      onClosed={resetForm}
+      backdropClassName="bg-dark"
+    >
+      <ModalHeader
+        toggle={closeModal}
+        className="text-center text-capitalize"
+      ></ModalHeader>
+      <ModalBody className="px-sm-2 pb-2">
+        <div className="text-center mb-1">
+          <h4 className="mb-1">Add a new passport</h4>
+          <p>Please fill all the required informations.</p>
+        </div>
+        <Row tag="form" className="gy-1 pt-75" onSubmit={onSubmit}>
+          <Col md={12} xs={12}>
+            <Label className="form-label text-capitalize" for="registration">
+              register{": "} <span className="text-danger">*</span>
+            </Label>
+            <Input
+              id="registration"
+              type="text"
+              name="registration"
+              value={passport.registration}
+              onChange={onChange}
+              invalid={true && errors.registration}
+              placeholder="Example: ESB ..."
+              required
+            />
+            {errors.registration && (
+              <FormFeedback className="d-block text-capitalize fw-bold">
+                {errors.registration}
+              </FormFeedback>
+            )}
           </Col>
           <Col md={12} xs={12}>
             <Label className="form-label text-capitalize" for="nationality">
               nationality{": "} <span className="text-danger">*</span>
             </Label>
             <Input
-            id="nationality"
-            type="text"
-            name="nationality"
-            value={passport.nationality}
-            onChange={onChange}
-            invalid={true && errors.nationality}
-            placeholder="Example: ESB ..."
-            required
-          />
-          {errors.nationality && (
-            <FormFeedback className="d-block text-capitalize fw-bold">
-              {errors.nationality}
-            </FormFeedback>
-          )}
-        </Col>
-        <Col md={12} xs={12}>
-          <Label
-            className="form-label text-capitalize"
-            for="createdAt"
-          >
-            createdAt{": "}
-            <span className="text-danger">*</span>
-          </Label>
-          <Input
-            id="createdAt"
-            type="date"
-            name="createdAt"
-            value={passport.createdAt}
-            onChange={onChange}
-            invalid={true && errors.createdAt}
-           // placeholder="Example: 56599..."
-            required
-          />
-          {errors.createdAt && (
-            <FormFeedback className="d-block text-capitalize fw-bold">
-              {errors.createdAt}
-            </FormFeedback>
-          )}
-        </Col>
-        <Col md={12} xs={12}>
-          <Label
-            className="form-label text-capitalize"
-            for="expiresAt"
-          >
-          expiresAt{": "}
-            <span className="text-danger">*</span>
-          </Label>
-          <Input
-            id="expiresAt"
-            type="date"
-            name="expiresAt"
-            value={passport.expiresAt}
-            onChange={onChange}
-            invalid={true && errors.expiresAt}
-           // placeholder="Example: 56599..."
-            required
-          />
-          {errors.expiresAt && (
-            <FormFeedback className="d-block text-capitalize fw-bold">
-              {errors.expiresAt}
-            </FormFeedback>
-          )}
-        </Col>
-        <Col xs={12} className="text-center mt-0 pt-50 mb-1 mt-2">
-          <Button type="submit" className="me-1" color="primary">
-            {!spinning ? (
-              "Create"
-            ) : (
-              <>
-                <Spinner size="sm" />
-                <span className="ms-50">Loading...</span>
-              </>
+              id="nationality"
+              type="text"
+              name="nationality"
+              value={passport.nationality}
+              onChange={onChange}
+              invalid={true && errors.nationality}
+              placeholder="Example: ESB ..."
+              required
+            />
+            {errors.nationality && (
+              <FormFeedback className="d-block text-capitalize fw-bold">
+                {errors.nationality}
+              </FormFeedback>
             )}
-          </Button>
-          <Button type="reset" color="danger" outline onClick={closeModal}>
-            Cancel
-          </Button>
-        </Col>
-      </Row>
-    </ModalBody>
-  </Modal>
-  )
+          </Col>
+          <Col md={12} xs={12}>
+            <Label className="form-label text-capitalize" for="createdAt">
+              createdAt{": "}
+              <span className="text-danger">*</span>
+            </Label>
+            <Input
+              id="createdAt"
+              type="date"
+              name="createdAt"
+              value={passport.createdAt}
+              onChange={onChange}
+              invalid={true && errors.createdAt}
+              // placeholder="Example: 56599..."
+              required
+            />
+            {errors.createdAt && (
+              <FormFeedback className="d-block text-capitalize fw-bold">
+                {errors.createdAt}
+              </FormFeedback>
+            )}
+          </Col>
+          <Col md={12} xs={12}>
+            <Label className="form-label text-capitalize" for="expiresAt">
+              expiresAt{": "}
+              <span className="text-danger">*</span>
+            </Label>
+            <Input
+              id="expiresAt"
+              type="date"
+              name="expiresAt"
+              value={passport.expiresAt}
+              onChange={onChange}
+              invalid={true && errors.expiresAt}
+              // placeholder="Example: 56599..."
+              required
+            />
+            {errors.expiresAt && (
+              <FormFeedback className="d-block text-capitalize fw-bold">
+                {errors.expiresAt}
+              </FormFeedback>
+            )}
+          </Col>
+          <Col xs={12} className="text-center mt-0 pt-50 mb-1 mt-2">
+            <Button type="submit" className="me-1" color="primary">
+              {!spinning ? (
+                "Create"
+              ) : (
+                <>
+                  <Spinner size="sm" />
+                  <span className="ms-50">Loading...</span>
+                </>
+              )}
+            </Button>
+            <Button type="reset" color="danger" outline onClick={closeModal}>
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+      </ModalBody>
+    </Modal>
+  );
 }
 
-export default CreatePassportModal
+export default CreatePassportModal;

@@ -26,9 +26,9 @@ import {
 // ** api config
 import axios from "../../../../../service/axios";
 // ** --------------------------------------------------------------------------
-const CreateMissionModal = (props) => {
+function EditMissionModal(props) {
   // ** props
-  const { visibility, closeModal, refresh } = props;
+  const { visibility, closeModal, refresh, row, closeMainModal } = props;
   // ** param
   const { id } = useParams();
   // ** router
@@ -52,6 +52,7 @@ const CreateMissionModal = (props) => {
   // ** set client
   useEffect(() => {
     if (visibility) {
+      setMission((prev) => ({ ...prev, ...row }));
       fetchClients();
     }
   }, [visibility]);
@@ -76,11 +77,12 @@ const CreateMissionModal = (props) => {
     event.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("mission/create", mission);
-      if (res?.status === 201) {
-        toast.success(`New mission was created successfully`);
+      const res = await axios.put(`mission/update/${row.id}`, mission);
+      if (res?.status === 202) {
+        toast.success(`Mission was updated successfully`);
         refresh();
         closeModal();
+        closeMainModal();
       }
     } catch (error) {
       console.log("err: ", error);
@@ -308,7 +310,7 @@ const CreateMissionModal = (props) => {
             <Row>
               <Col className="d-flex mt-1" md={{ size: 9, offset: 3 }}>
                 <Button className="me-1" color="primary" type="submit">
-                  Create
+                  Yes, Update
                 </Button>
                 <Button
                   outline
@@ -325,5 +327,6 @@ const CreateMissionModal = (props) => {
       </Modal>
     </>
   );
-};
-export default CreateMissionModal;
+}
+
+export default EditMissionModal;

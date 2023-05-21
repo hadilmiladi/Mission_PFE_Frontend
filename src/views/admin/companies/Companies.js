@@ -59,8 +59,6 @@ function Companies() {
   const [size, setSize] = useState(0);
   const [loading, setLoading] = useState(false);
   const [queries, setQueries] = useState({ ...initialQueries });
-  /*
-   */
   // ** Modals
   const [showCreateCompanyModal, setShowCreateCompanyModal] = useState(false);
   const [showEditCompanyModal, setShowEditCompanyModal] = useState(false);
@@ -68,9 +66,9 @@ function Companies() {
   // ** selected company
   const [selectedCompany, setSelectedCompany] = useState({});
   // ** fetching data
-  /* useEffect(() => {
+  useEffect(() => {
     fetchCompanies();
-  }, []); */
+  }, []);
   // ** fetch function
   const fetchCompanies = async () => {
     setLoading(true);
@@ -84,13 +82,11 @@ function Companies() {
           authorization: `Bearer ${accesToken}`,
         }, */
       });
-      console.log("res: ", res.data);
       if (res?.status === 200) {
         setCompanies([...res?.data?.items]);
         setSize(res?.data?.size);
       }
     } catch (error) {
-      console.log("err: ", error);
       // not token
       if (error?.response?.status === 401) {
         cleanUserLocalStorage();

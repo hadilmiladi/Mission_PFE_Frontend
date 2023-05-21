@@ -1,73 +1,55 @@
-import React, {
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from "react";
 
-import {
-  Check,
-  X,
-} from 'react-feather';
+import { Check, X } from "react-feather";
 // ** Toast
-import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 // ** Reactstrap Imports
-import {
-  Badge,
-  Card,
-  Table,
-} from 'reactstrap';
+import { Badge, Card, Table } from "reactstrap";
 
 // ** api config
-import axios from '../../../../../service/axios';
+import axios from "../../../../../service/axios";
 // ** parts
 // ** modals
 // ** utils
-import { cleanUserLocalStorage } from '../../../../../utility/Auth';
+import { cleanUserLocalStorage } from "../../../../../utility/Auth";
 import {
   serverErrorMessage,
   sessionExpired,
-} from '../../../../../utility/messages';
-import AddCompanySection from '../../../companies/section/AddCompanySection';
-import CreateEmployeeModal from './CreateNewPassport';
+} from "../../../../../utility/messages";
+import AddCompanySection from "../../../companies/section/AddCompanySection";
+import CreateEmployeeModal from "./CreateNewPassport";
 
 // ** -----------------------------------------------------------------------
 
-function Employees({employee,passports,refresh}) {
+function Employees({ employee, passports, refresh }) {
   // ** router
-const navigate = useNavigate();
-// ** access token
-const accesToken = localStorage.getItem(
-  `${process.env.REACT_APP_ACCESS_TOKEN}`
-);
-// ** initial state
-const initialQueries = {
-  p: 1,
-  l: 10,
-  sortBy: "default",
-  select: "all",
-};
-// ** states
+  const navigate = useNavigate();
+  // ** access token
+  const accesToken = localStorage.getItem(
+    `${process.env.REACT_APP_ACCESS_TOKEN}`
+  );
+  // ** initial state
+  const initialQueries = {
+    p: 1,
+    l: 10,
+    sortBy: "default",
+    select: "all",
+  };
+  // ** states
   const [passport, setPassport] = useState([]);
   const [size, setSize] = useState(0);
   const [loading, setLoading] = useState(false);
   const [queries, setQueries] = useState({ ...initialQueries });
   // modals
-  const [showCreateEmployeesModal, setShowCreateEmployeesModal] = useState(false);
+  const [showCreateEmployeesModal, setShowCreateEmployeesModal] =
+    useState(false);
   // ** fetching data
   useEffect(() => {
-    // there's a token
-    /* if (accesToken) {
-      fetchEmplyees();
-    }
-    // no token
-    else {
-      cleanUserLocalStorage(); 
-      navigate("/login");
-    } */
-    //fetchEmplyees()
-  }, [/* queries */]);
-   // ** fetch function
-   const fetchEmplyees = async () => {
+    fetchEmplyees();
+  }, []);
+  // ** fetch function
+  const fetchEmplyees = async () => {
     setLoading(true);
     try {
       const res = await axios.get(`passport/one/${id}`, {
@@ -79,13 +61,11 @@ const initialQueries = {
           authorization: `Bearer ${accesToken}`,
         }, */
       });
-      console.log("res: ",res.data)
       if (res?.status === 200) {
         setPassport([...res?.data?.items]);
         setSize(res?.data?.size);
       }
     } catch (error) {
-      console.log("err: ",error)
       // not token
       if (error?.response?.status === 401) {
         cleanUserLocalStorage();
@@ -136,10 +116,9 @@ const initialQueries = {
   // ** ==>
   return (
     <>
-       
       <AddCompanySection
         refresh={fetchEmplyees}
-         openModal={() => setShowCreateEmployeesModal(true)} 
+        openModal={() => setShowCreateEmployeesModal(true)}
       />
       <Card className={`${passports?.length === 0 && "pb-2"} pb-1`}>
         <Table responsive>
@@ -149,7 +128,7 @@ const initialQueries = {
               <th>nationality</th>
               <th>createdAt</th>
               <th>expiresAt</th>
-              
+
               <th></th>
             </tr>
           </thead>
@@ -158,39 +137,36 @@ const initialQueries = {
               return (
                 <tr key={`row-${index}`}>
                   <td>
-                    <div className="d-flex justify-content-left align-items-center">
-                      <div className="d-flex flex-column">
-                        <small className="text-truncate text-muted">
-                          {row?.registration}
-                        </small>
-                      </div>
-                    </div>
+                    <span className="user_name text-truncate text-body fw-bolder">
+                      {row?.registration}
+                    </span>
                   </td>
-                  <td classname="pe-0 me-0">  
-                    <div className="d-flex flex-column">
-                      <span className="user_name text-truncate text-body fw-bolder">
-                        {row?.nationality}
-                      </span>
-                    </div>
+                  <td classname="pe-0 me-0">
+                    <span className="user_name text-truncate text-body fw-bolder">
+                      {row?.nationality}
+                    </span>
                   </td>
-                  <td classname="pe-0 me-0">  
-                    <div className="d-flex flex-column">
-                      <span className="user_name text-truncate text-body fw-bolder">
-                        {row?.createdAt}
-                      </span>
-                    </div>
+                  <td classname="pe-0 me-0">
+                    <span className="user_name text-truncate text-body fw-bolder">
+                      {row?.createdAt}
+                    </span>
                   </td>
-                  <td classname="pe-0 me-0">  
-                    <div className="d-flex flex-column">
-                      <span className="user_name text-truncate text-body fw-bolder">
-                        {row?.expiresAt}
-                      </span>
-                    </div>
+                  <td classname="pe-0 me-0">
+                    <span className="user_name text-truncate text-body fw-bolder">
+                      {row?.expiresAt}
+                    </span>
                   </td>
                   <td>
-                  
-                  {employee?.currentPassport===row?.id ? <Badge color="light-success"><Check size={18} /></Badge>:<Badge color="light-danger"><X size={18} /></Badge>}</td>
-                
+                    {employee?.currentPassport === row?.id ? (
+                      <Badge color="light-success" className="p-50">
+                        <Check size={23} />
+                      </Badge>
+                    ) : (
+                      <Badge color="light-danger" className="p-50">
+                        <X size={18} />
+                      </Badge>
+                    )}
+                  </td>
                 </tr>
               );
             })}
@@ -198,12 +174,12 @@ const initialQueries = {
         </Table>
       </Card>
       <CreateEmployeeModal
-      visibility={showCreateEmployeesModal}
-      closeModal={() => setShowCreateEmployeesModal(false)}
-      refresh={refresh}
-     />
+        visibility={showCreateEmployeesModal}
+        closeModal={() => setShowCreateEmployeesModal(false)}
+        refresh={refresh}
+      />
     </>
-  )
+  );
 }
 
 export default Employees;
