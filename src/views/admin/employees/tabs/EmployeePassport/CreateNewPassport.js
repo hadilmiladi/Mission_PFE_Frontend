@@ -1,8 +1,12 @@
 // ** React Imports
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState } from 'react';
+
 // ** toast
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Button,
@@ -15,18 +19,20 @@ import {
   ModalHeader,
   Row,
   Spinner,
-} from "reactstrap";
+} from 'reactstrap';
+
+// ** api config
+import axios from '../../../../../service/axios';
 // ** utilies functions
-import { cleanUserLocalStorage } from "../../../../../utility/Auth";
+import { cleanUserLocalStorage } from '../../../../../utility/Auth';
 // ** utily messages
 import {
   badRequestMessage,
   requiredField,
   serverErrorMessage,
   sessionExpired,
-} from "../../../../../utility/messages";
-// ** api config
-import axios from "../../../../../service/axios";
+} from '../../../../../utility/messages';
+
 // ** --------------------------------------------------------------------------
 function CreatePassportModal(props) {
   // ** props
@@ -104,7 +110,7 @@ function CreatePassportModal(props) {
           duration: 5000,
         });
       }
-      // this email already exist
+      // this registration number already exist
       else if (
         error?.response?.status === 409 &&
         error?.response?.data?.code === "registration"

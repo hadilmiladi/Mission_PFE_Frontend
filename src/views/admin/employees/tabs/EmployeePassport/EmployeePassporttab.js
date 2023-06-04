@@ -1,24 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
-import { Check, X } from "react-feather";
+import {
+  Check,
+  X,
+} from 'react-feather';
 // ** Toast
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
-import { Badge, Card, Table } from "reactstrap";
+import {
+  Badge,
+  Card,
+  Table,
+} from 'reactstrap';
 
 // ** api config
-import axios from "../../../../../service/axios";
+import axios from '../../../../../service/axios';
 // ** parts
 // ** modals
 // ** utils
-import { cleanUserLocalStorage } from "../../../../../utility/Auth";
+import { cleanUserLocalStorage } from '../../../../../utility/Auth';
 import {
   serverErrorMessage,
   sessionExpired,
-} from "../../../../../utility/messages";
-import AddCompanySection from "../../../companies/section/AddCompanySection";
-import CreateEmployeeModal from "./CreateNewPassport";
+} from '../../../../../utility/messages';
+import AddCompanySection from '../../../companies/section/AddCompanySection';
+import CreateEmployeeModal from './CreateNewPassport';
 
 // ** -----------------------------------------------------------------------
 

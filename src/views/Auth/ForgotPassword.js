@@ -1,32 +1,42 @@
+// ** Styles
+import '@styles/react/pages/page-authentication.scss';
+
 // ** React Imports
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
 // ** Icons Imports
-import { ChevronLeft } from "react-feather";
+import { ChevronLeft } from 'react-feather';
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
 // ** Reactstrap Imports
 import {
+  Alert,
+  Button,
   Card,
   CardBody,
-  CardTitle,
   CardText,
+  CardTitle,
   Form,
-  Label,
-  Input,
-  Button,
-  Spinner,
   FormFeedback,
-  Alert,
-} from "reactstrap";
+  Input,
+  Label,
+  Spinner,
+} from 'reactstrap';
+
+// ** api config
+import axios from '../../service/axios';
 // ** util auth functions
 import {
-  isUserLoggedIn,
   cleanUserLocalStorage,
   getUserHomePageRoute,
-} from "../../utility/Auth";
-// ** api config
-import axios from "../../service/axios";
-// ** Styles
-import "@styles/react/pages/page-authentication.scss";
+  isUserLoggedIn,
+} from '../../utility/Auth';
+
 // ** -----------------------------------------------------------------
 const ForgotPassword = () => {
   // ** router
@@ -85,6 +95,7 @@ const ForgotPassword = () => {
     }
     return errors;
   };
+  //
   return (
     <div className="auth-wrapper auth-basic px-2">
       <div className="auth-inner my-2">

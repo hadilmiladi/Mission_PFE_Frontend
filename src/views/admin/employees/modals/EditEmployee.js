@@ -1,8 +1,15 @@
+// ** styles
+import 'cleave.js/dist/addons/cleave-phone.us';
+
 // ** React Imports
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
 // ** toast
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Button,
@@ -15,20 +22,20 @@ import {
   ModalHeader,
   Row,
   Spinner,
-} from "reactstrap";
+} from 'reactstrap';
+
+// ** api config
+import axios from '../../../../service/axios';
 // ** utilies functions
-import { cleanUserLocalStorage } from "../../../../utility/Auth";
+import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
   badRequestMessage,
   requiredField,
   serverErrorMessage,
   sessionExpired,
-} from "../../../../utility/messages";
-// ** api config
-import axios from "../../../../service/axios";
-// ** styles
-import "cleave.js/dist/addons/cleave-phone.us";
+} from '../../../../utility/messages';
+
 // ** --------------------------------------------------------------------------
 function EditEmployeeModal(props) {
   // ** props
@@ -50,7 +57,31 @@ function EditEmployeeModal(props) {
   // ** states
   const [spinning, setSpinning] = useState(false);
   const [errors, setErrors] = useState({});
-  const [employee, setEmployee] = useState({ ...initialCompany });
+  const [employee, setEmployee] = useState({ ...initialEmployee });
+  const [ranks, setRank]=useState([]);
+  // fetch ranks
+  useEffect(()=>{
+    if(visibility){
+      fetchRank()
+    }
+  },[visibility])
+  // retrive all ranks
+  const fetchRank = async ()=>{
+    try {
+      const res = await axios.get("rank/all", {
+        headers: {
+          authorization: `Bearer ${accesToken}`,
+        },
+      });
+      console.log("res: ",res.data)
+      if (res?.status === 200) {
+        setRank([...res?.data?.items])
+      }
+    } catch (error) {
+      console.log("err: ",error)
+      // errors
+    }
+  }
   // ** set data
   useEffect(() => {
     if (visibility) {
@@ -60,6 +91,8 @@ function EditEmployeeModal(props) {
         lastname: row?.lastname,
         registration: row?.registration,
         email: row?.email,
+        rankId:row?.rankId,
+        
         activated: row?.activated,
       }));
     }
@@ -77,13 +110,13 @@ function EditEmployeeModal(props) {
   const onSubmit = async (event) => {
     event.preventDefault();
     setErrors({});
-    const inputErrors = validate(company);
+    const inputErrors = validate(employee);
     if (Object.keys(inputErrors).length > 0) {
       setErrors({ ...inputErrors });
     }
     setSpinning(true);
     try {
-      const res = await axios.put(`employee/update/${row?.id}`, company, {
+      const res = await axios.put(`employee/update/${row?.id}`, employee, {
         headers: {
           authorization: `Bearer ${accesToken}`,
         },
@@ -96,6 +129,7 @@ function EditEmployeeModal(props) {
         closeModal();
       }
     } catch (error) {
+      console.log("err: ",error)
       // failed to create for some reason
       if (error?.response?.status === 400) {
         toast.error(badRequestMessage, {
@@ -121,7 +155,7 @@ function EditEmployeeModal(props) {
       // this email already exist
       else if (
         error?.response?.status === 409 &&
-        error?.response?.data?.email === "email"
+        error?.response?.data?.code === "email"
       ) {
         setErrors((prev) => ({
           email: "Email already used by an other employee",
@@ -130,7 +164,7 @@ function EditEmployeeModal(props) {
       // this registration already exist
       else if (
         error?.response?.status === 409 &&
-        error?.response?.data?.registration === "registration"
+        error?.response?.data?.code === "registration"
       ) {
         setErrors((prev) => ({
           registration: "registration number is used by an other employee",
@@ -159,6 +193,9 @@ function EditEmployeeModal(props) {
     }
     if (values.email === "") {
       errors.email = requiredField;
+    }
+    if (values.rankId === "") {
+      errors.rankId = requiredField;
     }
     return errors;
   };
@@ -192,12 +229,12 @@ function EditEmployeeModal(props) {
               First Name{": "} <span className="text-danger">*</span>
             </Label>
             <Input
-              id="fisrtname"
+              id="firstname"
               type="text"
-              name="fisrtname"
-              value={employee.fisrtname}
+              name="firstname"
+              value={employee.firstname}
               onChange={onChange}
-              invalid={true && errors.fisrtname}
+              invalid={true && errors.firstname}
               placeholder="Example: ESB ..."
               required
             />
@@ -247,6 +284,33 @@ function EditEmployeeModal(props) {
               </FormFeedback>
             )}
           </Col>
+
+          <Col md={12} xs={12}>
+          <Label className="form-label" for="rankId">
+            Rank{": "} <span className="text-danger">*</span>
+          </Label>
+          <Input
+            id="rankId"
+            type="select"
+            name="rankId"
+            value={employee.rankId}
+            onChange={onChange}
+            invalid={true && errors.rankId}
+            placeholder="Example: jhon@example.com ..."
+            required
+          >
+            {ranks?.map((item,index)=>{
+              return <option key={`row-${index}`} value={item?.id}>
+                {item?.name}
+              </option>
+            })}
+          </Input>
+          {errors.email && (
+            <FormFeedback className="d-block text-capitalize fw-bold">
+              {errors.email}
+            </FormFeedback>
+          )}
+        </Col>
           <Col md={12} xs={12}>
             <Label className="form-label text-capitalize" for="registration">
               employee registration{": "}

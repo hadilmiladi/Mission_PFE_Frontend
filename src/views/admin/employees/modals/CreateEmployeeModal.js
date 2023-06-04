@@ -1,33 +1,38 @@
 // ** React Imports
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+// ** toast
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Row,
   Col,
+  FormFeedback,
   Input,
   Label,
-  FormFeedback,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Row,
   Spinner,
-  InputGroup,
-} from "reactstrap";
-// ** toast
-import toast from "react-hot-toast";
+} from 'reactstrap';
+
+// ** api config
+import axios from '../../../../service/axios';
 // ** utilies functions
-import { cleanUserLocalStorage } from "../../../../utility/Auth";
+import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
-  sessionExpired,
-  serverErrorMessage,
-  requiredField,
   badRequestMessage,
-} from "../../../../utility/messages";
-// ** api config
-import axios from "./../../../../service/axios";
+  requiredField,
+  serverErrorMessage,
+  sessionExpired,
+} from '../../../../utility/messages';
+
 // ** --------------------------------------------------------------------------
 function CreateEmployeeModal(props) {
   // ** props
@@ -49,7 +54,7 @@ function CreateEmployeeModal(props) {
   const [spinning, setSpinning] = useState(false);
   const [errors, setErrors] = useState({});
   const [employee, setEmployee] = useState({ ...initialEmployee });
-  const [ranks, setRank]=useState([])
+  const [ranks, setRank]=useState([]);
   // fetch ranks
   useEffect(()=>{
     if(visibility){
@@ -133,7 +138,7 @@ function CreateEmployeeModal(props) {
           email: "Email already used by an other client",
         }));
       }
-      // this email already exist
+      // this registration number already exist
       else if (
         error?.response?.status === 409 &&
         error?.response?.data?.code === "registration"

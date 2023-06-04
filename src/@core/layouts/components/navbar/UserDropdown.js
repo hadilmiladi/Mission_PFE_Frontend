@@ -1,23 +1,28 @@
 // ** React Imports
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-// ** Custom Components
-import Avatar from "@components/avatar";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
 // ** Third Party Components
-import { Settings, Power } from "react-feather";
+import { Power } from 'react-feather';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
 import {
-  UncontrolledDropdown,
+  DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  DropdownItem,
-} from "reactstrap";
+  UncontrolledDropdown,
+} from 'reactstrap';
+
+// ** Custom Components
+import Avatar from '@components/avatar';
 // ** Default Avatar Image
-import defaultAvatar from "@src/assets/images/portrait/small/avatar-s-11.jpg";
-// ** api config
-import { BASE_PATH } from "../../../../service/axios";
+import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg';
+
 // ** utils
-import { cleanUserLocalStorage } from "../../../../utility/Auth";
+import { cleanUserLocalStorage } from '../../../../utility/Auth';
+
 // ** -----------------------------------------------------------------------
 const UserDropdown = () => {
   // ** router
@@ -26,15 +31,14 @@ const UserDropdown = () => {
   const [userData, setUserData] = useState(null);
   // ** set data
   useEffect(() => {
-    /* const data = localStorage.getItem(process.env.REACT_APP_ROLE_DATA);
+    const data = localStorage.getItem('access_role');
     if (data == null) {
       navigate("/login");
     }
     //
     if (data !== null) {
-      const user = JSON.parse(data);
-      setUserData({ ...user });
-    } */
+      setUserData(data);
+    }
   }, []);
   // ** log out
   const logOut = (event) => {
@@ -52,17 +56,12 @@ const UserDropdown = () => {
         onClick={(e) => e.preventDefault()}
       >
         <div className="user-nav d-sm-flex d-none">
-          {userData?.responsableName && (
-            <span className="user-name fw-bold text-capitalize">
-              {userData?.responsableName}
-            </span>
-          )}
           <span className="user-status text-capitalize fw-bold">
-            {userData?.role}
+            {userData}
           </span>
         </div>
         <Avatar
-          img={userData?.avatar ? BASE_PATH + userData.avatar : defaultAvatar}
+          img={defaultAvatar}
           imgHeight="40"
           imgWidth="40"
           status="online"
@@ -70,10 +69,6 @@ const UserDropdown = () => {
       </DropdownToggle>
       <DropdownMenu end>
         <DropdownItem divider />
-        <DropdownItem tag={Link} to="/settings">
-          <Settings size={14} className="me-75" />
-          <span className="align-middle">Paramètres</span>
-        </DropdownItem>
         <DropdownItem onClick={logOut}>
           <Power size={14} className="me-75" />
           <span className="align-middle">Se Déconnecter</span>

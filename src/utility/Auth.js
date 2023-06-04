@@ -1,37 +1,32 @@
 // ** check if the user is authed or not
 export const isUserLoggedIn = () => {
   const test =
-    localStorage.getItem(process.env.REACT_APP_ACCESS_TOKEN) &&
-    localStorage.getItem(process.env.REACT_APP_ROLE_DATA);
-  if (test === false) {
-    /* cleanUserLocalStorage(); */
-  }
+    localStorage.getItem("access_token") &&
+    localStorage.getItem('access_role');
   return test;
 };
 
 // ** clean user storage
 export const cleanUserLocalStorage = () => {
-  localStorage.removeItem(process.env.REACT_APP_ACCESS_TOKEN);
-  localStorage.removeItem(process.env.REACT_APP_ROLE_DATA);
+ localStorage.removeItem("access_token")
+ localStorage.removeItem('access_role')
 };
 
 // ** get the redirect user path
 export const getUserHomePageRoute = () => {
-  const user = localStorage.getItem(process.env.REACT_APP_ROLE_DATA);
-  if (user === null) {
-    return "/";
+  const user = localStorage.getItem('access_role')
+  console.log("user: ",user)
+  if(user===null){
+    return "/"
   }
-  const parsedUser = JSON.parse(user);
-  if (!parsedUser?.role) {
-    return undefined;
+  if(user==="admin"){
+    return "/admin/missions"
   }
-  switch (String(parsedUser?.role)) {
-    case "admin":
-      return "/admin/dashboard";
-    case "client":
-      return "/dashboard";
-    default:
-      return "/";
+  if(user==="employee"){
+    return "/employee/missions"
+  }
+  if(user==="ceo"){
+    return "/ceo/dashboard"
   }
 };
 
@@ -39,19 +34,15 @@ export const getUserHomePageRoute = () => {
 export const getUserRoutePerRole = (role) => {
   switch (String(role)) {
     case "admin":
-      return "/back/dashboard";
-    case "client":
-      return "/dashboard";
-    default:
-      return "/";
+      return "/admin/missions";
+    case "employee":
+      return "/employee/missions";
+    case "ceo":
+      return "/ceo/dashboard";
   }
 };
 
 // ** get user auth data
 export const getAuthedUserRole = () => {
-  const user = localStorage.getItem(process.env.REACT_APP_ROLE_DATA);
-  if (user) {
-    return JSON.parse(user);
-  }
-  return user;
+  return localStorage.getItem('access_role')
 };

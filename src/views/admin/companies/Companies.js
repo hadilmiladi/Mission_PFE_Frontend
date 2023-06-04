@@ -1,43 +1,48 @@
 // ** React Imports
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
+// ** Icons Imports
+import {
+  Edit,
+  Trash,
+} from 'react-feather';
+// ** Toast
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
 import {
+  Badge,
   Button,
+  Card,
+  Col,
+  Form,
   Input,
   Row,
-  Col,
-  Card,
-  Form,
-  Pagination,
-  PaginationItem,
-  PaginationLink,
   Table,
-  Badge,
-} from "reactstrap";
-// ** Icons Imports
-import { ChevronLeft, ChevronRight, Edit, Trash } from "react-feather";
+} from 'reactstrap';
+
 // ** Custom Components
-import Breadcrumbs from "@components/breadcrumbs";
-import Avatar from "@components/avatar";
-// ** Toast
-import toast from "react-hot-toast";
-// ** Parts
-import CompaniesCountDashboard from "./section/CompaniesCountDashboard";
-import AddCompanySection from "./section/AddCompanySection";
-// ** Modals
-import CreateCompanyModal from "./modals/CreateCompanyModal";
-import DeleteCompanyModal from "./modals/DeleteCompanyModal";
-import EditCompanyModal from "./modals/EditCompanyModal";
-// ** utils
-import { cleanUserLocalStorage } from "../../../utility/Auth";
-import {
-  sessionExpired,
-  serverErrorMessage,
-} from "./../../../utility/messages";
-import { paginationOptions } from "../../../utility/Static";
+import Breadcrumbs from '@components/breadcrumbs';
+
 // ** api config
-import axios, { BASE_PATH } from "./../../../service/axios";
+import axios from '../../../service/axios';
+// ** utils
+import { cleanUserLocalStorage } from '../../../utility/Auth';
+import {
+  serverErrorMessage,
+  sessionExpired,
+} from '../../../utility/messages';
+import { paginationOptions } from '../../../utility/Static';
+// ** Modals
+import CreateCompanyModal from './modals/CreateCompanyModal';
+import DeleteCompanyModal from './modals/DeleteCompanyModal';
+import EditCompanyModal from './modals/EditCompanyModal';
+import AddCompanySection from './section/AddCompanySection';
+// ** Parts
+import CompaniesCountDashboard from './section/CompaniesCountDashboard';
 
 // ** -----------------------------------------------------------------------
 function Companies() {
@@ -147,8 +152,8 @@ function Companies() {
   return (
     <>
       <Breadcrumbs
-        title="Companies management"
-        data={[{ title: "Companies" }]}
+        title="Client management"
+        data={[{ title: "Clients" }]}
       />
       <CompaniesCountDashboard size={size} />
       <AddCompanySection

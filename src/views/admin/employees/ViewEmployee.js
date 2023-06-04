@@ -1,24 +1,36 @@
 // ** styles
-import "@styles/react/apps/app-users.scss";
+import '@styles/react/apps/app-users.scss';
 
 // ** React Imports
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 // ** toast
-import toast from "react-hot-toast";
-import { useNavigate, useParams } from "react-router-dom";
+import toast from 'react-hot-toast';
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 // ** Reactstrap Imports
-import { Col, Row } from "reactstrap";
+import {
+  Col,
+  Row,
+} from 'reactstrap';
 
 // ** Costum components
-import Breadcrumbs from "@components/breadcrumbs";
+import Breadcrumbs from '@components/breadcrumbs';
 
 // ** api link
-import axios from "../../../service/axios";
-import { notFoundMessage, serverErrorMessage } from "../../../utility/messages";
+import axios from '../../../service/axios';
+import {
+  notFoundMessage,
+  serverErrorMessage,
+} from '../../../utility/messages';
 // ** Parts
-import EmployeeInfoCard from "./parts/EmployeeInfoCard";
-import EmployeeTabs from "./parts/EmployeeTabs";
+import EmployeeInfoCard from './parts/EmployeeInfoCard';
+import EmployeeTabs from './parts/EmployeeTabs';
 
 // ** ---------------------------------------------------------------------
 function ViewEmployee() {
@@ -33,6 +45,7 @@ function ViewEmployee() {
   // ** states
   const [active, setActive] = useState("missions");
   const [employee, setEmployee] = useState(null);
+  const [currentPassport, setCurrentPassport]=useState(null)
   const [passports, setPassports] = useState([]);
   const [match, setMatch] = useState(true);
   // ** fetching data
@@ -51,6 +64,7 @@ function ViewEmployee() {
       });
       if (res?.status === 200) {
         setEmployee({ ...res?.data?.item });
+        setCurrentPassport({...res?.data?.currentPassport})
         setPassports([...res?.data?.passports]);
       }
     } catch (error) {
@@ -94,7 +108,7 @@ function ViewEmployee() {
         {employee !== null ? (
           <Row>
             <Col xl="4" lg="5" xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
-              <EmployeeInfoCard employee={employee} refresh={fetchEmployee} />
+              <EmployeeInfoCard employee={employee} refresh={fetchEmployee} currentPassport={currentPassport} />
             </Col>
             <Col xl="8" lg="7" xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
               <EmployeeTabs
@@ -103,6 +117,7 @@ function ViewEmployee() {
                 employee={employee}
                 refresh={fetchEmployee}
                 passports={passports}
+                currentPassport={currentPassport}
               />
             </Col>
           </Row>

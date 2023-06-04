@@ -1,20 +1,21 @@
 // ** Router imports
-import { lazy } from "react";
+import { lazy } from 'react';
 
 // ** Router imports
-import { useRoutes, Navigate } from "react-router-dom";
-
-// ** GetRoutes
-import { getRoutes } from "./routes";
-
-// ** Layouts
-import BlankLayout from "@layouts/BlankLayout";
+import {
+  Navigate,
+  useRoutes,
+} from 'react-router-dom';
 
 // ** Hooks Imports
-import { useLayout } from "@hooks/useLayout";
+import { useLayout } from '@hooks/useLayout';
+// ** Layouts
+import BlankLayout from '@layouts/BlankLayout';
 
 // ** Auth functions
-/* import { getAuthedUserRole, getUserRoutePerRole } from "../utility/Auth"; */
+import { getUserHomePageRoute } from '../utility/Auth';
+// ** GetRoutes
+import { getRoutes } from './routes';
 
 // ** components
 const Error = lazy(() => import("../views/Error"));
@@ -26,7 +27,8 @@ const Router = () => {
   const allRoutes = getRoutes(layout);
 
   const getHomeRoute = () => {
-    return "/login";
+    console.log("route: ",getUserHomePageRoute)
+    return getUserHomePageRoute()
   };
 
   const routes = useRoutes([

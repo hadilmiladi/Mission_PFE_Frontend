@@ -1,22 +1,24 @@
 // ** React Imports
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+
+// ** Third Party Components
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
   Col,
+  Modal,
+  ModalBody,
+  ModalHeader,
   Spinner,
-  Alert,
-} from "reactstrap";
-// ** Third Party Components
-import toast from "react-hot-toast";
-// ** utils
-import { serverErrorMessage } from "../../../../../utility/messages";
+} from 'reactstrap';
+
 // ** api config
-import axios from "../../../../../service/axios";
+import axios from '../../../../../service/axios';
+// ** utils
+import { serverErrorMessage } from '../../../../../utility/messages';
+
 // ** --------------------------------------------------------------------------
 function ConfirmMissionModal(props) {
   // ** Props
@@ -46,6 +48,7 @@ function ConfirmMissionModal(props) {
       }
     } catch (error) {
       // errors
+      console.log("err: ",error)
       if (error?.response?.status === 500) {
         toast.error(serverErrorMessage, {
           duration: 5000,

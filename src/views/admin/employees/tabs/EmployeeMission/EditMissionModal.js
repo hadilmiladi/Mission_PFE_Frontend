@@ -1,8 +1,15 @@
 // ** Reactstrap Imports
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
 // ** toast
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Button,
@@ -14,17 +21,19 @@ import {
   ModalBody,
   ModalHeader,
   Row,
-} from "reactstrap";
+} from 'reactstrap';
+
+// ** api config
+import axios from '../../../../../service/axios';
 // ** utilies functions
-import { cleanUserLocalStorage } from "../../../../../utility/Auth";
+import { cleanUserLocalStorage } from '../../../../../utility/Auth';
 // ** utily messages
 import {
   badRequestMessage,
   serverErrorMessage,
   sessionExpired,
-} from "../../../../../utility/messages";
-// ** api config
-import axios from "../../../../../service/axios";
+} from '../../../../../utility/messages';
+
 // ** --------------------------------------------------------------------------
 function EditMissionModal(props) {
   // ** props
@@ -41,7 +50,10 @@ function EditMissionModal(props) {
     finish: null,
     destination: "",
     planeId: "",
-    hotelId: "",
+    planeLink: "",
+    planePrice: "",
+    hotelLink: "",
+    hotelPrice: "",
     clientId: "",
     employeeId: id,
   };
@@ -293,15 +305,60 @@ function EditMissionModal(props) {
               </Col>
             </Row>
             <Row className="mb-1">
-              <Label sm="3" for="hotelId">
-                Hotel:
+              <Label sm="3" for="planeLink">
+                Plane Link:
               </Label>
               <Col sm="9">
                 <Input
-                  type="text"
-                  name="hotelId"
-                  id="hotelId"
-                  value={mission.hotelId}
+                  type="url"
+                  name="planeLink"
+                  id="planeLink"
+                  value={mission.planeLink}
+                  onChange={onChange}
+                  placeholder="3513zex13zzdx"
+                />
+              </Col>
+            </Row>
+            <Row className="mb-1">
+              <Label sm="3" for="planePrice">
+                Plane Price:
+              </Label>
+              <Col sm="9">
+                <Input
+                  type="number"
+                  name="planePrice"
+                  id="planePrice"
+                  value={mission.planePrice}
+                  onChange={onChange}
+                  placeholder="3513zex13zzdx"
+                />
+              </Col>
+            </Row>
+            <Row className="mb-1">
+              <Label sm="3" for="hotelLink">
+                Hotel Link:
+              </Label>
+              <Col sm="9">
+                <Input
+                  type="url"
+                  name="hotelLink"
+                  id="hotelLink"
+                  value={mission.hotelLink}
+                  onChange={onChange}
+                  placeholder="3513zex13zzdx"
+                />
+              </Col>
+            </Row>
+            <Row className="mb-1">
+              <Label sm="3" for="hotelPrice">
+                hotel Price:
+              </Label>
+              <Col sm="9">
+                <Input
+                  type="number"
+                  name="hotelPrice"
+                  id="hotelPrice"
+                  value={mission.hotelPrice}
                   onChange={onChange}
                   placeholder="3513zex13zzdx"
                 />

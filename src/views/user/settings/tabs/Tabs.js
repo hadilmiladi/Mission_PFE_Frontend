@@ -1,7 +1,15 @@
-// ** Reactstrap Imports
-import { Nav, NavItem, NavLink } from "reactstrap";
 // ** Icons Imports
-import { User, Lock, Bookmark, Calendar, UserPlus } from "react-feather";
+import {
+  Lock,
+  User,
+} from 'react-feather';
+// ** Reactstrap Imports
+import {
+  Nav,
+  NavItem,
+  NavLink,
+} from 'reactstrap';
+
 // ** ----------------------------------------------------------------------
 function Tabs({ activeTab, toggleTab }) {
   return (
@@ -12,7 +20,7 @@ function Tabs({ activeTab, toggleTab }) {
           onClick={() => toggleTab("profile")}
         >
           <User size={18} className="me-50" />
-          <span className="fw-bold">Profile</span>
+          <span className="fw-bold">passport</span>
         </NavLink>
       </NavItem>
       <NavItem>

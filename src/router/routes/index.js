@@ -1,17 +1,20 @@
 // ** React Imports
-import { Fragment, lazy } from "react";
+import {
+  Fragment,
+  lazy,
+} from 'react';
 
-import { Navigate } from "react-router-dom";
+import { Navigate } from 'react-router-dom';
 
 // ** Route Components
-import PublicRoute from "@components/routes/PublicRoute";
+import PublicRoute from '@components/routes/PublicRoute';
 // ** Layouts
-import BlankLayout from "@layouts/BlankLayout";
-import LayoutWrapper from "@src/@core/layouts/components/layout-wrapper";
-import HorizontalLayout from "@src/layouts/HorizontalLayout";
-import VerticalLayout from "@src/layouts/VerticalLayout";
+import BlankLayout from '@layouts/BlankLayout';
+import LayoutWrapper from '@src/@core/layouts/components/layout-wrapper';
+import HorizontalLayout from '@src/layouts/HorizontalLayout';
+import VerticalLayout from '@src/layouts/VerticalLayout';
 // ** Utils
-import { isObjEmpty } from "@utils";
+import { isObjEmpty } from '@utils';
 
 // ** layouts
 const getLayout = {
@@ -26,13 +29,7 @@ const TemplateTitle = "";
 const DefaultRoute = "/";
 // ** Auth imports   ------------------------------------------------------------------------
 const Login = lazy(() => import("../../views/Auth/Login"));
-const SignUp = lazy(() => import("../../views/Auth/SignUp"));
-const ForgotPassword = lazy(() => import("../../views/Auth/ForgotPassword"));
-const ResetPassword = lazy(() => import("../../views/Auth/ResetPassword"));
-const CreatePassword = lazy(() => import("../../views/Auth/CreatePassword"));
-// ** Client imports ------------------------------------------------------------------------
-// ** setting
-const AdminSettings = lazy(() => import("../../views/user/settings/Settings"));
+// ** admin imports ------------------------------------------------------------------------
 // ** companies
 const AdminCompanies = lazy(() =>
   import("../../views/admin/companies/Companies")
@@ -44,6 +41,26 @@ const AdminEmployees = lazy(() =>
 const AdminViewEmployee = lazy(() =>
   import("../../views/admin/employees/ViewEmployee")
 );
+// ** ranks
+const AdminRank = lazy(() =>
+  import("../../views/admin/ranks/Ranks")
+);
+// ** invoices 
+const AdminInvoices = lazy(()=>import("../../views/admin/factureMission/AdminInvoices"))
+// ** invoice
+const AdminInvoice = lazy(() =>
+  import("../../views/admin/factureMission/preview/index")
+);
+const AdminMission = lazy(()=>import("../../views/admin/mission/Mission"))
+const AdminSettings = lazy(()=>import("../../views/admin/settings/AdminSettings"))
+// ** user settings
+const EmployeeMission = lazy(()=>import("../../views/user/mission/EmployeeMission"))
+
+// ** user settings
+const CeoDashboard = lazy(()=>("../../views/ceo/dashboard/CeoDashboard"))
+// ** cliient imports ----------------------------------------------------------------------
+const EmployeeSettings = lazy(()=>import("../../views/user/settings/Settings"))
+
 // ** Catching imports ----------------------------------------------------------------------
 const Error = lazy(() => import("../../views/Error"));
 
@@ -63,38 +80,14 @@ const Routes = [
       layout: "blank",
     },
   },
-  {
-    path: "/sign-up",
-    element: <SignUp />,
-    meta: {
-      layout: "blank",
-    },
-  },
-  {
-    path: "/forgot-password",
-    element: <ForgotPassword />,
-    meta: {
-      layout: "blank",
-    },
-  },
-  {
-    path: "/reset-password/:token",
-    element: <ResetPassword />,
-    meta: {
-      layout: "blank",
-    },
-  },
-  {
-    path: "/create-password/:token",
-    element: <CreatePassword />,
-    meta: {
-      layout: "blank",
-    },
-  },
-  // ** client routes -------------------------------------------------------
+  // ** adminS routes -------------------------------------------------------
   {
     path: "/admin/clients",
     element: <AdminCompanies />,
+  },
+  {
+    path: "/admin/ranks",
+    element: <AdminRank />,
   },
   {
     path: "/admin/employees",
@@ -105,8 +98,42 @@ const Routes = [
     element: <AdminViewEmployee />,
   },
   {
-    path: "/settings",
+    path:"/admin/invoice",
+    element:<AdminInvoices />
+  },
+  {
+    path: "/admin/invoice/:id",
+    element: <AdminInvoice />,
+  },
+  {
+    path:"/admin/missions",
+    element:<AdminMission />
+  },
+  {
+    path: "/admin/settings",
     element: <AdminSettings />,
+  },
+  // ** user settings routes -------------------------------------------------------
+  {
+    path:"/employee/missions",
+    element:<EmployeeMission />
+  },
+  {
+    path: "/employee/settings",
+    element: <EmployeeSettings />,
+  },
+  // ** ceo settings routes -------------------------------------------------------
+  {
+    path: "/ceo/dashboard",
+    element: <CeoDashboard />,
+  },
+  {
+    path: "/ceo/employees",
+    element: <AdminEmployees />,
+  },
+  {
+    path: "/ceo/missions",
+    element: <AdminMission />,
   },
   // ** Catching errors ------------------------------------------------------------
   {

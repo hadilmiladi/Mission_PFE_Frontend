@@ -1,27 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
 
 // ** Toast
-import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
-import { Card, Table } from "reactstrap";
+import {
+  Card,
+  Table,
+} from 'reactstrap';
 
 // ** api config
-import axios from "../../../../../service/axios";
+import axios from '../../../../../service/axios';
 // ** parts
 // ** modals
 // ** utils
-import { cleanUserLocalStorage } from "../../../../../utility/Auth";
+import { cleanUserLocalStorage } from '../../../../../utility/Auth';
 import {
   serverErrorMessage,
   sessionExpired,
-} from "../../../../../utility/messages";
-import AddCompanySection from "../../../companies/section/AddCompanySection";
-import CreateEmployeeModal from "./CreateNewVisa";
+} from '../../../../../utility/messages';
+import AddCompanySection from '../../../companies/section/AddCompanySection';
+import CreateVisaModal from './CreateNewVisa';
 
 // ** -----------------------------------------------------------------------
 
-function Employees({ visas, refresh, employee }) {
+function EmployeeVisaTab({refresh,currentPassport,active }) {
   // ** router
   const navigate = useNavigate();
   // ** access token
@@ -44,19 +50,16 @@ function Employees({ visas, refresh, employee }) {
   const [showCreateEmployeesModal, setShowCreateEmployeesModal] =
     useState(false);
   // ** fetching data
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if(active==="visa"){
+      fetchEmplyees()
+    }
+  }, [active]);
   // ** fetch function
   const fetchEmplyees = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`visa/one/${id}`, {
-        /* params: {
-          page: queries.p,
-          limit: queries.l,
-        },
-        headers: {
-          authorization: `Bearer ${accesToken}`,
-        }, */
+      const res = await axios.get(`visa/passport/${currentPassport.id}`, {
       });
       console.log("res: ", res.data);
       if (res?.status === 200) {
@@ -64,7 +67,6 @@ function Employees({ visas, refresh, employee }) {
         setSize(res?.data?.size);
       }
     } catch (error) {
-      console.log("err: ", error);
       // not token
       if (error?.response?.status === 401) {
         cleanUserLocalStorage();
@@ -119,7 +121,7 @@ function Employees({ visas, refresh, employee }) {
         refresh={fetchEmplyees}
         openModal={() => setShowCreateEmployeesModal(true)}
       />
-      <Card className={`${visas?.length === 0 && "pb-2"} pb-1`}>
+      <Card className={`${visa?.length === 0 && "pb-2"} pb-1`}>
         <Table responsive>
           <thead>
             <tr>
@@ -131,7 +133,7 @@ function Employees({ visas, refresh, employee }) {
             </tr>
           </thead>
           <tbody>
-            {visas?.map((row, index) => {
+            {visa?.map((row, index) => {
               return (
                 <tr key={`row-${index}`}>
                   <td>
@@ -163,13 +165,14 @@ function Employees({ visas, refresh, employee }) {
           </tbody>
         </Table>
       </Card>
-      <CreateEmployeeModal
+      <CreateVisaModal
         visibility={showCreateEmployeesModal}
         closeModal={() => setShowCreateEmployeesModal(false)}
         refresh={refresh}
+        currentPassport={currentPassport}
       />
     </>
   );
 }
 
-export default Employees;
+export default EmployeeVisaTab;

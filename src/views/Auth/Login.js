@@ -1,137 +1,85 @@
-// ** React imports
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-// ** Custom Components
-import InputPasswordToggle from "@components/input-password-toggle";
-import Avatar from "./../../@core/components/avatar/index";
-// ** Reactstrap Imports
+import '@styles/react/pages/page-authentication.scss';
+
 import {
-  Card,
-  CardBody,
-  CardTitle,
-  Form,
-  Label,
-  Input,
+  useEffect,
+  useState,
+} from 'react';
+
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import {
   Button,
-  Spinner,
+  CardText,
+  CardTitle,
+  Col,
+  Form,
   FormFeedback,
-  Alert,
-} from "reactstrap";
-// ** icons
-import { Coffee, X } from "react-feather";
-// ** packages
-import toast from "react-hot-toast";
-// ** Api config
-import axios from "./../../service/axios";
-// ** util auth functions
+  Input,
+  Label,
+  Row,
+} from 'reactstrap';
+
+import axios from '../../service/axios';
 import {
+  cleanUserLocalStorage,
   getUserRoutePerRole,
   isUserLoggedIn,
-  cleanUserLocalStorage,
-  getUserHomePageRoute,
-} from "../../utility/Auth";
-// ** util messages functions
-import { serverErrorMessage, requiredField } from "../../utility/messages";
-// ** Styles
-import "@styles/react/pages/page-authentication.scss";
-// ** --------------------------------------------------------------
+} from '../../utility/Auth';
+import {
+  requiredField,
+  serverErrorMessage,
+} from '../../utility/messages';
+
 const Login = () => {
-  // ** router
   const navigate = useNavigate();
-  // ** toast component
-  const ToastContent = ({ t, name, role }) => {
-    return (
-      <div className="d-flex">
-        <div className="me-1">
-          <Avatar size="sm" color="success" icon={<Coffee size={12} />} />
-        </div>
-        <div className="d-flex flex-column">
-          <div className="d-flex justify-content-between">
-            <h6 className="text-capitalize">{name}</h6>
-            <X
-              size={12}
-              className="cursor-pointer"
-              onClick={() => toast.dismiss(t.id)}
-            />
-          </div>
-          <span className="text-capitalize">
-            You have successfully logged in as {role}. Now you can start
-            exploring. Enjoy!
-          </span>
-        </div>
-      </div>
-    );
-  };
-  // ** initial state
-  const initialValues = {
-    email: "",
-    password: "",
-    remember: false,
-  };
-  // ** states
   const [spinning, setSpinning] = useState(false);
   const [errors, setErrors] = useState({});
-  const [user, setUser] = useState({ ...initialValues });
+  const [email, setEmail] = useState("");
   const [showAlert, setShowAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(false);
-  // ** on Changes
-  const onChange = (event) => {
-    const { name, value } = event.target;
-    setUser((prev) => ({ ...prev, [name]: value }));
-  };
-  const onChangeRememberMe = (event) => {
-    setUser((prev) => ({ ...prev, remember: event.target.checked }));
-  };
-  // ** submit login and handle role in the back.
+// ** check if already authed
+useEffect(() => {
+  const isLogged = isUserLoggedIn()
+  if (!isLogged) {
+    cleanUserLocalStorage();
+    navigate('/login')
+    return;
+  }
+  if (isLogged) {
+    navigate('/');
+    return;
+  }
+  
+}, [navigate]);
   const onSubmit = async (event) => {
     event.preventDefault();
     setErrors({});
     setShowAlert(false);
-    setAlertMessage("");
-    const inputErrors = validate(user);
+    const inputErrors = validate(email);
     if (Object.keys(inputErrors).length > 0) {
       setErrors({ ...inputErrors });
     }
     setSpinning(true);
     if (Object.keys(inputErrors).length === 0) {
       try {
-        const res = await axios.post("auth/login", user);
+        const res = await axios.get(`/Login/${email}`);
+        console.log("res: ", res)
         if (res?.status === 200) {
-          const token = res?.data?.token;
-          const user = res?.data?.item;
-          // save tokens
-          localStorage.setItem(process.env.REACT_APP_ACCESS_TOKEN, token);
-          localStorage.setItem(
-            process.env.REACT_APP_ROLE_DATA,
-            JSON.stringify(user)
-          );
-          // navigate depending on role
-          const homeRoute = getUserRoutePerRole(user.role);
-          navigate(homeRoute);
-          // Display toast
-          toast((t) => (
-            <ToastContent
-              t={t}
-              role={user?.role}
-              name={res?.data?.item?.responsableName}
-            />
-          ));
+          console.log("res: ",res)
+          localStorage.setItem('access_token',res?.data?.token)
+          localStorage.setItem('access_role',res?.data?.role)
+          const home = getUserRoutePerRole(res?.data?.role)
+          console.log("home: ",home)
+          navigate(home)
+          
         }
       } catch (error) {
+        console.log("err: ", error)
         const status = error?.response?.status;
-        // ** user doesn't exist
-        if (status === 409) {
+        if (status === 404) {
           setErrors({
-            email: "This's user doesn't exist",
+            email: "This user doesn't exist",
           });
         }
-        // ** incorrect password
-        else if (status === 401) {
-          setErrors({
-            password: "Wrong password",
-          });
-        }
-        // ** server error
         else if (status === 500) {
           toast.error(serverErrorMessage, {
             duration: 5000,
@@ -141,45 +89,57 @@ const Login = () => {
     }
     setSpinning(false);
   };
-  // ** validate
+
   const validate = (values) => {
     const errors = {};
-    // exist
-    if (values.email === "") {
+    if (values === "") {
       errors.email = requiredField;
-    }
-    // exist
-    if (values.password === "") {
-      errors.password = requiredField;
     }
     return errors;
   };
-  // ** ==>
+
+
   return (
-    <div className="auth-wrapper auth-basic px-2">
-      <div className="auth-inner my-2">
-        <Card className="mb-0">
-          <CardBody>
-            <Link className="brand-logo" to="/">
-              <h4 className="brand-text text-primary ms-1 text-uppercase">
-                Logo
-              </h4>
-            </Link>
-            <CardTitle tag="h4" className="mb-1 text-center text-capitalize">
-              Welcome to trackiha 👋
+  
+
+    <div className="auth-wrapper auth-cover">
+      <Row className="auth-inner m-0">
+         
+
+          <h2 className="brand-text text-primary ms-1">Nexus</h2>
+        <Col className="d-none d-lg-flex align-items-center" lg="8" sm="12">
+          <div className="w-100 d-lg-flex align-items-center justify-content-center px-5">
+           {/*  <img className="img-fluid" src={logo} alt="Login Cover" /> */}
+          </div>
+        </Col>
+
+        <Col
+          className="d-flex align-items-center auth-bg px-2 p-lg-5"
+          lg="4"
+          sm="12"
+        >
+          <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
+            <CardTitle tag="h2" className="fw-bold mb-1">
+              Welcome! 👋
             </CardTitle>
-            <Form className="auth-login-form mt-2" onSubmit={onSubmit}>
+            <CardText className="mb-2">
+              Please sign-in to your account and start the adventure
+            </CardText>
+            <Form
+              className="auth-login-form mt-2"
+              onSubmit={onSubmit}
+            >
               <div className="mb-1">
-                <Label className="form-label" for="email">
-                  E-mail: <span className="text-danger">*</span>
+                <Label className="form-label" for="login-email">
+                  Email
                 </Label>
                 <Input
                   type="email"
                   id="email"
                   placeholder="example: johnk@example.com"
                   name="email"
-                  value={user.email}
-                  onChange={onChange}
+                  value={email}
+                  onChange={(e)=>setEmail(e.target.value)}
                   invalid={errors.email && true}
                   autoFocus
                   required
@@ -190,63 +150,24 @@ const Login = () => {
                   </FormFeedback>
                 )}
               </div>
-              <div className="mb-1">
-                <div className="d-flex justify-content-between">
-                  <Label className="form-label" for="login-password">
-                    Password: <span className="text-danger">*</span>
-                  </Label>
-                  <Link to="/forgot-password">
-                    <small>Forgot your password ?</small>
-                  </Link>
-                </div>
-                <InputPasswordToggle
-                  className="input-group-merge"
-                  id="password"
-                  name="password"
-                  value={user.password}
-                  onChange={onChange}
-                  invalid={errors.password && true}
-                  required
-                />
-                {errors.password && (
-                  <FormFeedback className="d-block">
-                    {errors.password}
-                  </FormFeedback>
-                )}
-              </div>
               {showAlert && (
                 <Alert color="danger">
                   <div className="alert-body text-center">
-                    {showAlert && alertMessage}
+                    Your account is currently suspended, Please contact administration to slove this issue.
                   </div>
                 </Alert>
               )}
-              <div className="form-check mb-1">
-                <Input
-                  type="checkbox"
-                  name="remember"
-                  defaultValue={true}
-                  onChange={onChangeRememberMe}
-                  id="remember"
-                />
-                <Label className="form-check-label" for="remember">
-                  Remember me
-                </Label>
-              </div>
-              <Button color="primary" type="submit" block>
-                {!spinning ? "Sign in" : <Spinner size="sm" />}
+              
+              <Button type='submit' color="primary" block >
+                Sign in
               </Button>
             </Form>
-            <p className="text-center mt-2">
-              <span className="me-25">New on our platform?</span>
-              <Link to="/sign-up">
-                <span>Create an account</span>
-              </Link>
-            </p>
-          </CardBody>
-        </Card>
-      </div>
+           
+          </Col>
+        </Col>
+      </Row>
     </div>
+ 
   );
 };
 

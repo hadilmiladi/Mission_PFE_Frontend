@@ -17,23 +17,23 @@ function AddRankSection(props) {
   // ** ==>
   return (
     <div className="invoice-list-table-header w-100 pb-2">
-      <Row>
-        <Col
-          lg="12"
-          className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap"
+    <Row>
+      <Col
+        lg="12"
+        className="actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap"
+      >
+        <Button
+          id="createPatientModal"
+          color="primary"
+          className="btn-icon"
+          onClick={openModal}
         >
-          <Button
-            id="createPatientModal"
-            color="primary"
-            className="btn-icon"
-            onClick={openModal}
-          >
-            <Plus size={18} />
-          </Button>
-        </Col>
-      </Row>
-    </div>
-  );
+          <Plus size={18} />
+        </Button>
+      </Col>
+    </Row>
+  </div>
+);
 }
 
 export default AddRankSection;

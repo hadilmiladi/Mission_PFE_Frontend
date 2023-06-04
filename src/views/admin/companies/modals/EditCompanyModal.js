@@ -128,7 +128,7 @@ function EditCompanyModal(props) {
       // this email already exist
       else if (
         error?.response?.status === 409 &&
-        error?.response?.data?.email === "email"
+        error?.response?.data?.code === "email"
       ) {
         setErrors((prev) => ({
           email: "Email already used by an other client",

@@ -1,9 +1,25 @@
 // ** Reactstrap Imports
-import { useEffect, useState } from "react";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
 // ** icons
-import { Check, Clock, Edit, Slash, Trash } from "react-feather";
+import {
+  Check,
+  Edit,
+  Slash,
+  Trash,
+} from 'react-feather';
 // ** Reactstrap Imports
-import { Badge, Button, Modal, ModalBody, ModalHeader } from "reactstrap";
+import {
+  Badge,
+  Button,
+  Modal,
+  ModalBody,
+  ModalHeader,
+} from 'reactstrap';
+
 // ** --------------------------------------------------------------------------
 function ViewMissionModal(props) {
   // ** props
@@ -71,12 +87,20 @@ function ViewMissionModal(props) {
               <span className="text-capitalize">{mission?.destination}</span>
             </li>
             <li className="mb-75">
-              <span className="fw-bolder me-25">Hotel :</span>
-              <span className="text-capitalize">{mission?.hotelId}</span>
+              <span className="fw-bolder me-25">Hotel Link :</span>
+              <a target='_blank' href={mission.hotelLink}>
+                {`${String(mission.hotelLink).slice(0,50)}`}
+              </a>
             </li>
             <li className="mb-75">
-              <span className="fw-bolder me-25">Plance :</span>
+              <span className="fw-bolder me-25">Plane Code :</span>
               <span className="text-capitalize">{mission?.planeId}</span>
+            </li>
+            <li className="mb-75">
+              <span className="fw-bolder me-25">Plane Link :</span>
+              <a target='_blank' href={mission.planeLink}>
+                {`${String(mission.planeLink).slice(0,50)}`}
+              </a>
             </li>
             <li className="mb-75">
               <span className="fw-bolder me-25">Description :</span>

@@ -1,7 +1,21 @@
-import { Users } from 'react-feather';
+import {
+  Archive,
+  BarChart,
+  BarChart2,
+  FileText,
+  Settings,
+  Users,
+} from 'react-feather';
 
 export default [
   // ** client navigation
+  {
+    id:"adminMissions",
+    title:"Missions",
+    icon: <Archive />,
+    navLink: "/admin/missions",
+    role: "admin",
+  },
   {
     id: "client",
     title: "Clients",
@@ -19,8 +33,51 @@ export default [
   {
     id: "rank",
     title: "Ranks",
-    icon: <Users size={20} />,
+    icon: <BarChart size={20} />,
     navLink: "/admin/ranks",
     role: "admin",
   },
+  {
+    id: "invoice",
+    title: "Invoices",
+    icon: <FileText size={20} />,
+    navLink: "/admin/invoice",
+    role: "admin",
+  },
+  {
+    id:"adminSettings",
+    title: "Settings",
+    icon: <Settings size={20} />,
+    navLink: "/admin/settings",
+    role: "admin",
+  },
+  {
+    id:"employeeMissions",
+    title:"Missions",
+    icon: <Archive />,
+    navLink:"/employee/missions",
+    role: "employee",
+  },
+  {
+    id:"employeeSettings",
+    title: "Settings",
+    icon: <Settings size={20} />,
+    navLink: "/employee/settings",
+    role: "employee",
+  },
+  {
+    id:"ceoDashboard",
+    title: "Dashboard",
+    icon: <BarChart2 size={20} />,
+    navLink: "/ceo/dashboard",
+    role: "ceo",
+  },
+  {
+    id:"ceoMissions",
+    title:"Missions",
+    icon: <Archive size={20} />,
+    navLink: "/ceo/missions",
+    role: "ceo",
+  },
+  
 ];

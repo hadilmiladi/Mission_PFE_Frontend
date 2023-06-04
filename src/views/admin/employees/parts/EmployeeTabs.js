@@ -1,14 +1,26 @@
 // ** Icons Imports
-import { Calendar, FileText } from "react-feather";
+import {
+  Calendar,
+  FileText,
+} from 'react-feather';
 // ** Reactstrap Imports
-import { Nav, NavItem, NavLink, TabContent, TabPane } from "reactstrap";
+import {
+  Nav,
+  NavItem,
+  NavLink,
+  TabContent,
+  TabPane,
+} from 'reactstrap';
+
+import EmployeeMissionsTab from '../tabs/EmployeeMission/EmployeeMissionsTab';
 // * Tabs
-import EmployeePassporttab from "../tabs/EmployeePassport/EmployeePassporttab";
-import EmployeeMissionsTab from "../tabs/EmployeeMission/EmployeeMissionsTab";
+import EmployeePassporttab from '../tabs/EmployeePassport/EmployeePassporttab';
+import EmployeeVisaTab from '../tabs/EmployeeVisa/EmployeeVisaTab';
+
 // ** ------------------------------------------------------------------
 function EmployeeTabs(props) {
   // ** props
-  const { active, toggleTab, refresh, employee, passports } = props;
+  const { active, toggleTab, refresh, employee, passports,currentPassport } = props;
   console.log("active: ", active);
   // ** ==>
   return (
@@ -25,6 +37,16 @@ function EmployeeTabs(props) {
         </NavItem>
 
         <NavItem>
+        <NavLink
+          active={active === "visa"}
+          onClick={() => toggleTab("visa")}
+        >
+          <Calendar className="font-medium-3 me-50" />
+          <span className="fw-bold">Visa</span>
+        </NavLink>
+      </NavItem>
+
+        <NavItem>
           <NavLink
             active={active === "passports"}
             onClick={() => toggleTab("passports")}
@@ -34,16 +56,15 @@ function EmployeeTabs(props) {
           </NavLink>
         </NavItem>
 
-        <NavItem>
-          <NavLink active={active === "visa"} onClick={() => toggleTab("visa")}>
-            <FileText className="font-medium-3 me-50" />
-            <span className="fw-bold">Visa</span>
-          </NavLink>
-        </NavItem>
       </Nav>
+      
       <TabContent activeTab={active}>
         <TabPane tabId="missions">
           <EmployeeMissionsTab active={active} />
+        </TabPane>
+
+        <TabPane tabId="visa">
+          <EmployeeVisaTab active={active} currentPassport={currentPassport} />
         </TabPane>
 
         <TabPane tabId="passports">
@@ -60,3 +81,9 @@ function EmployeeTabs(props) {
 }
 
 export default EmployeeTabs;
+
+/* 
+<TabPane tabId="visa">
+  <EmployeeVisaTab active={active} />
+</TabPane>
+*/

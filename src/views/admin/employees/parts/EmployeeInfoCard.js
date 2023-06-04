@@ -1,15 +1,33 @@
-// ** react imports
-import { Link } from "react-router-dom";
-// ** Reactstrap Imports
-import { Badge, Button, Card, CardBody } from "reactstrap";
-// ** icons
-import { Check, Clock, Edit, Slash, Trash } from "react-feather";
 // ** Styles
-import "@styles/react/libs/react-select/_react-select.scss";
+import '@styles/react/libs/react-select/_react-select.scss';
+
+import { useState } from 'react';
+
+// ** icons
+import {
+  Check,
+  Clock,
+  Edit,
+  Slash,
+  Trash,
+} from 'react-feather';
+// ** Reactstrap Imports
+import {
+  Badge,
+  Button,
+  Card,
+  CardBody,
+} from 'reactstrap';
+
+import EditEmployeeModal from '../modals/EditEmployee';
+
 // -------------------------------------------------------------------------
 function EmployeeInfoCard(props) {
   // props
-  const { employee, refresh } = props;
+  const [showEditEmployeeModal, setShowEditEmployeeModal] = useState(false);
+ // ** selected Employee
+ const [selectedEmployee, setSelectedEmployee] = useState({});
+  const { employee, refresh,currentPassport } = props;
   // ** ==>
   return (
     <>
@@ -54,9 +72,9 @@ function EmployeeInfoCard(props) {
               </li>
               <li className="mb-75">
                 <span className="fw-bolder me-25">Current Passport :</span>
-                {employee?.currentPassport ? (
+                {currentPassport ? (
                   <span className="text-capitalize">
-                    {employee?.currentPassport}
+                    {currentPassport?.registration}
                   </span>
                 ) : (
                   <Badge color="light-danger" className="p-50 text-capitalize">
@@ -74,15 +92,16 @@ function EmployeeInfoCard(props) {
             >
               <Slash size={18} />
             </Button>
-            <Link to="../EditEmployee.js">
+           
               <Button
                 id="openEditOrderModal"
                 color="primary"
                 className="btn-icon rounded-circle"
+               onClick={() => setShowEditEmployeeModal(true)}
               >
                 <Edit size={18} />
               </Button>
-            </Link>
+            
 
             <Button
               id="openDeleteOrderModal"
@@ -108,8 +127,16 @@ function EmployeeInfoCard(props) {
           </div>
         </CardBody>
       </Card>
+      <EditEmployeeModal
+      visibility={showEditEmployeeModal}
+      closeModal={()=>setShowEditEmployeeModal(false)}
+      row={employee}
+      refresh={refresh}
+      />
     </>
   );
 }
+    
+  
 
 export default EmployeeInfoCard;

@@ -1,23 +1,39 @@
 // ** react imports
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-// ** react imports
-import { Badge, Button, Card, Table } from "reactstrap";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 // ** icons
-import { Eye } from "react-feather";
+import {
+  Eye,
+  FileText,
+} from 'react-feather';
+import {
+  Link,
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
+// ** react imports
+import {
+  Badge,
+  Button,
+  Card,
+  Table,
+} from 'reactstrap';
+
+import axios from '../../../../../service/axios';
 // ** sections
-import AddCompanySection from "../../../companies/section/AddCompanySection";
-// ** Modals
-import CreateMissionModal from "./CreateNewMission";
-import ViewMissionModal from "./ViewMissionModal";
-// ** api config
-import axios from "../../../../../service/axios";
-import DeleteEmployeeModal from "./DeleteEmployeeModal";
-import CancelMissionModal from "./CancelMissionModal";
-import ConfirmMissionModal from "./ConfirmMissionModal";
-import EditMissionModal from "./EditMissionModal";
+import AddCompanySection from '../../../companies/section/AddCompanySection';
+import CancelMissionModal from './CancelMissionModal';
+import ConfirmMissionModal from './ConfirmMissionModal';
+import CreateMissionModal from './CreateNewMission';
+import DeleteEmployeeModal from './DeleteEmployeeModal';
+import EditMissionModal from './EditMissionModal';
+import ViewMissionModal from './ViewMissionModal';
+
 // -------------------------------------------------------------------------
-function EmployeeMissionsTab({ active }) {
+function EmployeeMissionsTab({ active, }) {
   // ** router
   const navigate = useNavigate();
   const { id } = useParams();
@@ -35,6 +51,7 @@ function EmployeeMissionsTab({ active }) {
   // ** states
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [size, setSize] = useState(0);
   const [queries, setQueries] = useState({ ...initialQueries });
   const [selectedMission, setSelectedMission] = useState({});
   // ** modals
@@ -54,17 +71,39 @@ function EmployeeMissionsTab({ active }) {
   const fetchMissions = async () => {
     console.log("called");
     setLoading(true);
-    try {
-      const res = await axios.get(`mission/employee/${id}`);
-      console.log("res: ", res.data);
+     try {
+      const res = await axios.get(`mission/employee/${id}`)
       if (res?.status === 200) {
         setMissions([...res?.data?.items]);
+        setSize(res?.data?.size);
       }
     } catch (error) {
       console.log("err: ", error);
       // errors
     }
-    setLoading(false);
+    setLoading(false); 
+  };
+  // ** Pagination
+  const pagination = [];
+  for (let i = 0; i < size / queries.l; i++) {
+    pagination.push(i);
+  }
+  // ** pagination config
+  const prevPagination = () => {
+    if (queries.p > 0) {
+      setQueries((prev) => ({ ...prev, p: queries.p - 1 }));
+    }
+  };
+  // ** next
+  const nextPagination = () => {
+    const condition = queries.p == (size / queries.l).toFixed(0);
+    if (!condition) {
+      setQueries((prev) => ({ ...prev, p: queries.p + 1 }));
+    }
+  };
+  // ** select
+  const selectPagination = (index) => {
+    setQueries((prev) => ({ ...prev, p: index }));
   };
   // ** ==>
   return (
@@ -78,7 +117,7 @@ function EmployeeMissionsTab({ active }) {
           <thead>
             <tr>
               <th>#</th>
-              <th>ClientX</th>
+              <th>Client</th>
               <th>Date</th>
               <th>Destination</th>
               <th>Status</th>
@@ -127,6 +166,9 @@ function EmployeeMissionsTab({ active }) {
                     ) : null}
                   </td>
                   <td>
+                  <Button to={`/admin/invoice/${row?.id}`} tag={Link} color="primary" className="btn-icon rounded-circle me-25" disabled={row?.accepted===false}>
+                      <FileText size={16} />
+                    </Button>
                     <Button
                       color="primary"
                       className="btn-icon rounded-circle"

@@ -1,25 +1,27 @@
 // ** React Imports
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+
+// ** Third Party Components
+import toast from 'react-hot-toast';
 // ** Reactstrap Imports
 import {
+  Alert,
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
   Col,
-  Spinner,
-  Row,
-  Label,
   Form,
   Input,
-} from "reactstrap";
-// ** Third Party Components
-import toast from "react-hot-toast";
-// ** utils
-import { serverErrorMessage } from "../../../../../utility/messages";
+  Label,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Row,
+} from 'reactstrap';
+
 // ** api config
-import axios from "../../../../../service/axios";
+import axios from '../../../../../service/axios';
+// ** utils
+import { serverErrorMessage } from '../../../../../utility/messages';
+
 // ** --------------------------------------------------------------------------
 function CancelMissionModal(props) {
   // ** Props
@@ -27,10 +29,12 @@ function CancelMissionModal(props) {
   // ** states
   const [spinning, setSpinning] = useState(false);
   const [comment, setComment] = useState("");
+  const [showAlert, setShowAlert]=useState(false)
   // ** on submit
   const onSubmit = async (event) => {
     event.preventDefault();
     setSpinning(true);
+    setShowAlert(false)
     try {
       const res = await axios.put(`mission/status/set/${row?.id}`, {
         operation: "cancel",
@@ -45,7 +49,9 @@ function CancelMissionModal(props) {
         closeMainModal();
       }
     } catch (error) {
-      console.log("err: ", error);
+      if(error?.response?.status === 409){
+        setShowAlert(true)
+      }
       // server error
       if (error?.response?.status === 500) {
         toast.error(serverErrorMessage, {
@@ -59,6 +65,7 @@ function CancelMissionModal(props) {
   const onDiscard = () => {
     setSpinning(false);
     setComment("");
+    setShowAlert(false)
   };
   // ** ==>
   return (
@@ -95,9 +102,14 @@ function CancelMissionModal(props) {
               />
             </Col>
           </Row>
+          {showAlert&&<Alert color="danger">
+            <div className='alert-body'>
+              We're sorry but it seems to be that this mission was already accepeted and we can't cancel it now.
+            </div>
+          </Alert>}
           <Row>
             <Col className="d-flex mt-1" md={{ size: 9, offset: 3 }}>
-              <Button className="me-1" color="primary" type="submit">
+              <Button className="me-1" color="primary" type="submit" disabled={showAlert}>
                 Cancel
               </Button>
               <Button
@@ -105,6 +117,7 @@ function CancelMissionModal(props) {
                 color="secondary"
                 type="reset"
                 onClick={closeModal}
+                
               >
                 Discard
               </Button>
