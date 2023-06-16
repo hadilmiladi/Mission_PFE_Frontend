@@ -39,7 +39,7 @@ function EmployeeMissionsTab({ active, }) {
   const { id } = useParams();
   // ** access token
   const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+    "access_token"
   );
   // ** initial state
   const initialQueries = {
@@ -72,7 +72,10 @@ function EmployeeMissionsTab({ active, }) {
     console.log("called");
     setLoading(true);
      try {
-      const res = await axios.get(`mission/employee/${id}`)
+      const res = await axios.get(`mission/employee/${id}`,{
+      headers: {
+        authorization: `Bearer ${accesToken}`,
+      },})
       if (res?.status === 200) {
         setMissions([...res?.data?.items]);
         setSize(res?.data?.size);

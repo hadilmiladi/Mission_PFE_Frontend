@@ -27,6 +27,10 @@ import PreviewCard from './PreviewPrescription';
 const InvoicePreview = () => {
   // ** HooksVars
   const { id } = useParams();
+   // ** access token
+   const accesToken = localStorage.getItem(
+    "access_token"
+  );
 
   // ** States
   const [data, setData] = useState(null);
@@ -46,7 +50,11 @@ const InvoicePreview = () => {
   }, [id]);
   const getOneInvoice = async()=>{
     try {
-      const res = await axios.get(`/invoice/one/11`)
+      const res = await axios.get(`/invoice/one/11`,{
+        headers: {
+          authorization: `Bearer ${accesToken}`,
+        },
+      })
       if(res?.status===200){
         setData(prev=>({...res?.data?.item}))
       }

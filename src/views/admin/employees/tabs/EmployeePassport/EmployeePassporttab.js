@@ -35,10 +35,10 @@ import CreateEmployeeModal from './CreateNewPassport';
 function Employees({ employee, passports, refresh }) {
   // ** router
   const navigate = useNavigate();
-  // ** access token
-  const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
-  );
+ // ** access token
+ const accesToken = localStorage.getItem(
+  "access_token"
+);
   // ** initial state
   const initialQueries = {
     p: 1,
@@ -63,13 +63,10 @@ function Employees({ employee, passports, refresh }) {
     setLoading(true);
     try {
       const res = await axios.get(`passport/one/${id}`, {
-        /* params: {
-          page: queries.p,
-          limit: queries.l,
-        },
-        headers: {
-          authorization: `Bearer ${accesToken}`,
-        }, */
+        
+         headers: {
+        authorization: `Bearer ${accesToken}`,
+      },
       });
       if (res?.status === 200) {
         setPassport([...res?.data?.items]);

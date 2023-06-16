@@ -1,28 +1,39 @@
 // ** React Imports
-import { Fragment, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  Fragment,
+  useEffect,
+  useState,
+} from 'react';
+
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
-import { Row, Col, TabContent, TabPane } from "reactstrap";
+import {
+  Col,
+  Row,
+  TabContent,
+  TabPane,
+} from 'reactstrap';
+
 // ** components
-import Breadcrumbs from "@components/breadcrumbs";
-// ** Tabs
-import Tabs from "./tabs/Tabs";
-import ProfileSettingTab from "./tabs/ProfileSettingTab";
-import PasswordSettingTab from "./tabs/PasswordSettingTab";
-// ** utils function
-import { cleanUserLocalStorage } from "../../../utility/Auth";
+import Breadcrumbs from '@components/breadcrumbs';
+
+// ** api config
+import axios from '../../../service/axios';
 import {
   badRequestMessage,
   serverErrorMessage,
-  sessionExpired,
-} from "../../../utility/messages";
-// ** api config
-import axios from "../../../service/axios";
+} from '../../../utility/messages';
+import PasswordSettingTab from './tabs/PasswordSettingTab';
+import ProfileSettingTab from './tabs/ProfileSettingTab';
+// ** Tabs
+import Tabs from './tabs/Tabs';
+
 // ** ------------------------------------------------------------------------
 function Settings() {
   // ** access token
   const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+    `access_token`
   );
   // ** router
   const navigate = useNavigate();
@@ -32,37 +43,39 @@ function Settings() {
   // ** fetching profile
   useEffect(() => {
     // there's a token
-   /*  if (accesToken) {
+    if (accesToken) {
       fetchProfile(); 
     }
     // no token
     else {
-      cleanUserLocalStorage();
-      navigate("/login");
-    } */
+      /* cleanUserLocalStorage();
+      navigate("/login"); */
+    }
   }, [active]);
   // ** fetch function
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("user/one", {
+      const res = await axios.get("employee/one", {
         headers: {
           authorization: `Bearer ${accesToken}`,
         },
       });
       if (res?.status === 200) {
+        console.log("res: ",res.data)
         setProfile((prev) => ({ ...res?.data?.item }));
       }
     } catch (error) {
+      console.log("err: ",error)
       // not token
       if (error?.response?.status === 401) {
-        cleanUserLocalStorage();
-        navigate("/login");
+        /* cleanUserLocalStorage();
+        navigate("/login"); */
         toast.error(badRequestMessage, {
           duration: 5000,
         });
       }
       // not token
-      else if (error?.response?.status === 401) {
+      /* else if (error?.response?.status === 401) {
         cleanUserLocalStorage();
         navigate("/login");
         toast.error(sessionExpired, {
@@ -76,7 +89,7 @@ function Settings() {
         toast.error(sessionExpired, {
           duration: 5000,
         });
-      }
+      } */
       //  server error
       else if (error?.response?.status === 500) {
         toast.error(serverErrorMessage, {
@@ -108,8 +121,11 @@ function Settings() {
                 active={active}
               />
             </TabPane>
-            <TabPane tabId="password">
-              <PasswordSettingTab />
+            <TabPane tabId="visa">
+              <PasswordSettingTab 
+               active={active}
+               currentPassport={profile?.currentPassport}
+               />
             </TabPane>
           </TabContent>
         </Col>

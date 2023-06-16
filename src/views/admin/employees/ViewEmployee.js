@@ -40,7 +40,7 @@ function ViewEmployee() {
   const navigate = useNavigate();
   // ** access token
   const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+    "access_token"
   );
   // ** states
   const [active, setActive] = useState("missions");

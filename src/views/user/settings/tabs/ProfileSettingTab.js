@@ -4,7 +4,10 @@ import React, {
   useState,
 } from 'react';
 
-import { X } from 'react-feather';
+import {
+  Check,
+  X,
+} from 'react-feather';
 // ** toast
 import toast from 'react-hot-toast';
 import {
@@ -21,7 +24,6 @@ import {
 // ** utils
 // ** api config
 import axios from '../../../../service/axios';
-import { cleanUserLocalStorage } from '../../../../utility/Auth';
 import { sessionExpired } from '../../../../utility/messages';
 
 // ** -------------------------------------------------------------------------------
@@ -74,16 +76,16 @@ function Employees({ employee, refresh, active , user }) {
       console.log(error)
       // not token
       if (error?.response?.status === 401) {
-        cleanUserLocalStorage();
-        navigate("/login");
+       /*  cleanUserLocalStorage();
+        navigate("/login"); */
         toast.error(sessionExpired, {
           duration: 5000,
         });
       }
       // expired
       else if (error?.response?.status === 403) {
-        cleanUserLocalStorage();
-        navigate("/login");
+        /* cleanUserLocalStorage();
+        navigate("/login"); */
         toast.error(sessionExpired, {
           duration: 5000,
         });
@@ -97,6 +99,7 @@ function Employees({ employee, refresh, active , user }) {
     }
     setLoading(false);
   };
+  /* console.log(passports?.items?.id */
   // ** Pagination
   const pagination = [];
   for (let i = 0; i < size / queries.l; i++) {
@@ -145,7 +148,7 @@ function Employees({ employee, refresh, active , user }) {
                     </span>
                   </td>
                   <td>
-                    {employee?.currentPassport === row?.id ? (
+                    {row?.employee?.currentPassport  === row?.id  ? (
                       <Badge color="light-success" className="p-50">
                         <Check size={23} />
                       </Badge>

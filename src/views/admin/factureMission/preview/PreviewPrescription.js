@@ -242,7 +242,7 @@ const PreviewCard = ({ data }) => {
               <div className="invoice-total-item">
                 <p className="invoice-total-title">Total:</p>
                 <p className="invoice-total-amount">
-                {data?.item?.mission?.planePrice+data?.item?.mission?.planePrice+data?.prxdium?.perdiem} $
+                {data?.item?.mission?.hotelPrice+data?.item?.mission?.planePrice+data?.prxdium?.perdiem} $
                 </p>
               </div>
             </div>

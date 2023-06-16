@@ -1,29 +1,51 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, {
+  useEffect,
+  useState,
+} from 'react';
+
 // ** Toast
-import toast from "react-hot-toast";
+import toast from 'react-hot-toast';
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
 // ** Reactstrap Imports
-import { Badge, Card, Col, Form, Input, Row, Table } from "reactstrap";
+import {
+  Badge,
+  Card,
+  Col,
+  Form,
+  Input,
+  Row,
+  Table,
+} from 'reactstrap';
+
 // ** Custom Components
-import Breadcrumbs from "@components/breadcrumbs";
-// ** sections
-import AddCompanySection from "../companies/section/AddCompanySection";
-import CompaniesCountDashboard from "../companies/section/CompaniesCountDashboard";
-// ** modals
-import CreateEmployeeModal from "./modals/CreateEmployeeModal";
-// ** utils
-import { cleanUserLocalStorage } from "../../../utility/Auth";
-import { serverErrorMessage, sessionExpired } from "../../../utility/messages";
-import { paginationOptions } from "../../../utility/Static";
+import Breadcrumbs from '@components/breadcrumbs';
+
 // ** api config
-import axios from "../../../service/axios";
+import axios from '../../../service/axios';
+// ** utils
+import { cleanUserLocalStorage } from '../../../utility/Auth';
+import {
+  serverErrorMessage,
+  sessionExpired,
+} from '../../../utility/messages';
+import { paginationOptions } from '../../../utility/Static';
+// ** sections
+import AddCompanySection from '../companies/section/AddCompanySection';
+import CompaniesCountDashboard
+  from '../companies/section/CompaniesCountDashboard';
+// ** modals
+import CreateEmployeeModal from './modals/CreateEmployeeModal';
+
 // ** -----------------------------------------------------------------------
 function Employees() {
   // ** router
   const navigate = useNavigate();
   // ** access token
   const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+    "access_token"
   );
   // ** initial state
   const initialQueries = {
@@ -50,13 +72,10 @@ function Employees() {
     setLoading(true);
     try {
       const res = await axios.get("employee/all", {
-        /* params: {
-          page: queries.p,
-          limit: queries.l,
-        },
+       
         headers: {
           authorization: `Bearer ${accesToken}`,
-        }, */
+        },
       });
       if (res?.status === 200) {
         setEmployees([...res?.data?.items]);

@@ -57,7 +57,7 @@ const AdminSettings = lazy(()=>import("../../views/admin/settings/AdminSettings"
 const EmployeeMission = lazy(()=>import("../../views/user/mission/EmployeeMission"))
 
 // ** user settings
-const CeoDashboard = lazy(()=>("../../views/ceo/dashboard/CeoDashboard"))
+const CeoDashboard = lazy(()=>import("../../views/ceo/dashboard/CeoDashboard"))
 // ** cliient imports ----------------------------------------------------------------------
 const EmployeeSettings = lazy(()=>import("../../views/user/settings/Settings"))
 

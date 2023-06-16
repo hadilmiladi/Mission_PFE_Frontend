@@ -25,11 +25,11 @@ function Tabs({ activeTab, toggleTab }) {
       </NavItem>
       <NavItem>
         <NavLink
-          active={activeTab === "password"}
-          onClick={() => toggleTab("password")}
+          active={activeTab === "visa"}
+          onClick={() => toggleTab("visa")}
         >
           <Lock size={18} className="me-50" />
-          <span className="fw-bold">Sécurité</span>
+          <span className="fw-bold">visa</span>
         </NavLink>
       </NavItem>
     </Nav>

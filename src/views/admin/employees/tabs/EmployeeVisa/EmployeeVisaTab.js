@@ -30,10 +30,10 @@ import CreateVisaModal from './CreateNewVisa';
 function EmployeeVisaTab({refresh,currentPassport,active }) {
   // ** router
   const navigate = useNavigate();
-  // ** access token
-  const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
-  );
+ // ** access token
+ const accesToken = localStorage.getItem(
+  "access_token"
+);
   // ** initial state
   const initialQueries = {
     p: 1,
@@ -55,17 +55,23 @@ function EmployeeVisaTab({refresh,currentPassport,active }) {
       fetchEmplyees()
     }
   }, [active]);
+  //console.log(currentPassport)
   // ** fetch function
   const fetchEmplyees = async () => {
     setLoading(true);
     try {
       const res = await axios.get(`visa/passport/${currentPassport.id}`, {
+        headers: {
+          authorization: `Bearer ${accesToken}`,
+        },
       });
-      console.log("res: ", res.data);
+      
       if (res?.status === 200) {
         setvisa([...res?.data?.items]);
         setSize(res?.data?.size);
+        
       }
+      console.log("res: ", visa);
     } catch (error) {
       // not token
       if (error?.response?.status === 401) {
