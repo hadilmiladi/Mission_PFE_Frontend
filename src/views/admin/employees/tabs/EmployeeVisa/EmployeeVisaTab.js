@@ -174,7 +174,7 @@ function EmployeeVisaTab({refresh,currentPassport,active }) {
       <CreateVisaModal
         visibility={showCreateEmployeesModal}
         closeModal={() => setShowCreateEmployeesModal(false)}
-        refresh={refresh}
+        refresh={fetchEmplyees}
         currentPassport={currentPassport}
       />
     </>

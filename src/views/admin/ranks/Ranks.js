@@ -50,10 +50,10 @@ import AddRankSection from './section/AddRankSection';
 function Ranks() {
   // ** router
   const navigate = useNavigate();
-  // ** access token
-  const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
-  );
+ // ** access token
+ const accesToken = localStorage.getItem(
+  "access_token"
+);
   // ** initial state
   const initialQueries = {
     p: 1,
@@ -82,13 +82,10 @@ function Ranks() {
     setLoading(true);
     try {
       const res = await axios.get("rank/all", {
-        /* params: {
-          page: queries.p,
-          limit: queries.l,
-        },
+        
         headers: {
           authorization: `Bearer ${accesToken}`,
-        }, */
+        }, 
       });
       if (res?.status === 200) {
         setRanks([...res?.data?.items]);

@@ -1,32 +1,41 @@
 // ** React Imports
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+
+// ** Third Party Components
+import toast from 'react-hot-toast';
 // ** Reactstrap Imports
 import {
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
   Col,
+  Modal,
+  ModalBody,
+  ModalHeader,
   Spinner,
-} from "reactstrap";
-// ** Third Party Components
-import toast from "react-hot-toast";
-// ** utils
-import { serverErrorMessage } from "../../../../../utility/messages";
+} from 'reactstrap';
+
 // ** api config
-import axios from "../../../../../service/axios";
+import axios from '../../../../../service/axios';
+// ** utils
+import { serverErrorMessage } from '../../../../../utility/messages';
+
 // ** --------------------------------------------------------------------------
 function DeleteEmployeeModal(props) {
   // ** Props
   const { visibility, closeModal, row, refresh, closeMainModal } = props;
   // ** states
   const [spinning, setSpinning] = useState(false);
+   // ** access token
+   const accesToken = localStorage.getItem(
+    "access_token"
+  );
   // ** on submit
   const onSubmit = async () => {
     setSpinning(true);
     try {
-      const res = await axios.delete(`mission/delete/${row?.id}`, {});
+      const res = await axios.delete(`mission/delete/${row?.id}`,{
+        headers: {
+          authorization: `Bearer ${accesToken}`,
+        },});
       if (res?.status === 202) {
         toast.success(`Mission was deleted successfully`, {
           duration: 5000,

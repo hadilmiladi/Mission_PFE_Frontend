@@ -40,6 +40,10 @@ function EditMissionModal(props) {
   const { visibility, closeModal, refresh, row, closeMainModal } = props;
   // ** param
   const { id } = useParams();
+   // ** access token
+   const accesToken = localStorage.getItem(
+    "access_token"
+  );
   // ** router
   const navigate = useNavigate();
   // **
@@ -71,7 +75,10 @@ function EditMissionModal(props) {
   // fetc client
   const fetchClients = async () => {
     try {
-      const res = await axios.get("client/all");
+      const res = await axios.get("client/all",{
+        headers: {
+          authorization: `Bearer ${accesToken}`,
+        },});
       if (res?.status === 200) {
         setClients([...res?.data?.items]);
       }
@@ -89,7 +96,11 @@ function EditMissionModal(props) {
     event.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.put(`mission/update/${row.id}`, mission);
+      const res = await axios.put(`mission/update/${row.id}`, mission,{
+        headers: {
+          authorization: `Bearer ${accesToken}`,
+        },
+      });
       if (res?.status === 202) {
         toast.success(`Mission was updated successfully`);
         refresh();

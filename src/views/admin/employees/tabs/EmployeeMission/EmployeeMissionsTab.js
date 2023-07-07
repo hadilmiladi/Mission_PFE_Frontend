@@ -14,7 +14,7 @@ import {
   useNavigate,
   useParams,
 } from 'react-router-dom';
-// ** react imports
+// ** reactstrap
 import {
   Badge,
   Button,
@@ -22,6 +22,7 @@ import {
   Table,
 } from 'reactstrap';
 
+// ** axios instance
 import axios from '../../../../../service/axios';
 // ** sections
 import AddCompanySection from '../../../companies/section/AddCompanySection';
@@ -30,30 +31,33 @@ import ConfirmMissionModal from './ConfirmMissionModal';
 import CreateMissionModal from './CreateNewMission';
 import DeleteEmployeeModal from './DeleteEmployeeModal';
 import EditMissionModal from './EditMissionModal';
+import ValidMissionModal from './ValidatedMission';
 import ViewMissionModal from './ViewMissionModal';
 
 // -------------------------------------------------------------------------
-function EmployeeMissionsTab({ active, }) {
+function EmployeeMissionsTab({ active }) {
   // ** router
   const navigate = useNavigate();
   const { id } = useParams();
+
   // ** access token
-  const accesToken = localStorage.getItem(
-    "access_token"
-  );
+  const accessToken = localStorage.getItem('access_token');
+
   // ** initial state
   const initialQueries = {
     p: 1,
     l: 10,
-    sortBy: "default",
-    select: "all",
+    sortBy: 'default',
+    select: 'all',
   };
+
   // ** states
   const [missions, setMissions] = useState([]);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState(0);
   const [queries, setQueries] = useState({ ...initialQueries });
   const [selectedMission, setSelectedMission] = useState({});
+
   // ** modals
   const [showCreateMissionModal, setShowCreateMissionModal] = useState(false);
   const [showViewMissionModal, setShowViewMissionModal] = useState(false);
@@ -61,61 +65,64 @@ function EmployeeMissionsTab({ active, }) {
   const [showEditMissionModal, setShowEditMissionModal] = useState(false);
   const [showCancelMissionModal, setShowCancelMissionModal] = useState(false);
   const [showAcceptMissionModal, setShowAcceptMissionModal] = useState(false);
+  const [showValidMissionModal, setShowValidMissionModal] = useState(false);
+
   // ** fetch data
   useEffect(() => {
-    if (active === "missions") {
+    if (active === 'missions') {
       fetchMissions();
     }
   }, [active]);
+
   // ** fetch function
   const fetchMissions = async () => {
-    console.log("called");
     setLoading(true);
-     try {
-      const res = await axios.get(`mission/employee/${id}`,{
-      headers: {
-        authorization: `Bearer ${accesToken}`,
-      },})
+    try {
+      const res = await axios.get(`mission/employee/${id}`, {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
       if (res?.status === 200) {
         setMissions([...res?.data?.items]);
         setSize(res?.data?.size);
       }
     } catch (error) {
-      console.log("err: ", error);
-      // errors
+      console.log('err: ', error);
+      // handle errors
     }
-    setLoading(false); 
+    setLoading(false);
   };
+
   // ** Pagination
   const pagination = [];
   for (let i = 0; i < size / queries.l; i++) {
     pagination.push(i);
   }
+
   // ** pagination config
   const prevPagination = () => {
     if (queries.p > 0) {
       setQueries((prev) => ({ ...prev, p: queries.p - 1 }));
     }
   };
-  // ** next
+
   const nextPagination = () => {
     const condition = queries.p == (size / queries.l).toFixed(0);
     if (!condition) {
       setQueries((prev) => ({ ...prev, p: queries.p + 1 }));
     }
   };
-  // ** select
+
   const selectPagination = (index) => {
     setQueries((prev) => ({ ...prev, p: index }));
   };
-  // ** ==>
+
   return (
     <>
-      <AddCompanySection
-        refresh={fetchMissions}
-        openModal={() => setShowCreateMissionModal(true)}
-      />
-      <Card className={`${missions?.length === 0 && "pb-2"} pb-1`}>
+      <AddCompanySection refresh={fetchMissions} openModal={() => setShowCreateMissionModal(true)} />
+
+      <Card className={`${missions?.length === 0 && 'pb-2'} pb-1`}>
         <Table responsive>
           <thead>
             <tr>
@@ -132,44 +139,46 @@ function EmployeeMissionsTab({ active, }) {
               return (
                 <tr key={`row-${index}`}>
                   <td>
-                    <span className="user_name text-truncate text-body fw-bolder">
-                      {row?.id}
-                    </span>
+                    <span className="user_name text-truncate text-body fw-bolder">{row?.id}</span>
+                  </td>
+                  <td>
+                    <span className="user_name text-truncate text-body fw-bolder">{row?.client?.company_name}</span>
                   </td>
                   <td>
                     <span className="user_name text-truncate text-body fw-bolder">
-                      {row?.client?.company_name}
+                      {`${String(row?.start).slice(0, 16)}-${String(row?.finish).slice(0, 16)}`}
                     </span>
                   </td>
                   <td>
-                    <span className="user_name text-truncate text-body fw-bolder">
-                      {`${String(row?.start).slice(0, 16)}-${String(
-                        row?.finish
-                      ).slice(0, 16)}`}
-                    </span>
+                    <span className="user_name text-truncate text-body fw-bolder">{row?.destination}</span>
                   </td>
                   <td>
-                    <span className="user_name text-truncate text-body fw-bolder">
-                      {row?.destination}
-                    </span>
-                  </td>
-                  <td>
-                    {row?.accepted === true && row?.declined === false ? (
+                    {row?.accepted === true && row?.declined === false && row?.validated === false ? (
                       <Badge color="light-success" className="p-50 w-100">
                         Accepted
                       </Badge>
-                    ) : row?.accepted === false && row?.declined === true ? (
+                    ) : row?.accepted === false && row?.declined === false && row?.validated === true ? (
+                      <Badge color="light-info" className="p-50 w-100">
+                        Validated
+                      </Badge>
+                    ) : row?.accepted === false && row?.declined === true && row?.validated === false ? (
                       <Badge color="light-danger" className="p-50 w-100">
                         Canceled
                       </Badge>
-                    ) : row?.accepted === false && row?.declined === false ? (
+                    ) : row?.accepted === false && row?.declined === false && row?.validated === false ? (
                       <Badge color="light-primary" className="p-50 w-100">
                         Pending
                       </Badge>
                     ) : null}
                   </td>
                   <td>
-                  <Button to={`/admin/invoice/${row?.id}`} tag={Link} color="primary" className="btn-icon rounded-circle me-25" disabled={row?.accepted===false}>
+                    <Button
+                      to={`/admin/invoices/${row?.id}`}
+                      tag={Link}
+                      color="primary"
+                      className="btn-icon rounded-circle me-25"
+                      disabled={row?.accepted === false}
+                    >
                       <FileText size={16} />
                     </Button>
                     <Button
@@ -189,11 +198,13 @@ function EmployeeMissionsTab({ active, }) {
           </tbody>
         </Table>
       </Card>
+
       <CreateMissionModal
         visibility={showCreateMissionModal}
         closeModal={() => setShowCreateMissionModal(false)}
         refresh={fetchMissions}
       />
+
       <ViewMissionModal
         visibility={showViewMissionModal}
         closeModal={() => setShowViewMissionModal(false)}
@@ -201,8 +212,10 @@ function EmployeeMissionsTab({ active, }) {
         openDeleteMissionModal={() => setShowDeleteMissionModal(true)}
         openCancelMissionModal={() => setShowCancelMissionModal(true)}
         openConfirmMissionModal={() => setShowAcceptMissionModal(true)}
+        openValidMissionModal={() => setShowValidMissionModal(true)}
         openEditMissionModal={() => setShowEditMissionModal(true)}
       />
+
       <DeleteEmployeeModal
         visibility={showDeleteMissionModal}
         closeModal={() => setShowDeleteMissionModal(false)}
@@ -210,6 +223,7 @@ function EmployeeMissionsTab({ active, }) {
         row={selectedMission}
         refresh={fetchMissions}
       />
+
       <CancelMissionModal
         visibility={showCancelMissionModal}
         closeModal={() => setShowCancelMissionModal(false)}
@@ -217,6 +231,7 @@ function EmployeeMissionsTab({ active, }) {
         row={selectedMission}
         refresh={fetchMissions}
       />
+
       <ConfirmMissionModal
         visibility={showAcceptMissionModal}
         closeModal={() => setShowAcceptMissionModal(false)}
@@ -224,6 +239,15 @@ function EmployeeMissionsTab({ active, }) {
         row={selectedMission}
         refresh={fetchMissions}
       />
+
+      <ValidMissionModal
+        visibility={showValidMissionModal}
+        closeModal={() => setShowValidMissionModal(false)}
+        closeMainModal={() => setShowViewMissionModal(false)}
+        row={selectedMission}
+        refresh={fetchMissions}
+      />
+
       <EditMissionModal
         visibility={showEditMissionModal}
         closeModal={() => setShowEditMissionModal(false)}

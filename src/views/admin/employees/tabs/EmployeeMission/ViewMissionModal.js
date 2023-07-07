@@ -8,6 +8,7 @@ import {
 import {
   Check,
   Edit,
+  Pocket,
   Slash,
   Trash,
 } from 'react-feather';
@@ -31,6 +32,7 @@ function ViewMissionModal(props) {
     openCancelMissionModal,
     openConfirmMissionModal,
     openEditMissionModal,
+    openValidMissionModal
   } = props;
   // ** states
   const [mission, setMission] = useState({});
@@ -108,11 +110,15 @@ function ViewMissionModal(props) {
             </li>
             <li className="mb-75">
               <span className="fw-bolder me-25">Status :</span>
-              {mission?.accepted === true && mission?.declined === false ? (
+              {mission?.accepted === true && mission?.declined === false && mission?.validated === false ? (
                 <Badge color="light-success" className="p-50">
                   Accepted
                 </Badge>
-              ) : mission?.accepted === false && mission?.declined === true ? (
+              ) : mission?.accepted === false && mission?.declined === false && mission?.validated === true ? (
+                <Badge color="light-info" className="p-50 ">
+                  Validated
+                </Badge>
+              ) :mission?.accepted === false && mission?.declined === true && mission?.validated === false ? (
                 <Badge color="light-danger" className="p-50">
                   Canceled
                 </Badge>
@@ -122,7 +128,7 @@ function ViewMissionModal(props) {
                 </Badge>
               )}
             </li>
-            {mission?.accepted === true && mission?.declined === false && (
+            {mission?.accepted === true && mission?.declined === false && mission?.validated === false && (
               <>
                 <li className="mb-75">
                   <span className="fw-bolder me-25">Accepted At :</span>
@@ -130,13 +136,27 @@ function ViewMissionModal(props) {
                     {String(mission?.acceptedAt).slice(0, 10)}
                   </span>
                 </li>
-                <li className="mb-75">
+                {/* <li className="mb-75">
                   <span className="fw-bolder me-25">Reason :</span>
                   <span className="text-capitalize">{mission?.comment}</span>
-                </li>
+                </li> */}
               </>
             )}
-            {mission?.accepted === false && mission?.declined === true && (
+              {mission?.accepted === false && mission?.declined === false && mission?.validated === true && (
+              <>
+                <li className="mb-75">
+                  <span className="fw-bolder me-25">Accepted At :</span>
+                  <span className="text-capitalize">
+                    {String(mission?.validatedAt).slice(0, 10)}
+                  </span>
+                </li>
+                {/* <li className="mb-75">
+                  <span className="fw-bolder me-25">Reason :</span>
+                  <span className="text-capitalize">{mission?.comment}</span>
+                </li> */}
+              </>
+            )}
+            {mission?.accepted === false && mission?.declined === true && mission?.validated === false && (
               <>
                 <li className="mb-75">
                   <span className="fw-bolder me-25">Declined At :</span>
@@ -176,6 +196,14 @@ function ViewMissionModal(props) {
               onClick={openConfirmMissionModal}
             >
               <Check size={18} />
+            </Button>
+            <Button
+              id="openSetOrderDeliveredModal"
+              color="info"
+              className="btn-icon rounded-circle"
+              onClick={openValidMissionModal}
+            >
+              <Pocket size={18} />
             </Button>
             <Button
               id="openDeleteOrderModal"

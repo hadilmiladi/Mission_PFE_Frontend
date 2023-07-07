@@ -15,9 +15,9 @@ import {
 import axios from '../../../service/axios';
 
 function Mission() {
-  // ** access token
-  const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+   // ** access token
+   const accesToken = localStorage.getItem(
+    "access_token"
   );
   // ** initial state
   const initialQueries = {
@@ -49,7 +49,10 @@ const handleClick = (id) => {
   console.log("called");
   setLoading(true);
    try {
-    const res = await axios.get(`mission/all`)
+    const res = await axios.get(`mission/all`,{
+      headers: {
+        authorization: `Bearer ${accesToken}`,
+      },})
     if (res?.status === 200) {
       setMissions([...res?.data?.items]);
       setSize(res?.data?.size);

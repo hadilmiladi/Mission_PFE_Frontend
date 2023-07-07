@@ -23,8 +23,6 @@ import {
 
 // ** api config
 import axios from '../../../../service/axios';
-// ** utilies functions
-import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
   badRequestMessage,
@@ -39,9 +37,9 @@ function CreateEmployeeModal(props) {
   const { visibility, closeModal, refresh } = props;
   // ** router
   const navigate = useNavigate();
-  // ** access token
-  const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+   // ** access token
+   const accesToken = localStorage.getItem(
+    "access_token"
   );
   // ** initial employee
   const initialEmployee = {
@@ -115,16 +113,16 @@ function CreateEmployeeModal(props) {
       }
       // not token
       else if (error?.response?.status === 401) {
-        cleanUserLocalStorage();
-        navigate("/login");
+        /* cleanUserLocalStorage();
+        navigate("/login"); */
         toast.error(sessionExpired, {
           duration: 5000,
         });
       }
       // token invalide
       else if (error?.response?.status === 403) {
-        cleanUserLocalStorage();
-        navigate("/login");
+       /*  cleanUserLocalStorage();
+        navigate("/login"); */
         toast.error(sessionExpired, {
           duration: 5000,
         });

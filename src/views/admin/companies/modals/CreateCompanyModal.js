@@ -1,42 +1,45 @@
 // ** React Imports
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+
+// ** toast
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Row,
   Col,
+  FormFeedback,
   Input,
   Label,
-  FormFeedback,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Row,
   Spinner,
-} from "reactstrap";
-// ** toast
-import toast from "react-hot-toast";
+} from 'reactstrap';
+
+// ** api config
+import axios from '../../../../service/axios';
 // ** utilies functions
-import { cleanUserLocalStorage } from "../../../../utility/Auth";
+import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
-  sessionExpired,
-  serverErrorMessage,
-  requiredField,
   badRequestMessage,
-} from "../../../../utility/messages";
-// ** api config
-import axios from "./../../../../service/axios";
+  requiredField,
+  serverErrorMessage,
+  sessionExpired,
+} from '../../../../utility/messages';
+
 // ** --------------------------------------------------------------------------
 function CreateCompanyModal(props) {
   // ** props
   const { visibility, closeModal, refresh } = props;
   // ** router
   const navigate = useNavigate();
-  // ** access token
-  const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
-  );
+    // ** access token
+    const accesToken = localStorage.getItem(
+      "access_token"
+    );
   // ** initial company
   const initialCompany = {
     company_name: "",

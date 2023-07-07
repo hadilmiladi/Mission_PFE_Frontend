@@ -18,11 +18,13 @@ import {
   serverErrorMessage,
   sessionExpired,
 } from '../../../../utility/messages';
+import AddCompanySection from '../../companies/section/AddCompanySection';
+import AddNewVisa from './AddNewVisa';
 
 /* import AddCompanySection from '../../../companies/section/AddCompanySection';
 import CreateVisaModal from './CreateNewVisa'; */
 // ** -----------------------------------------------------------------------
-function UserVisaTab({currentPassport,active }) {
+function UserVisaTab({currentPassport,active , refresh}) {
   console.log("current: ",currentPassport)
  // ** router
  const navigate = useNavigate();
@@ -43,7 +45,9 @@ function UserVisaTab({currentPassport,active }) {
    const [size, setSize] = useState(0);
    const [loading, setLoading] = useState(false);
    const [queries, setQueries] = useState({ ...initialQueries });
- 
+    // modals
+    const [showAddNewVisa, setShowAddNewVisa] =
+    useState(false);
   // **// ** fetching data
   useEffect(() => {
     if(active==="visa"){
@@ -65,6 +69,7 @@ function UserVisaTab({currentPassport,active }) {
         setvisa([...res?.data?.items]);
         setSize(res?.data?.size);
       }
+      console.log(visa)
     } catch (error) {
       console.log(error)
       // not token
@@ -118,10 +123,10 @@ const selectPagination = (index) => {
 // ** ==>
 return (
   <>
-    {/* <AddCompanySection
-      refresh={fetchEmplyees}
-      openModal={() => setShowCreateEmployeesModal(true)}
-    /> */}
+    <AddCompanySection
+        refresh={fetchVisa}
+        openModal={() => setShowAddNewVisa(true)}
+      />
     <Card className={`${visa?.length === 0 && "pb-2"} pb-1`}>
       <Table responsive>
         <thead>
@@ -166,12 +171,12 @@ return (
         </tbody>
       </Table>
     </Card>
-   {/*  <CreateVisaModal
-      visibility={showCreateEmployeesModal}
-      closeModal={() => setShowCreateEmployeesModal(false)}
-      refresh={refresh}
+    <AddNewVisa
+      visibility={showAddNewVisa}
+      closeModal={() => setShowAddNewVisa(false)}
+      refresh={fetchVisa}
       currentPassport={currentPassport}
-    /> */}
+    />
   </>
 );
 }

@@ -42,9 +42,9 @@ function EditCompanyModal(props) {
   const { visibility, closeModal, refresh, row } = props;
   // ** router
   const navigate = useNavigate();
-  // ** access token
-  const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+   // ** access token
+   const accesToken = localStorage.getItem(
+    "access_token"
   );
   // ** initial company
   const initialCompany = {

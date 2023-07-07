@@ -26,6 +26,11 @@ import { serverErrorMessage } from '../../../../../utility/messages';
 function CancelMissionModal(props) {
   // ** Props
   const { visibility, closeModal, row, refresh, closeMainModal } = props;
+
+  // ** access token
+  const accesToken = localStorage.getItem(
+    "access_token"
+  );
   // ** states
   const [spinning, setSpinning] = useState(false);
   const [comment, setComment] = useState("");
@@ -37,9 +42,15 @@ function CancelMissionModal(props) {
     setShowAlert(false)
     try {
       const res = await axios.put(`mission/status/set/${row?.id}`, {
-        operation: "cancel",
+        declined:true,
+        accepted:false,
+        validated:false,
         comment,
-      });
+      },
+      {
+        headers: {
+          authorization: `Bearer ${accesToken}`,
+    }},);
       if (res?.status === 202) {
         toast.success(`Mission was canceled successfully`, {
           duration: 5000,

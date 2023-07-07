@@ -27,7 +27,7 @@ function ConfirmMissionModal(props) {
   const navigate = useNavigate();
   // ** access token
   const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+    "access_token"
   );
   // ** states
   const [spinning, setSpinning] = useState(false);
@@ -36,7 +36,13 @@ function ConfirmMissionModal(props) {
     setSpinning(true);
     try {
       const res = await axios.put(`mission/status/set/${row?.id}`, {
-        operation: "accept",
+        accepted: true,
+        declined: false,
+        validated: false
+      },{
+        headers: {
+          authorization: `Bearer ${accesToken}`,
+        },
       });
       if (res?.status === 202) {
         toast.success(`Mission was accepted successfully`, {

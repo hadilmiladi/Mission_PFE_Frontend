@@ -25,8 +25,6 @@ import {
 
 // ** api config
 import axios from '../../../../../service/axios';
-// ** utilies functions
-import { cleanUserLocalStorage } from '../../../../../utility/Auth';
 // ** utily messages
 import {
   badRequestMessage,
@@ -40,6 +38,10 @@ const CreateMissionModal = (props) => {
   const { visibility, closeModal, refresh } = props;
   // ** param
   const { id } = useParams();
+    // ** access token
+    const accesToken = localStorage.getItem(
+      "access_token"
+    );
   // ** router
   const navigate = useNavigate();
   // **
@@ -70,7 +72,9 @@ const CreateMissionModal = (props) => {
   // fetc client
   const fetchClients = async () => {
     try {
-      const res = await axios.get("client/all");
+      const res = await axios.get("client/all",{ headers: {
+        authorization: `Bearer ${accesToken}`,
+      },});
       if (res?.status === 200) {
         setClients([...res?.data?.items]);
       }
@@ -88,7 +92,10 @@ const CreateMissionModal = (props) => {
     event.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("mission/create", mission);
+      const res = await axios.post("mission/create", mission,{
+        headers: {
+          authorization: `Bearer ${accesToken}`,
+        },});
       if (res?.status === 201) {
         toast.success(`New mission was created successfully`);
         refresh();
@@ -104,16 +111,16 @@ const CreateMissionModal = (props) => {
       }
       // not token
       else if (error?.response?.status === 401) {
-        cleanUserLocalStorage();
-        navigate("/login");
+       /*  cleanUserLocalStorage();
+        navigate("/login"); */
         toast.error(sessionExpired, {
           duration: 5000,
         });
       }
       // token invalide
       else if (error?.response?.status === 403) {
-        cleanUserLocalStorage();
-        navigate("/login");
+       /*  cleanUserLocalStorage();
+        navigate("/login"); */
         toast.error(sessionExpired, {
           duration: 5000,
         });

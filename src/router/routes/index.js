@@ -34,6 +34,9 @@ const Login = lazy(() => import("../../views/Auth/Login"));
 const AdminCompanies = lazy(() =>
   import("../../views/admin/companies/Companies")
 );
+const AdminProfile = lazy(() =>
+  import("../../views/admin/AdminProfile/index")
+);
 //** employees */
 const AdminEmployees = lazy(() =>
   import("../../views/admin/employees/Employees")
@@ -52,15 +55,20 @@ const AdminInvoice = lazy(() =>
   import("../../views/admin/factureMission/preview/index")
 );
 const AdminMission = lazy(()=>import("../../views/admin/mission/Mission"))
-const AdminSettings = lazy(()=>import("../../views/admin/settings/AdminSettings"))
+/* const AdminSettings = lazy(()=>import("../../views/admin/settings/Settings")) */
 // ** user settings
 const EmployeeMission = lazy(()=>import("../../views/user/mission/EmployeeMission"))
 
+// ** ceo mission
+const MissionCeo = lazy(()=>import("../../views/ceo/missionCeo/CeoMission"))
 // ** user settings
 const CeoDashboard = lazy(()=>import("../../views/ceo/dashboard/CeoDashboard"))
+// ** ceo passportvisa
+const CeoSettings = lazy(()=>import("../../views/ceo/CeopassportVisa/Settings"))
 // ** cliient imports ----------------------------------------------------------------------
 const EmployeeSettings = lazy(()=>import("../../views/user/settings/Settings"))
 
+const Invoice=lazy(()=>import("../../views/admin/factureMission/invoices"))
 // ** Catching imports ----------------------------------------------------------------------
 const Error = lazy(() => import("../../views/Error"));
 
@@ -102,17 +110,25 @@ const Routes = [
     element:<AdminInvoices />
   },
   {
-    path: "/admin/invoice/:id",
+    path:"/admin/miniinvoice/:id",
+    element:<Invoice />
+  },
+  {
+    path: "/admin/invoices/:id",
     element: <AdminInvoice />,
   },
   {
     path:"/admin/missions",
     element:<AdminMission />
-  },
+  }, 
   {
+    path:"/admin/profile",
+    element:<AdminProfile />
+  },
+  /* {
     path: "/admin/settings",
     element: <AdminSettings />,
-  },
+  }, */
   // ** user settings routes -------------------------------------------------------
   {
     path:"/employee/missions",
@@ -128,13 +144,21 @@ const Routes = [
     element: <CeoDashboard />,
   },
   {
-    path: "/ceo/employees",
-    element: <AdminEmployees />,
+    path: "/ceo/missionCeo",
+    element: <MissionCeo />,
   },
   {
-    path: "/ceo/missions",
-    element: <AdminMission />,
+    path: "/ceo/settings",
+    element: <CeoSettings />,
   },
+  /* {
+    path: "/ceo/employees",
+    element: <AdminEmployees />,
+  }, */
+  /* {
+    path: "/ceo/mission",
+    element: <AdminMission />,
+  }, */
   // ** Catching errors ------------------------------------------------------------
   {
     path: "/error",

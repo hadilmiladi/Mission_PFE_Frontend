@@ -1,37 +1,43 @@
 // ** React Imports
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useState,
+} from 'react';
+
+// ** Third Party Components
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
 import {
-  Button,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  Col,
-  Spinner,
   Alert,
-} from "reactstrap";
-// ** Third Party Components
-import toast from "react-hot-toast";
+  Button,
+  Col,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Spinner,
+} from 'reactstrap';
+
 // ** api config
-import axios from "../../../../service/axios";
+import axios from '../../../../service/axios';
 // ** utilies functions
-import { cleanUserLocalStorage } from "../../../../utility/Auth";
+import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
-  sessionExpired,
-  serverErrorMessage,
   badRequestMessage,
-} from "../../../../utility/messages";
+  serverErrorMessage,
+  sessionExpired,
+} from '../../../../utility/messages';
+
 // ** --------------------------------------------------------------------------
 function DeleteCompanyModal(props) {
   // ** Props
   const { visibility, closeModal, row, refresh } = props;
   // ** router
   const navigate = useNavigate();
-  // ** access token
-  const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+   // ** access token
+   const accesToken = localStorage.getItem(
+    "access_token"
   );
   // ** states
   const [spinning, setSpinning] = useState(false);

@@ -9,7 +9,10 @@ import {
 } from 'react-feather';
 // ** Toast
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import {
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Badge,
@@ -39,6 +42,8 @@ function Employees({ employee, passports, refresh }) {
  const accesToken = localStorage.getItem(
   "access_token"
 );
+
+
   // ** initial state
   const initialQueries = {
     p: 1,
@@ -51,6 +56,8 @@ function Employees({ employee, passports, refresh }) {
   const [size, setSize] = useState(0);
   const [loading, setLoading] = useState(false);
   const [queries, setQueries] = useState({ ...initialQueries });
+  const { id } = useParams();
+  console.log('id', id);
   // modals
   const [showCreateEmployeesModal, setShowCreateEmployeesModal] =
     useState(false);
@@ -58,6 +65,7 @@ function Employees({ employee, passports, refresh }) {
   useEffect(() => {
     fetchEmplyees();
   }, []);
+  
   // ** fetch function
   const fetchEmplyees = async () => {
     setLoading(true);
@@ -98,6 +106,7 @@ function Employees({ employee, passports, refresh }) {
     }
     setLoading(false);
   };
+  
   // ** Pagination
   const pagination = [];
   for (let i = 0; i < size / queries.l; i++) {

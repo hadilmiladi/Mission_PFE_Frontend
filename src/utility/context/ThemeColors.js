@@ -1,5 +1,9 @@
 // ** React Imports
-import { useEffect, useState, createContext } from "react"
+import {
+  createContext,
+  useEffect,
+  useState,
+} from 'react';
 
 // ** Create Context
 const ThemeColors = createContext()
@@ -55,4 +59,4 @@ const ThemeContext = ({ children }) => {
   )
 }
 
-export { ThemeColors, ThemeContext }
+export { ThemeColors, ThemeContext };

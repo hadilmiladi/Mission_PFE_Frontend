@@ -45,7 +45,7 @@ function CreateVisaModal(props) {
   const { id } = useParams();
   // ** access token
   const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+    "access_token"
   );
    // ** initial visa
    const initialVisa = {

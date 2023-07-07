@@ -5,42 +5,51 @@ import {
   useState,
 } from 'react';
 
+import jwt_decode from 'jwt-decode';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+// ** Reactstrap Imports
 import {
-  Breadcrumb,
   Col,
   Row,
   TabContent,
   TabPane,
 } from 'reactstrap';
 
-import axios from '../../../service/axios';
+// ** components
+import Breadcrumbs from '@components/breadcrumbs';
+
 // ** api config
+import axios from '../../../service/axios';
 import {
   badRequestMessage,
   serverErrorMessage,
 } from '../../../utility/messages';
-import Tabs from '../../user/settings/tabs/Tabs';
-//import Tabs from '../../user/settings/tabs/Tabs';
-import ProfileSettingTab from './AdminProfilSetting';
-
+import PasswordSettingTab from './tabs/PasswordSettingTab';
+import ProfileSettingTab from './tabs/ProfileSettingTab';
 // ** Tabs
-//import Tabs from './tabs/Tabs';
+import Tabs from './tabs/Tabs';
 
 // ** ------------------------------------------------------------------------
-function AdminSettings() {
+function Settings() {
   // ** access token
   const accesToken = localStorage.getItem(
     `access_token`
   );
+  const token = localStorage.getItem('access_token');
+  console.log('token', token);
+  const decodedToken = jwt_decode(token);
+  const id = decodedToken.id;
+
+  console.log('id :', id);
+
   // ** router
   const navigate = useNavigate();
   // ** states
   const [active, setActive] = useState("profile");
   const [profile, setProfile] = useState(null);
-   // ** fetching profile
-   useEffect(() => {
+  // ** fetching profile
+  useEffect(() => {
     // there's a token
     if (accesToken) {
       fetchProfile(); 
@@ -54,7 +63,7 @@ function AdminSettings() {
   // ** fetch function
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("employee/one", {
+      const res = await axios.get(`employee/one/${id}`, {
         headers: {
           authorization: `Bearer ${accesToken}`,
         },
@@ -73,7 +82,6 @@ function AdminSettings() {
           duration: 5000,
         });
       }
-      
       // not token
       /* else if (error?.response?.status === 401) {
         cleanUserLocalStorage();
@@ -98,7 +106,6 @@ function AdminSettings() {
       }
     }
   };
-  console.log(profile)
   // ** switch between tabs
   const toggleTab = (tab) => {
     setActive(tab);
@@ -106,7 +113,7 @@ function AdminSettings() {
   // ** ==>
   return (
     <Fragment>
-      <Breadcrumb
+      <Breadcrumbs
         title="Account Settings"
         data={[{ title: "Account Settings" }]}
       />
@@ -122,12 +129,12 @@ function AdminSettings() {
                 active={active}
               />
             </TabPane>
-            {/* <TabPane tabId="visa">
+            <TabPane tabId="visa">
               <PasswordSettingTab 
                active={active}
                currentPassport={profile?.currentPassport}
                />
-            </TabPane> */}
+            </TabPane>
           </TabContent>
         </Col>
       </Row>
@@ -135,7 +142,4 @@ function AdminSettings() {
   );
 }
 
-
-
-
-export default AdminSettings
+export default Settings;

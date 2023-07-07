@@ -1,5 +1,8 @@
 // ** React Imports
-import { useState } from 'react';
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 // ** toast
 import toast from 'react-hot-toast';
@@ -20,8 +23,6 @@ import {
 
 // ** api config
 import axios from '../../../../service/axios';
-// ** utilies functions
-import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
   badRequestMessage,
@@ -36,10 +37,10 @@ function CreateRankModal(props) {
     const { visibility, closeModal, refresh } = props;
     // ** router
     const navigate = useNavigate();
-    // ** access token
-    const accesToken = localStorage.getItem(
-      `${process.env.REACT_APP_ACCESS_TOKEN}`
-    );
+   // ** access token
+  const accesToken = localStorage.getItem(
+    "access_token"
+  );
      // ** initial rank
   const initialRank = {
     name: "",
@@ -50,11 +51,35 @@ function CreateRankModal(props) {
    const [spinning, setSpinning] = useState(false);
    const [errors, setErrors] = useState({});
    const [rank, setRank] = useState({ ...initialRank });
+   const [permission, setPermission] = useState('');
    // ** on change
    const onChange = (event) => {
     const { name, value } = event.target;
     setRank((prev) => ({ ...prev, [name]: value }));
   };
+  //useEffect
+  useEffect(() => {
+    const fetchRankData = async () => {
+      try {
+        const res = await axios.get('rank/all', {
+          headers: {
+            authorization: `Bearer ${accesToken}`,
+          },
+        });
+        if (res?.status === 200) {
+          const rank = res.data;
+          
+          setPermission(rank.permission);
+          //console.log(permission)
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    fetchRankData();
+  }, []);
+  console.log(rank)
   // ** on submit
   const onSubmit = async (event) => {
     event.preventDefault();
@@ -86,16 +111,16 @@ function CreateRankModal(props) {
             }
             // not token
             else if (error?.response?.status === 401) {
-                cleanUserLocalStorage();
-                navigate("/login");
+                /* cleanUserLocalStorage();
+                navigate("/login"); */
                 toast.error(sessionExpired, {
                   duration: 5000,
                 });
               }
                // token invalide
       else if (error?.response?.status === 403) {
-        cleanUserLocalStorage();
-        navigate("/login");
+       /*  cleanUserLocalStorage();
+        navigate("/login"); */
         toast.error(sessionExpired, {
           duration: 5000,
         });
@@ -141,6 +166,7 @@ function CreateRankModal(props) {
       }
       return errors;
   };
+  //console.log(permission)
   // ** reset form on close
   const resetForm = () => {
     setSpinning(false);
@@ -189,25 +215,34 @@ function CreateRankModal(props) {
             )}
           </Col>
           <Col md={12} xs={12}>
-            <Label className="form-label text-capitalize" for="permission">
-              Permission {": "} <span className="text-danger">*</span>
-            </Label>
-            <Input
-              id="permission"
-              type="text"
-              name="permission"
-              value={rank.permission}
-              onChange={onChange}
-              invalid={true && errors.permission}
-              placeholder="Example: ESB ..."
-              required
-            />
-             {errors.permission && (
-              <FormFeedback className="d-block text-capitalize fw-bold">
-                {errors.permission}
-              </FormFeedback>
-            )}
-          </Col>
+          
+  <Label className="form-label text-capitalize" for="permission">
+    Permission {": "} <span className="text-danger">*</span>
+  </Label>
+  <Input
+    id="permission"
+    type="select"
+    name="permission"
+    value={permission}
+    onChange={onChange}
+    invalid={!!errors.permission} // Updated to use boolean conversion
+    placeholder="Example: ESB ..."
+    required
+  >
+    <option value="">Select Permission</option>
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+    <option value="ceo">CEO</option>
+    <option value="chef du projet">Chef du Projet</option>
+  </Input>
+  {errors.permission && (
+    <FormFeedback className="d-block text-capitalize fw-bold">
+      {errors.permission}
+    </FormFeedback>
+  )}
+</Col>
+
+
           <Col md={12} xs={12}>
             <Label className="form-label text-capitalize" for="perdiem">
               Perdiem {": "} <span className="text-danger">*</span>

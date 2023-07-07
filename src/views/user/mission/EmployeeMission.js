@@ -4,6 +4,7 @@ import React, {
   useState,
 } from 'react';
 
+import { Eye } from 'react-feather';
 import {
   useNavigate,
   useParams,
@@ -11,16 +12,20 @@ import {
 // ** react imports
 import {
   Badge,
+  Button,
   Card,
   Table,
 } from 'reactstrap';
 
 import axios from '../../../service/axios';
+import AddCompanySection from '../companies/section/AddCompanySection';
+import CreateNewMission from './CreateNewMission';
+import ViewMission from './ViewMission';
 
 function EmployeeMission() {
-   // ** access token
-   const accesToken = localStorage.getItem(
-    `${process.env.REACT_APP_ACCESS_TOKEN}`
+  // ** access token
+  const accesToken = localStorage.getItem(
+    "access_token"
   );
   // ** initial state
   const initialQueries = {
@@ -33,25 +38,27 @@ function EmployeeMission() {
 const [missions, setMissions] = useState([]);
 const [loading, setLoading] = useState(false);
 const [size, setSize] = useState(0);
+const [showViewMission, setShowViewMission] = useState(false);
 const [queries, setQueries] = useState({ ...initialQueries });
 const [selectedMission, setSelectedMission] = useState({});
 const navigate= useNavigate();
 const { id } = useParams();
-const handleClick = (id) => {
-  navigate(`/admin/employees/${id}`);
-};
+const [showCreateNewMission, setShowCreateNewMission] = useState(false);
+
  // ** fetch data
  useEffect(() => {
-  {
-    fetchMissions();
-  }
+   fetchMissions();
 }, []);
 // ** fetch function
 const fetchMissions = async () => {
   console.log("called");
   setLoading(true);
    try {
-    const res = await axios.get(`mission/employee/${id}`)
+    const res = await axios.get(`mission/employee`, {
+      headers: {
+        authorization: `Bearer ${accesToken}`,
+      },
+    })
     if (res?.status === 200) {
       setMissions([...res?.data?.items]);
       setSize(res?.data?.size);
@@ -86,13 +93,16 @@ const selectPagination = (index) => {
 };
 return (
   <>
+   <AddCompanySection
+        refresh={fetchMissions}
+        openModal={() => setShowCreateNewMission(true)}
+      />
     <Card className={`${missions?.length === 0 && 'pb-2'} pb-1`}>
       <Table responsive>
         <thead>
           <tr>
             <th>#</th>
             <th>Client</th>
-            <th>Employee</th>
             <th>Date</th>
             <th>Destination</th>
             <th>Status</th>
@@ -103,7 +113,7 @@ return (
           {missions.map((row, index) => {
               return (
                 
-                  <tr key={`row-${index}`} onClick={() => handleClick(row?.id)}> 
+                  <tr> 
                     <td>
                       <span className="user_name text-truncate text-body fw-bolder">
                         {row?.id}
@@ -112,11 +122,6 @@ return (
                     <td>
                       <span className="user_name text-truncate text-body fw-bolder">
                         {row?.client?.company_name}
-                      </span>
-                    </td>
-                    <td>
-                      <span className="user_name text-truncate text-body fw-bolder">
-                        {row?.employee?.firstname + ' ' + row?.employee?.lastname}
                       </span>
                     </td>
                     <td>
@@ -144,12 +149,36 @@ return (
                         </Badge>
                       ) : null}
                     </td>
+                    <td>  <Button
+                      color="primary"
+                      className="btn-icon rounded-circle"
+                      onClick={() => {
+                        setSelectedMission({ ...row });
+                        setShowViewMission(true);
+                      }}
+                    >
+                      <Eye size={16} />
+                    </Button></td>
                   </tr>
               );
             })}
           </tbody>
         </Table>
       </Card>
+      <ViewMission
+        visibility={showViewMission}
+        closeModal={() => setShowViewMission(false)}
+        row={selectedMission}
+       /*  openDeleteMissionModal={() => setShowDeleteMission(true)}
+        openCancelMissionModal={() => setShowCancelMissionModal(true)}
+        openConfirmMissionModal={() => setShowAcceptMissionModal(true)}
+        openEditMissionModal={() => setShowEditMissionModal(true)} */
+      />
+       <CreateNewMission
+        visibility={showCreateNewMission}
+        closeModal={() => setShowCreateNewMission(false)}
+        refresh={fetchMissions}
+      />
     </>
   );
 };

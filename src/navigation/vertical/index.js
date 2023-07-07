@@ -4,11 +4,12 @@ import {
   BarChart2,
   FileText,
   Settings,
+  User,
   Users,
 } from 'react-feather';
 
 export default [
-  // ** client navigation
+  // ** admin navigation
   {
     id:"adminMissions",
     title:"Missions",
@@ -44,11 +45,18 @@ export default [
     navLink: "/admin/invoice",
     role: "admin",
   },
-  {
+ /*  {
     id:"adminSettings",
     title: "Settings",
     icon: <Settings size={20} />,
     navLink: "/admin/settings",
+    role: "admin",
+  }, */
+  {
+    id:"adminProfile",
+    title: "Profile",
+    icon: <User size={20} />,
+    navLink: "/admin/profile",
     role: "admin",
   },
   {
@@ -76,7 +84,14 @@ export default [
     id:"ceoMissions",
     title:"Missions",
     icon: <Archive size={20} />,
-    navLink: "/ceo/missions",
+    navLink: "/ceo/missionCeo",
+    role: "ceo",
+  },
+  {
+    id:"ceoSttings",
+    title:"Passports/Visa",
+    icon: <Archive size={20} />,
+    navLink: "/ceo/settings",
     role: "ceo",
   },
   

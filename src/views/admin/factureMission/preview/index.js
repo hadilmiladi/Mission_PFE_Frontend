@@ -20,7 +20,8 @@ import {
 
 // ** Third Party Components
 import axios from '../../../../service/axios';
-import PreviewActions from './PreviewActions';
+//import SendInvoiceSidebar from '../shared-sidebar/SidebarSendInvoice';
+//import PreviewActions from './PreviewActions';
 // ** Invoice Preview Components
 import PreviewCard from './PreviewPrescription';
 
@@ -50,13 +51,13 @@ const InvoicePreview = () => {
   }, [id]);
   const getOneInvoice = async()=>{
     try {
-      const res = await axios.get(`/invoice/one/11`,{
+      const res = await axios.get(`/globalinvoice/global/${id}`,{
         headers: {
           authorization: `Bearer ${accesToken}`,
         },
       })
       if(res?.status===200){
-        setData(prev=>({...res?.data?.item}))
+        setData(res?.data)
       }
     } catch (error) {
       console.log("err: ",error)
@@ -65,25 +66,27 @@ const InvoicePreview = () => {
       }
     }
   }
+  console.log("data",data)
   return data !== null  ? (
     <div className="invoice-preview-wrapper">
       <Row className="invoice-preview">
         <Col xl={9} md={8} sm={12}>
           <PreviewCard data={data} />
         </Col>
-        <Col xl={3} md={4} sm={12}>
+       {/*  <Col xl={3} md={4} sm={12}>
           <PreviewActions
             id={id}
             setSendSidebarOpen={setSendSidebarOpen}
             setAddPaymentOpen={setAddPaymentOpen}
           />
-        </Col>
+        </Col> */}
       </Row>
       {/* <SendInvoiceSidebar
         toggleSidebar={toggleSendSidebar}
         open={sendSidebarOpen}
-      />
-      <AddPaymentSidebar
+        data={data}
+      /> */}
+      {/* <AddPaymentSidebar
         toggleSidebar={toggleAddSidebar}
         open={addPaymentOpen}
       /> */}
