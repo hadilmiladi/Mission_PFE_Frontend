@@ -96,7 +96,7 @@ const nextPagination = () => {
 const selectPagination = (index) => {
   setQueries((prev) => ({ ...prev, p: index }));
 };
-console.log(missions.length)
+console.log("missions.length",missions.length)
 if(missions.length!==0){
 return (
   <>
@@ -142,19 +142,23 @@ return (
                       </span>
                     </td>
                     <td>
-                      {row?.accepted === true && row?.declined === false ? (
-                        <Badge color="light-success" className="p-50 w-100">
-                          Accepted
-                        </Badge>
-                      ) : row?.accepted === false && row?.declined === true ? (
-                        <Badge color="light-danger" className="p-50 w-100">
-                          Canceled
-                        </Badge>
-                      ) : row?.accepted === false && row?.declined === false ? (
-                        <Badge color="light-primary" className="p-50 w-100">
-                          Pending
-                        </Badge>
-                      ) : null}
+                    {row?.accepted === true && row?.declined === false && row?.validated === false ? (
+                <Badge color="light-success" className="p-50">
+                  Accepted
+                </Badge>
+              ) : row?.accepted === false && row?.declined === false && row?.validated === true ? (
+                <Badge color="light-info" className="p-50 ">
+                  Validated
+                </Badge>
+              ) :row?.accepted === false && row?.declined === true && row?.validated === false ? (
+                <Badge color="light-danger" className="p-50">
+                  Canceled
+                </Badge>
+              ) : (
+                <Badge color="light-primary" className="p-50">
+                  Pending
+                </Badge>
+              )}
                     </td>
                     <td>  <Button
                       color="primary"

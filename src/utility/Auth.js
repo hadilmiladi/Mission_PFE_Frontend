@@ -28,6 +28,9 @@ export const getUserHomePageRoute = () => {
   if(user==="ceo"){
     return "/ceo/dashboard"
   }
+  if(user==="chef du projet"){
+    return "/chef/accueil"
+  }
 };
 
 // ** get home route per role
@@ -39,6 +42,8 @@ export const getUserRoutePerRole = (role) => {
       return "/employee/missions";
     case "ceo":
       return "/ceo/dashboard";
+      case "chef du projet":
+      return "/chef/accueil";
   }
 };
 

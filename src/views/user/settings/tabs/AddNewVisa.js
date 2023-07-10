@@ -52,6 +52,7 @@ import {
     expiresAt: "",
     passportId:"",
   };
+  console.log("111111111111111111111",currentPassport)
    // ** states
    const [spinning, setSpinning] = useState(false);
    const [errors, setErrors] = useState({});
@@ -75,7 +76,7 @@ import {
     }
     setSpinning(true);
     try {
-        const res = await axios.post(`visa/create`, visa, {
+        const res = await axios.post(`visa/createwithcurrent/${currentPassport}`, visa, {
             headers: {
               authorization: `Bearer ${accesToken}`,
             },
@@ -107,20 +108,26 @@ import {
             });
           }
           // token invalide
-          else if (error?.response?.status === 403) {
-            console.log(response)
-           /*  cleanUserLocalStorage();
-            navigate("/login"); */
-            toast.error(sessionExpired, {
-              duration: 5000,
-            });
-          }
+          else if ( error?.response?.status === 404 &&
+            error?.response?.data?.code === "passport") {
+              toast.error("there is no active passport", {
+                  duration: 5000,
+                });
+            }
            // this date is not defined
           else if (
             error?.response?.status === 409 &&
-            error?.response?.data?.code === "date"
+            error?.response?.data?.code === "range"
           ) {
             toast.error("the visa range date is outside the passport date, Check again", {
+                duration: 5000,
+              });
+          }
+          else if (
+            error?.response?.status === 409 &&
+            error?.response?.data?.code === "exist"
+          ) {
+            toast.error("the visa already exists", {
                 duration: 5000,
               });
           }
@@ -153,6 +160,7 @@ import {
         setErrors({});
         setVisa({ ...initialVisa});
       };
+      console.log("visa add ")
       // ** ==>
       return (
         <Modal

@@ -29,7 +29,7 @@ function UserVisaTab({ currentPassport, active, refresh }) {
       fetchVisa();
     }
   }, [active]);
-
+console.log("&&&&&&&&&&&&&&&&&&&&&",currentPassport)
   const fetchVisa = async () => {
     setLoading(true);
     try {

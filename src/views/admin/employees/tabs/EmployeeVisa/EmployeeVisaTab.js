@@ -27,7 +27,7 @@ import CreateVisaModal from './CreateNewVisa';
 
 // ** -----------------------------------------------------------------------
 
-function EmployeeVisaTab({refresh,currentPassport,active }) {
+function EmployeeVisaTab({refresh,currentPassport,active , visas}) {
   // ** router
   const navigate = useNavigate();
  // ** access token
@@ -42,7 +42,7 @@ function EmployeeVisaTab({refresh,currentPassport,active }) {
     select: "all",
   };
   // ** states
-  const [visa, setvisa] = useState([]);
+  const [visa, setVisa] = useState();
   const [size, setSize] = useState(0);
   const [loading, setLoading] = useState(false);
   const [queries, setQueries] = useState({ ...initialQueries });
@@ -51,12 +51,13 @@ function EmployeeVisaTab({refresh,currentPassport,active }) {
     useState(false);
   // ** fetching data
   useEffect(() => {
-    if(active==="visa"){
+    
       fetchEmplyees()
-    }
-  }, [active]);
+    
+  }, []);
   //console.log(currentPassport)
   // ** fetch function
+  console.log("currentPassport.id",currentPassport.id)
   const fetchEmplyees = async () => {
     setLoading(true);
     try {
@@ -67,11 +68,11 @@ function EmployeeVisaTab({refresh,currentPassport,active }) {
       });
       
       if (res?.status === 200) {
-        setvisa([...res?.data?.items]);
+        setVisa(res?.data?.visas);
         setSize(res?.data?.size);
         
       }
-      console.log("res: ", visa);
+      
     } catch (error) {
       // not token
       if (error?.response?.status === 401) {
@@ -98,6 +99,7 @@ function EmployeeVisaTab({refresh,currentPassport,active }) {
     }
     setLoading(false);
   };
+  console.log(visa)
   // ** Pagination
   const pagination = [];
   for (let i = 0; i < size / queries.l; i++) {
@@ -143,10 +145,12 @@ function EmployeeVisaTab({refresh,currentPassport,active }) {
               return (
                 <tr key={`row-${index}`}>
                   <td>
+                 
                     <div className="d-flex justify-content-left align-items-center">
                       <div className="d-flex flex-column">
                         <small className="text-truncate text-muted">
                           {row?.valable_for}
+                          {console.log(row.valable_for)}
                         </small>
                       </div>
                     </div>
@@ -174,7 +178,8 @@ function EmployeeVisaTab({refresh,currentPassport,active }) {
       <CreateVisaModal
         visibility={showCreateEmployeesModal}
         closeModal={() => setShowCreateEmployeesModal(false)}
-        refresh={fetchEmplyees}
+        /* refresh={fetchEmplyees} */
+        refresh={refresh}
         currentPassport={currentPassport}
       />
     </>

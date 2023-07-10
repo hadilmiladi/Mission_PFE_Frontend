@@ -94,5 +94,19 @@ export default [
     navLink: "/ceo/settings",
     role: "ceo",
   },
+  {
+    id:"chefallMissions",
+    title:"Missions",
+    icon: <Archive />,
+    navLink: "/chef/accueil",
+    role: "chef du projet",
+  },
+  {
+    id:"chefSttings",
+    title:"Passports/Visa",
+    icon: <Archive size={20} />,
+    navLink: "/chef/settings",
+    role: "chef du projet",
+  },
   
 ];

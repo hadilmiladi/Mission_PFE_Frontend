@@ -7,7 +7,12 @@ import React, {
   useState,
 } from 'react';
 
-import { FileText } from 'react-feather';
+import {
+  Eye,
+  FileText,
+  Send,
+  TrendingUp,
+} from 'react-feather';
 // ** Third Party Components
 import Flatpickr from 'react-flatpickr';
 import toast from 'react-hot-toast';
@@ -25,6 +30,7 @@ import {
 } from 'reactstrap';
 
 import axios from '../../../service/axios';
+import SetPaid from './setPaid';
 
 function AdminInvoices() {
   // ** access token
@@ -46,6 +52,7 @@ function AdminInvoices() {
    /*  employeeId:"all",
     type:"all" */
   }
+ 
 // ** states
 const [invoices, setInvoices] = useState([]);
 const [globalinvoices, setGlobalnvoices] = useState([]);
@@ -59,10 +66,22 @@ const [employees, setemployees]=useState([])
 const [filters, setfilters]=useState({
 ...initialFilters
 })
+
+
 const [rangeString, setRangeString] = useState('');
+const[global,setGlobal]=useState();
 const navigate= useNavigate();
+const [showSetPaid, setShowSetPaid] = useState(false);
+const [sendstatus, setSendstatus] = useState({});
+
+
+  const toggleModal = () => {
+    setShowModal(!showModal);
+  };
+
 useEffect(()=>{
   fetchClients()
+  
   //fetchEmployees()
 },[])
  // ** fetch data
@@ -71,11 +90,13 @@ useEffect(()=>{
     //fetchInvoices();
     //fetchglobalinvoice();
     fetchinvoicesall();
+    
   }
 }, [range,filters]);
 
+
 const fetchGlobalInvoice = async () => {
-  console.log('fetchGlobalInvoice called');
+  //console.log('fetchGlobalInvoice called');
   setLoading(true);
   const params = {
     start: range[0],
@@ -84,7 +105,7 @@ const fetchGlobalInvoice = async () => {
   };
 
   try {
-  console.log('i am in try')
+  //console.log('i am in try')
       const res = await axios.post(`globalinvoice/create`,params, {
         headers: {
           authorization: `Bearer ${accesToken}`,
@@ -172,25 +193,50 @@ const fetchinvoicesall=async()=>{
         authorization: `Bearer ${accesToken}`,
       },
     })
-    console.log("res: ",res?.data.items)
+    //console.log("res: ",res?.data.items)
     if (res?.status === 200) {
       setGlobalnvoices((res?.data?.globalInvoices));
-      //setSize(res?.data?.size);
+      setSize(res?.data?.size);
     }
   } catch (error) {
     console.log("errors: ",error)
     // errors
   }
 }
-
+//console.log("globalInvoice.paid",globalInvoices.paid)
 const handleClick=(id)=>{
-  navigate(`/admin/invoices/${id}`)
+  navigate(`/admin/globalinvoice/${id}`)
 }
 
+const sendMail=async(id)=>{
+  //console.log('i am here')
+  try{
+    const res=await axios.post(`globalinvoice/global/${id}`,{},{
+      
+      headers: {
+        authorization: `Bearer ${accesToken}`,
+      },
+    })
+    //console.log("res: ",res)
+    if (res?.status === 200) {
+      //console.log("this is resssss", res?.data?.globalInvoice);
+      toast.success("Email sent");
+      fetchinvoicesall();
+    }
+      
+    
+    
+  } catch (error) {
+    console.log("errors: ",error)
+    toast.error("an error is occured")
+    // errors
+  }
+}
 
+//console.log("global",global)
 
 //console.log("this is the filters ",filters.clientId)
-console.log("the global invoice is ", globalinvoices)
+//console.log("the global invoice is ", globalinvoices)
 /* 
 // ** fetch employee
 const fetchEmployees=async()=>{
@@ -263,25 +309,33 @@ const onChangeDate=(values)=>{
     const {name,value}=event.target;
     setfilters(prev=>({...prev,[name]:value}))
   }
-  let totalAmount = 0;
-
+  
+/* 
   const calculateSubtotal = (globalInvoice) => {
     const invoices = globalInvoice.invoices;
+    let totalAmount = 0;
   
     invoices.forEach((invoice) => {
       const invoiceStartDate = new Date(invoice.start);
       const invoiceEndDate = new Date(invoice.end);
       const invoiceTimeDifference = Math.abs(invoiceEndDate - invoiceStartDate);
       const invoiceNumberOfDays = Math.ceil(invoiceTimeDifference / (1000 * 60 * 60 * 24));
-      const subtotal = invoice?.mission?.planePrice + invoice?.mission?.hotelPrice + invoice?.mission?.employee?.rank?.perdiem * invoiceNumberOfDays;
+  
+      // Check if the necessary properties exist and have valid values
+      const subtotal =
+        (invoice?.mission?.planePrice || 0) +
+        (invoice?.mission?.hotelPrice || 0) +
+        (invoice?.mission?.employee?.rank?.perdiem || 0) * invoiceNumberOfDays;
   
       totalAmount += subtotal; // Add the subtotal to the totalAmount
     });
   
+     // Log the totalAmount inside the function
+  
     return totalAmount;
-  };
- 
-  console.log("calculateSubtotal",totalAmount) 
+    
+  }; */
+  
   return (
     <>
     <Card>
@@ -385,24 +439,44 @@ const onChangeDate=(values)=>{
         <thead>
           <tr>
             <th>#</th>
+            <th> <TrendingUp size={14} /></th>
             <th>Client</th>
             <th>Date</th>
             <th>Total</th>
-            <th>Balance</th> 
             <th>Status</th> 
+            <th>Action</th> 
+            
             <th></th>
           </tr>
         </thead>
         <tbody>
+       
+
           {globalinvoices.map((row, index) => {
+         
               return (
-                <tr key={`row-${index}`} onClick={() => handleClick(row?.id)} > 
+                <tr key={`row-${index}`}  > 
                 <td>
                       <span className="user_name text-truncate text-body fw-bolder">
                         {row?.id}
                       </span>
                     </td>
                     <td>
+  <span className="user_name text-truncate text-body fw-bolder">
+  {row?.send===false ? (
+                        <Badge color="light-primary" className="p-50 w-100">
+                        Not send
+                      </Badge>
+                      ): row?.send===true ?(
+                        <Badge color="light-success" className="p-50 w-100">
+                         send
+                      </Badge>
+                      ): null}
+    
+  </span>
+</td>
+<td>
+
                       <span className="user_name text-truncate text-body fw-bolder">
                         {row?.client?.company_name}
                       </span>
@@ -418,44 +492,65 @@ const onChangeDate=(values)=>{
                       </span>
                     </td>
                     <td>
-                      <span className="user_name text-truncate text-body fw-bolder">
-                       {/*  {row?.mission?.planePrice+row?.mission?.hotelPrice+row?.mission?.employee?.rank?.perdiem} $ */} 
-                       {row?.totalAmount}
-                      </span>
-                    </td> 
-                    <td>
                     <span className="user_name text-truncate text-body fw-bolder">
-                      {row?.paid===false ? (
-                        <Badge color="light-primary" className="p-50 w-100">
-                        Not paid
-                      </Badge>
-                      ): row?.paid===true ?(
-                        <Badge color="light-success" className="p-50 w-100">
-                         Paid
-                      </Badge>
-                      ): null}
+                     
                     </span>
+                   
+                  </td>
+                    <td onClick={() => setShowSetPaid(true)}>
+                      {console.log(row?.paid)}
+                    <span className="user_name text-truncate text-body fw-bolder">
+               
+                {row?.paid === false ? (
+                  <Badge color="light-primary" className="p-50 w-100">
+                    Not paid
+                  </Badge>
+                ) : row?.paid === true ? (
+                  <Badge color="light-success" className="p-50 w-100">
+                    Paid
+                  </Badge>
+                ) : null}
+              </span>
+             {/*  {console.log('paid is', row?.paid)} */}
+</td>
+{showSetPaid && (
+  <SetPaid
+    visibility={showSetPaid}
+    closeModal={() => setShowSetPaid(false)}
+    row={row}
+    refresh={fetchinvoicesall}
+    closeMainModal={toggleModal}
+    
+  />
+)}
+
+
+                    <td>
+                    
+                    <Send className='cursor-pointer' size={17} id={`send-tooltip-${row.id}`} onClick={(event) => {
+      event.stopPropagation(); // Prevent event propagation
+      sendMail(row.id);
+    }}
+    
+ />
+                
+          <Eye size={17} className='mx-1' onClick={() => handleClick(row?.id)} />
+      
                       </td>
-                    <td>
-                    <span className="user_name text-truncate text-body fw-bolder">
-                      {row?.send===false ? (
-                        <Badge color="light-primary" className="p-50 w-100">
-                        Not send
-                      </Badge>
-                      ): row?.send===true ?(
-                        <Badge color="light-success" className="p-50 w-100">
-                         send
-                      </Badge>
-                      ): null}
-                    </span>
-                      </td> </tr>
+                      <td>
+                      <span className="user_name text-truncate text-body fw-bolder">
+                      
+                       </span>
+                        </td> </tr>
               );
             })}
           </tbody>
         </Table>
+        
       </Card>
+     
     </>
   );
 };
 
-export default AdminInvoices
+export default AdminInvoices;

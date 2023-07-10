@@ -4,11 +4,9 @@ import React, {
   useState,
 } from 'react';
 
+import jwt_decode from 'jwt-decode';
 import { Eye } from 'react-feather';
-import {
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // ** react imports
 import {
   Badge,
@@ -27,6 +25,12 @@ function EmployeeMission() {
   const accesToken = localStorage.getItem(
     "access_token"
   );
+  const token = localStorage.getItem('access_token');
+  console.log('token', token);
+  const decodedToken = jwt_decode(token);
+  const id = decodedToken.id;
+
+  console.log('id :', id);
   // ** initial state
   const initialQueries = {
     p: 1,
@@ -42,7 +46,7 @@ const [showViewMission, setShowViewMission] = useState(false);
 const [queries, setQueries] = useState({ ...initialQueries });
 const [selectedMission, setSelectedMission] = useState({});
 const navigate= useNavigate();
-const { id } = useParams();
+
 const [showCreateNewMission, setShowCreateNewMission] = useState(false);
 
  // ** fetch data
@@ -54,7 +58,7 @@ const fetchMissions = async () => {
   console.log("called");
   setLoading(true);
    try {
-    const res = await axios.get(`mission/employee`, {
+    const res = await axios.get(`mission/employee/${id}`, {
       headers: {
         authorization: `Bearer ${accesToken}`,
       },
@@ -135,19 +139,23 @@ return (
                       </span>
                     </td>
                     <td>
-                      {row?.accepted === true && row?.declined === false ? (
-                        <Badge color="light-success" className="p-50 w-100">
-                          Accepted
-                        </Badge>
-                      ) : row?.accepted === false && row?.declined === true ? (
-                        <Badge color="light-danger" className="p-50 w-100">
-                          Canceled
-                        </Badge>
-                      ) : row?.accepted === false && row?.declined === false ? (
-                        <Badge color="light-primary" className="p-50 w-100">
-                          Pending
-                        </Badge>
-                      ) : null}
+                    {row?.accepted === true && row?.declined === false && row?.validated === false ? (
+                <Badge color="light-success" className="p-50">
+                  Accepted
+                </Badge>
+              ) : row?.accepted === false && row?.declined === false && row?.validated === true ? (
+                <Badge color="light-info" className="p-50 ">
+                  Validated
+                </Badge>
+              ) :row?.accepted === false && row?.declined === true && row?.validated === false ? (
+                <Badge color="light-danger" className="p-50">
+                  Canceled
+                </Badge>
+              ) : (
+                <Badge color="light-primary" className="p-50">
+                  Pending
+                </Badge>
+              )}
                     </td>
                     <td>  <Button
                       color="primary"

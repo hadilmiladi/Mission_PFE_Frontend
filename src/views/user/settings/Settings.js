@@ -5,6 +5,7 @@ import {
   useState,
 } from 'react';
 
+import jwt_decode from 'jwt-decode';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
@@ -31,10 +32,16 @@ import Tabs from './tabs/Tabs';
 
 // ** ------------------------------------------------------------------------
 function Settings() {
-  // ** access token
-  const accesToken = localStorage.getItem(
-    `access_token`
-  );
+ // ** access token
+ const accesToken = localStorage.getItem(
+  "access_token"
+);
+const token = localStorage.getItem('access_token');
+console.log('token', token);
+const decodedToken = jwt_decode(token);
+const id = decodedToken.id;
+
+console.log('id :', id);
   // ** router
   const navigate = useNavigate();
   // ** states
@@ -55,13 +62,13 @@ function Settings() {
   // ** fetch function
   const fetchProfile = async () => {
     try {
-      const res = await axios.get("employee/one", {
+      const res = await axios.get(`employee/one/${id}`, {
         headers: {
           authorization: `Bearer ${accesToken}`,
         },
       });
       if (res?.status === 200) {
-        console.log("res: ",res.data)
+        //console.log("res: ",res.data)
         setProfile((prev) => ({ ...res?.data?.item }));
       }
     } catch (error) {
@@ -74,6 +81,7 @@ function Settings() {
           duration: 5000,
         });
       }
+      
       // not token
       /* else if (error?.response?.status === 401) {
         cleanUserLocalStorage();
@@ -102,6 +110,7 @@ function Settings() {
   const toggleTab = (tab) => {
     setActive(tab);
   };
+  console.log("profile",profile)
   // ** ==>
   return (
     <Fragment>

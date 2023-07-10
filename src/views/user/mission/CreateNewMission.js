@@ -45,6 +45,7 @@ const CreateMission= (props) => {
   const token = localStorage.getItem('access_token');
   console.log('token', token);
   const decodedToken = jwt_decode(token);
+  console.log("decodedToken",decodedToken)
   const id = decodedToken.id;
 
   console.log('id :', id);

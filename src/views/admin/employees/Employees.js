@@ -3,6 +3,7 @@ import React, {
   useState,
 } from 'react';
 
+import jwt_decode from 'jwt-decode';
 // ** Toast
 import toast from 'react-hot-toast';
 import {
@@ -43,10 +44,15 @@ import CreateEmployeeModal from './modals/CreateEmployeeModal';
 function Employees() {
   // ** router
   const navigate = useNavigate();
-  // ** access token
-  const accesToken = localStorage.getItem(
+   // ** access token
+   const accesToken = localStorage.getItem(
     "access_token"
   );
+  const token = localStorage.getItem('access_token');
+  console.log('token', token);
+  const decodedToken = jwt_decode(token);
+  const id = decodedToken.id;
+  console.log('id :', id);
   // ** initial state
   const initialQueries = {
     p: 1,
@@ -71,7 +77,7 @@ function Employees() {
   const fetchEmplyees = async () => {
     setLoading(true);
     try {
-      const res = await axios.get("employee/all", {
+      const res = await axios.get(`employee/all/${id}`, {
        
         headers: {
           authorization: `Bearer ${accesToken}`,

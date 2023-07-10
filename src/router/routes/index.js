@@ -44,6 +44,9 @@ const AdminEmployees = lazy(() =>
 const AdminViewEmployee = lazy(() =>
   import("../../views/admin/employees/ViewEmployee")
 );
+/* const ChefViewEmployee = lazy(() =>
+  import("../../views/chefProjet/mission/employees/Employees")
+); */
 // ** ranks
 const AdminRank = lazy(() =>
   import("../../views/admin/ranks/Ranks")
@@ -52,15 +55,20 @@ const AdminRank = lazy(() =>
 const AdminInvoices = lazy(()=>import("../../views/admin/factureMission/AdminInvoices"))
 // ** invoice
 const AdminInvoice = lazy(() =>
+  import("../../views/admin/factureMission/previewInvoice/index")
+);
+//globalinvoice details
+const AdminGlobaInvoice = lazy(() =>
   import("../../views/admin/factureMission/preview/index")
 );
 const AdminMission = lazy(()=>import("../../views/admin/mission/Mission"))
 /* const AdminSettings = lazy(()=>import("../../views/admin/settings/Settings")) */
 // ** user settings
 const EmployeeMission = lazy(()=>import("../../views/user/mission/EmployeeMission"))
-
+/* const ChefSettings = lazy(()=>import("../../views/chefProjet/settings/settings")) */
 // ** ceo mission
 const MissionCeo = lazy(()=>import("../../views/ceo/missionCeo/CeoMission"))
+const ChefAccueil = lazy(()=>import("../../views/chefProjet/mission/Mission"))
 // ** user settings
 const CeoDashboard = lazy(()=>import("../../views/ceo/dashboard/CeoDashboard"))
 // ** ceo passportvisa
@@ -105,9 +113,17 @@ const Routes = [
     path: "/admin/employees/:id",
     element: <AdminViewEmployee />,
   },
+  /* {
+    path: "/chef/employees/:id",
+    element: <ChefViewEmployee />,
+  }, */
   {
     path:"/admin/invoice",
     element:<AdminInvoices />
+  },
+  {
+    path:"/admin/globalinvoice/:id",
+    element:<AdminGlobaInvoice />
   },
   {
     path:"/admin/miniinvoice/:id",
@@ -148,9 +164,17 @@ const Routes = [
     element: <MissionCeo />,
   },
   {
+    path: "/chef/accueil",
+    element: <ChefAccueil />,
+  },
+  {
     path: "/ceo/settings",
     element: <CeoSettings />,
   },
+  /* {
+    path:"/chef/settings",
+    element:<ChefSettings />
+  }, */
   /* {
     path: "/ceo/employees",
     element: <AdminEmployees />,

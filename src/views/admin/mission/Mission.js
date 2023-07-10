@@ -4,6 +4,7 @@ import React, {
   useState,
 } from 'react';
 
+import jwt_decode from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 // ** react imports
 import {
@@ -19,6 +20,12 @@ function Mission() {
    const accesToken = localStorage.getItem(
     "access_token"
   );
+  const token = localStorage.getItem('access_token');
+  console.log('token', token);
+  const decodedToken = jwt_decode(token);
+  const id = decodedToken.id;
+
+  console.log('id :', id);
   // ** initial state
   const initialQueries = {
     p: 1,
@@ -49,7 +56,7 @@ const handleClick = (id) => {
   console.log("called");
   setLoading(true);
    try {
-    const res = await axios.get(`mission/all`,{
+    const res = await axios.get(`mission/all/${id}`,{
       headers: {
         authorization: `Bearer ${accesToken}`,
       },})
@@ -63,6 +70,7 @@ const handleClick = (id) => {
   }
   setLoading(false); 
 };
+console.log("missions",missions)
 // ** Pagination
 const pagination = [];
 for (let i = 0; i < size / queries.l; i++) {
@@ -103,9 +111,10 @@ return (
         </thead>
         <tbody>
           {missions.map((row, index) => {
+              {console.log('index',row.employeeId)}
               return (
-                
-                  <tr key={`row-${index}`} onClick={() => handleClick(row?.id)}> 
+              
+                  <tr key={`row-${index}`} onClick={() => handleClick(row?.employeeId)}> 
                     <td>
                       <span className="user_name text-truncate text-body fw-bolder">
                         {row?.id}
@@ -132,19 +141,23 @@ return (
                       </span>
                     </td>
                     <td>
-                      {row?.accepted === true && row?.declined === false ? (
-                        <Badge color="light-success" className="p-50 w-100">
-                          Accepted
-                        </Badge>
-                      ) : row?.accepted === false && row?.declined === true ? (
-                        <Badge color="light-danger" className="p-50 w-100">
-                          Canceled
-                        </Badge>
-                      ) : row?.accepted === false && row?.declined === false ? (
-                        <Badge color="light-primary" className="p-50 w-100">
-                          Pending
-                        </Badge>
-                      ) : null}
+                    {row?.accepted === true && row?.declined === false && row?.validated === false ? (
+                <Badge color="light-success" className="p-50">
+                  Accepted
+                </Badge>
+              ) : row?.accepted === false && row?.declined === false && row?.validated === true ? (
+                <Badge color="light-info" className="p-50 ">
+                  Validated
+                </Badge>
+              ) :row?.accepted === false && row?.declined === true && row?.validated === false ? (
+                <Badge color="light-danger" className="p-50">
+                  Canceled
+                </Badge>
+              ) : (
+                <Badge color="light-primary" className="p-50">
+                  Pending
+                </Badge>
+              )}
                     </td>
                   </tr>
               );
