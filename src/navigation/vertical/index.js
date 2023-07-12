@@ -103,7 +103,7 @@ export default [
   },
   {
     id:"chefSttings",
-    title:"Passports/Visa",
+    title:"Profil",
     icon: <Archive size={20} />,
     navLink: "/chef/settings",
     role: "chef du projet",

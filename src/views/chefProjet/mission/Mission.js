@@ -5,15 +5,18 @@ import React, {
 } from 'react';
 
 import jwt_decode from 'jwt-decode';
+import { Eye } from 'react-feather';
 import { useNavigate } from 'react-router-dom';
 // ** react imports
 import {
   Badge,
+  Button,
   Card,
   Table,
 } from 'reactstrap';
 
 import axios from '../../../service/axios';
+import ViewMission from './ViewMission';
 
 function Mission() {
      // ** access token
@@ -40,6 +43,7 @@ function Mission() {
   const [queries, setQueries] = useState({ ...initialQueries });
   const [selectedMission, setSelectedMission] = useState({});
   const navigate= useNavigate();
+  const [showViewMission, setShowViewMission] = useState(false);
  
   // ** fetch data
   useEffect(() => {
@@ -156,12 +160,31 @@ function Mission() {
                 </Badge>
               )}
                     </td>
+                    <td>  <Button
+                      color="primary"
+                      className="btn-icon rounded-circle"
+                      onClick={() => {
+                        setSelectedMission({ ...row });
+                        setShowViewMission(true);
+                      }}
+                    >
+                      <Eye size={16} />
+                    </Button></td>
                   </tr>
               );
             })}
           </tbody>
         </Table>
       </Card>
+      <ViewMission
+        visibility={showViewMission}
+        closeModal={() => setShowViewMission(false)}
+        row={selectedMission}
+       /*  openDeleteMissionModal={() => setShowDeleteMission(true)}
+        openCancelMissionModal={() => setShowCancelMissionModal(true)}
+        openConfirmMissionModal={() => setShowAcceptMissionModal(true)}
+        openEditMissionModal={() => setShowEditMissionModal(true)} */
+      />
     </>
   );
 }

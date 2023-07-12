@@ -19,7 +19,7 @@ import { getRoutes } from './routes';
 
 // ** components
 const Error = lazy(() => import("../views/Error"));
-const Login = lazy(() => import("../views/Auth/Login"));
+const Login = lazy(() => import("../views/Auth/login"));
 const Router = () => {
   // ** Hooks
   const { layout } = useLayout();

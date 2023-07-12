@@ -28,7 +28,7 @@ const TemplateTitle = "";
 // ** Default Route
 const DefaultRoute = "/";
 // ** Auth imports   ------------------------------------------------------------------------
-const Login = lazy(() => import("../../views/Auth/Login"));
+const Login = lazy(() => import("../../views/Auth/Loginn"));
 // ** admin imports ------------------------------------------------------------------------
 // ** companies
 const AdminCompanies = lazy(() =>
@@ -65,7 +65,7 @@ const AdminMission = lazy(()=>import("../../views/admin/mission/Mission"))
 /* const AdminSettings = lazy(()=>import("../../views/admin/settings/Settings")) */
 // ** user settings
 const EmployeeMission = lazy(()=>import("../../views/user/mission/EmployeeMission"))
-/* const ChefSettings = lazy(()=>import("../../views/chefProjet/settings/settings")) */
+const ChefProfil = lazy(()=>import("../../views/chefProjet/Profil/Profil")) 
 // ** ceo mission
 const MissionCeo = lazy(()=>import("../../views/ceo/missionCeo/CeoMission"))
 const ChefAccueil = lazy(()=>import("../../views/chefProjet/mission/Mission"))
@@ -171,10 +171,10 @@ const Routes = [
     path: "/ceo/settings",
     element: <CeoSettings />,
   },
-  /* {
+  {
     path:"/chef/settings",
-    element:<ChefSettings />
-  }, */
+    element:<ChefProfil />
+  },
   /* {
     path: "/ceo/employees",
     element: <AdminEmployees />,

@@ -30,7 +30,7 @@ import {
   serverErrorMessage,
 } from '../../utility/messages';
 
-const Login = () => {
+const Loginn = () => {
   const navigate = useNavigate();
   const [spinning, setSpinning] = useState(false);
   const [errors, setErrors] = useState({});
@@ -104,6 +104,33 @@ useEffect(() => {
   const handleMicrosoftLogin = () => {
     setRedirectToMicrosoft(true);
   };
+// Redirect to Microsoft login when redirectToMicrosoft is true
+useEffect(() => {
+  const handleMicrosoftLoginCallback = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    console.log("this is the codddddeeeee",code);
+    if (code) {
+      try {
+        const res = await axios.post('admin/clients', { code });
+        console.log("this is my ressssss",res);
+        // Handle the response and perform necessary actions
+        // For example, store the access token and role in localStorage
+        localStorage.setItem('access_token', res?.data?.token);
+        localStorage.setItem('access_role', res?.data?.role);
+        const home = getUserRoutePerRole(res?.data?.role);
+        navigate(home);
+      } catch (error) {
+        // Handle the error
+      }
+    }
+  };
+  if (redirectToMicrosoft) {
+    window.location.href = 'https://login.microsoft.com'; // Replace with the appropriate Microsoft login URL
+  } else {
+    handleMicrosoftLoginCallback();
+  }
+}, [redirectToMicrosoft, navigate]);
 
 
   return (
@@ -165,7 +192,7 @@ useEffect(() => {
                 </Alert>
               )}
               
-              <Button color="primary">
+              <Button color="primary"/*  block onClick={handleMicrosoftLogin} */>
                 Sign in with Microsoft
               </Button>
             </Form>
@@ -178,4 +205,4 @@ useEffect(() => {
   );
 };
 
-export default Login;
+export default Loginn;
