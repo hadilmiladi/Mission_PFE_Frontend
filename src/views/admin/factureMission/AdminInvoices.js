@@ -9,7 +9,6 @@ import React, {
 
 import {
   Eye,
-  FileText,
   Send,
   TrendingUp,
 } from 'react-feather';
@@ -67,7 +66,7 @@ const [filters, setfilters]=useState({
 ...initialFilters
 })
 
-
+const[hasDelaisToday,setHasDelaisToday]=useState(false)
 const [rangeString, setRangeString] = useState('');
 const[global,setGlobal]=useState();
 const navigate= useNavigate();
@@ -116,22 +115,29 @@ const fetchGlobalInvoice = async () => {
       if (res.status === 200) {
         toast.success('Invoice created successfully');
         setSize(res.data.size);
+        
         fetchinvoicesall();
       }
     } catch (error) {
-      if (error?.response?.status===400 &&  error?.response?.data?.code ==='parameters '){
-        toast.error('check parameters ')
+      
+  
+      if (error?.response?.status===400 &&  error?.response?.data?.code ==='parameters'){
+        toast.error("check params")
+        
+        //console.log("hhhhaaaadiiillll")
+        
       }else if (error?.response?.status === 400 && error?.response?.data?.code === 'exist') {
-        toast.error('already exist');}
+        toast.error('already exist');
+      }
         else if (error?.response?.status === 400 && error?.response?.data?.code === 'no_invoices') {
           toast.error('no such invoice exist');}
-      else if(error?.response?.status===500){
+   /*    else if(error?.response?.status===500){
         console.log("errorrr",error)
         toast.error('serveur')
-      }
+      } */
       
     }
-  
+    
     setLoading(false);
     
   
@@ -197,13 +203,17 @@ const fetchinvoicesall=async()=>{
     if (res?.status === 200) {
       setGlobalnvoices((res?.data?.globalInvoices));
       setSize(res?.data?.size);
+      
     }
+    console.log("globaaaaaaaaaaaaaaaaaaal",globalinvoices)
   } catch (error) {
     console.log("errors: ",error)
     // errors
   }
+  
 }
-//console.log("globalInvoice.paid",globalInvoices.paid)
+
+
 const handleClick=(id)=>{
   navigate(`/admin/globalinvoice/${id}`)
 }
@@ -340,93 +350,46 @@ const onChangeDate=(values)=>{
     <>
     <Card>
     <div className='invoice-list-table-header d-flex justify-content-center w-100 me-1 ms-50 mt-2 mb-75'>
-          {/* <Col className="d-flex align-items-center">
-          <div className='d-flex align-items-center w-100'>
-          <label htmlFor='rows-per-page'>Ivoice Type: </label>
-          <Input
-                className=''
-                type='select'
-                name="type"
-                id='rows-per-page'
-                value={filters.type}  
-                onChange={onChange}
-                style={{ width: '5rem' }}
-              >
-                <option value='all'>All Invoices</option>
-                <option value='global'>Global Invoice</option>
-                <option value='mini'>Mini Invoice</option>
-              </Input>
-              </div>
-          </Col> */}
-          <Col xl="3" className="d-flex align-items-center p-0">
-      <div className="d-flex align-items-center w-100">
-            <Label className="form-label" for="range-picker">
-        Range
-      </Label>
-      <Flatpickr
-        value={range}
-        id="range-picker"
-        className="form-control"
-        onChange={onChangeDate}
-        options={{
-          mode: "range",
-          //defaultDate: ["2020-02-01", "2020-02-15"], 
-        }}
-      />
-      </div>
-        </Col>
-          <Col xl='3' className='d-flex align-items-center p-0'>
-            <div className='d-flex align-items-center w-100'>
-              <label htmlFor='rows-per-page'>Show</label>
-              <Input
-                className='mx-50'
-                type='select'
-                name="clientId"
-                id='rows-per-page'
-                value={filters.clientId}
-                onChange={onChange}
-                style={{ width: '5rem' }}
-              >
-                <option value='all'>All clients</option>
-                {clients.map((item,index)=>{
-                  return<option key={`option-${index+1}`} value={item?.id}>
-                    {item.company_name}
-                  </option>
-                })}
-              </Input>
-              <label htmlFor='rows-per-page'>Client: </label>
-            </div>
-          </Col>
-         {/*  <Col xl='3' className='d-flex align-items-center p-0'>
-            <div className='d-flex align-items-center w-100'>
-              <label htmlFor='rows-per-page'>Show</label>
-              <Input
-                className='mx-50'
-                type='select'
-                name="employeeId"
-                id='rows-per-page'
-                value={filters.employeeId}
-                onChange={onChange}
-                style={{ width: '5rem' }}
-              >
-                <option value='all'>All employee</option>
-                {employees.map((item,index)=>{
-                  return<option key={`option-${index+1}`} value={item?.id}>
-                    {item.firstname+" "+item.lastname}
-                  </option>
-                })}
-              </Input>
-              <label htmlFor='rows-per-page'>Client: </label>
-            </div>
-          </Col> */}
-          
-    </div>
-    <Col xl='3' className='d-flex align-items-center p-0'>
-    <Button color="primary" className="btn-icon rounded-circle" onClick={fetchGlobalInvoice}>
-  <FileText size={16} />
-</Button>
+  <Col xl="2" className="d-flex align-items-center p-0">
+    <Label className="form-label" for="range-picker">
+      Dates
+    </Label>
+    <Flatpickr
+      value={range}
+      id="range-picker"
+      className="form-control"
+      onChange={onChangeDate}
+      options={{
+        mode: "range",
+      }}
+    />
+  </Col>
+  <Col xl='4' className='d-flex align-items-center p-0'>
+    <label htmlFor='rows-per-page' /* className="me-2" */>Client</label>
+    <Input
+      className='mx-2'
+      type='select'
+      name="clientId"
+      id='rows-per-page'
+      value={filters.clientId}
+      onChange={onChange}
+    >
+      <option value='all'>clients</option>
+      {clients.map((item, index) => (
+        <option key={`option-${index+1}`} value={item?.id}>
+          {item.company_name}
+        </option>
+      ))}
+    </Input>
+  </Col>
+  <Col xl='2' className='d-flex align-items-center p-0'>
+    <Button color='primary' onClick={fetchGlobalInvoice}>
+      Add Record
+    </Button>
+  </Col>
+</div>
 
-          </Col>
+
     </Card>   
     <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
       <Row>
@@ -453,12 +416,13 @@ const onChangeDate=(values)=>{
        
 
           {globalinvoices.map((row, index) => {
-         
+        
               return (
-                <tr key={`row-${index}`}  > 
+                <tr key={`row-${index}`} color='FF3342' > 
                 <td>
                       <span className="user_name text-truncate text-body fw-bolder">
-                        {row?.id}
+                        {row?.id} 
+                       
                       </span>
                     </td>
                     <td>
@@ -498,19 +462,22 @@ const onChangeDate=(values)=>{
                    
                   </td>
                     <td onClick={() => setShowSetPaid(true)}>
-                      {console.log(row?.paid)}
-                    <span className="user_name text-truncate text-body fw-bolder">
-               
-                {row?.paid === false ? (
-                  <Badge color="light-primary" className="p-50 w-100">
-                    Not paid
-                  </Badge>
-                ) : row?.paid === true ? (
-                  <Badge color="light-success" className="p-50 w-100">
-                    Paid
-                  </Badge>
-                ) : null}
-              </span>
+                      {console.log(row?.deadline)}
+                      <span className="user_name text-truncate text-body fw-bolder">
+  {row?.paid === false && row?.deadline === true ? (
+    <Badge color="light-danger" className="p-50 w-100">
+      Not paid
+    </Badge>
+  ) : row?.paid === false ? (
+    <Badge color="light-primary" className="p-50 w-100">
+      Not paid
+    </Badge>
+  ) : row?.paid === true ? (
+    <Badge color="light-success" className="p-50 w-100">
+      Paid
+    </Badge>
+  ) : null}
+</span>
              {/*  {console.log('paid is', row?.paid)} */}
 </td>
 {showSetPaid && (

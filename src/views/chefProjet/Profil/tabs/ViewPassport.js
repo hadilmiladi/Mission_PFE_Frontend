@@ -4,16 +4,13 @@ import React, {
   useState,
 } from 'react';
 
+import jwt_decode from 'jwt-decode';
 import {
   Check,
   X,
 } from 'react-feather';
 // ** toast
 import toast from 'react-hot-toast';
-import {
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Badge,
@@ -30,13 +27,17 @@ import AddNewPassport from './AddNewPassport';
 
 // ** -------------------------------------------------------------------------------
 function Employees({ employee, refresh, active , user }) {
-    // ** router
-    const navigate = useNavigate();
-    const {id} =useParams();
+    
     // ** access token
     const accesToken = localStorage.getItem(
       "access_token"
     );
+    const token = localStorage.getItem('access_token');
+console.log('token', token);
+const decodedToken = jwt_decode(token);
+const id = decodedToken.id;
+
+console.log('id :', id);
     // ** initial state
    const initialQueries = {
     p: 1,
@@ -63,7 +64,7 @@ function Employees({ employee, refresh, active , user }) {
   const fetchEmployees = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`/passport/employee`, {
+      const res = await axios.get(`/passport/employee/${id}`, {
         headers: {
           authorization: `Bearer ${accesToken}`,
         },

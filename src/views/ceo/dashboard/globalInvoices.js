@@ -167,17 +167,20 @@ return (
                     <td >
                       
                     <span className="user_name text-truncate text-body fw-bolder">
-               
-                {row?.paid === false ? (
-                  <Badge color="light-primary" className="p-50 w-100">
-                    Not paid
-                  </Badge>
-                ) : row?.paid === true ? (
-                  <Badge color="light-success" className="p-50 w-100">
-                    Paid
-                  </Badge>
-                ) : null}
-              </span>
+  {row?.paid === false && row?.deadline === true ? (
+    <Badge color="light-danger" className="p-50 w-100">
+      Not paid
+    </Badge>
+  ) : row?.paid === false ? (
+    <Badge color="light-primary" className="p-50 w-100">
+      Not paid
+    </Badge>
+  ) : row?.paid === true ? (
+    <Badge color="light-success" className="p-50 w-100">
+      Paid
+    </Badge>
+  ) : null}
+</span>
              {/*  {console.log('paid is', row?.paid)} */}
 </td>
 

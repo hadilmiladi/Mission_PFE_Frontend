@@ -4,6 +4,7 @@ import {
   useState,
 } from 'react';
 
+import jwt_decode from 'jwt-decode';
 // ** Third Party Components
 import { Power } from 'react-feather';
 import { useNavigate } from 'react-router-dom';
@@ -15,31 +16,39 @@ import {
   UncontrolledDropdown,
 } from 'reactstrap';
 
-// ** Custom Components
-import Avatar from '@components/avatar';
-// ** Default Avatar Image
-import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg';
-
+import axios from '../../../../service/axios';
 // ** utils
 import { cleanUserLocalStorage } from '../../../../utility/Auth';
 
 // ** -----------------------------------------------------------------------
 const UserDropdown = () => {
-  // ** router
+  const token = localStorage.getItem('access_token');
+  const decodedToken = jwt_decode(token);
+  const id = decodedToken.id;
+
   const navigate = useNavigate();
-  // ** states
   const [userData, setUserData] = useState(null);
-  // ** set data
+
   useEffect(() => {
-    const data = localStorage.getItem('access_role');
-    if (data == null) {
+    fetchName();
+  }, []);
+
+  const fetchName = async () => {
+    try {
+      const res = await axios.get(`employee/name/${id}`);
+      if (res.status === 200) {
+        setUserData(res.data); // Assuming the data you need is in response.data
+      } else {
+        navigate("/login");
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error);
       navigate("/login");
     }
-    //
-    if (data !== null) {
-      setUserData(data);
-    }
-  }, []);
+  };
+  console.log(userData)
+
+  
   // ** log out
   const logOut = (event) => {
     event.preventDefault();
@@ -60,18 +69,18 @@ const UserDropdown = () => {
             {userData}
           </span>
         </div>
-        <Avatar
+       {/*  <Avatar
           img={defaultAvatar}
           imgHeight="40"
           imgWidth="40"
           status="online"
-        />
+        /> */}
       </DropdownToggle>
       <DropdownMenu end>
         <DropdownItem divider />
         <DropdownItem onClick={logOut}>
           <Power size={14} className="me-75" />
-          <span className="align-middle">Se Déconnecter</span>
+          <span className="align-middle">Sign out</span>
         </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>

@@ -16,8 +16,7 @@ import {
 import axios from '../../../service/axios';
 import { badRequestMessage } from '../../../utility/messages';
 
-const AccountTabs = (/* props */) => {
- /*  const { visibility, closeModal, refresh } = props; */
+const AccountTabs = () => {
   // Access token
   const accessToken = localStorage.getItem('access_token');
   const token = localStorage.getItem('access_token');
@@ -51,8 +50,10 @@ const AccountTabs = (/* props */) => {
       });
       if (res?.status === 200) {
         setAdmin({ ...res?.data?.item });
+        
         console.log(res);
       }
+      
     } catch (error) {
       console.log('Error:', error);
     } finally {
@@ -136,7 +137,7 @@ const AccountTabs = (/* props */) => {
           />
         </Col>
         <Col md={12} className="mt-3">
-          <Button type="submit" color="primary" disabled={spinning}>
+          <Button type="submit" color="primary" disabled={spinning} /* onClick={window.location.reload()} */>
             {spinning ? 'Updating...' : 'Update'}
           </Button>
         </Col>

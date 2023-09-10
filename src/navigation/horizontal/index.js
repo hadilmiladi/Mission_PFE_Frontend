@@ -1,4 +1,7 @@
-import { Mail, Home } from "react-feather"
+import {
+  Home,
+  Mail,
+} from 'react-feather';
 
 export default [
   {

@@ -1,46 +1,40 @@
+// ** Ripple Button
+import './@core/components/ripple-button';
+// ** PrismJS
+import 'prismjs';
+import 'prismjs/themes/prism-tomorrow.css';
+import 'prismjs/components/prism-jsx.min';
+// ** React Perfect Scrollbar
+import 'react-perfect-scrollbar/dist/css/styles.css';
+// ** React Hot Toast Styles
+import '@styles/react/libs/react-hot-toasts/react-hot-toasts.scss';
+// ** Core styles
+import './@core/assets/fonts/feather/iconfont.css';
+import './@core/scss/core.scss';
+import './assets/scss/style.scss';
+
 // ** React Imports
-import { Suspense, lazy } from "react";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
+import {
+  lazy,
+  Suspense,
+} from 'react';
 
-// ** Redux Imports
-import { store } from "./redux/store";
-import { Provider } from "react-redux";
-
-// ** ThemeColors Context
-
-import { ThemeContext } from "./utility/context/ThemeColors";
-
-// ** ThemeConfig
-import themeConfig from "./configs/themeConfig";
-
+import { createRoot } from 'react-dom/client';
 // ** Toast
-import { Toaster } from "react-hot-toast";
+import { Toaster } from 'react-hot-toast';
+import { Provider } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 
 // ** Spinner (Splash Screen)
-import Spinner from "./@core/components/spinner/Fallback-spinner";
-
-// ** Ripple Button
-import "./@core/components/ripple-button";
-
-// ** PrismJS
-import "prismjs";
-import "prismjs/themes/prism-tomorrow.css";
-import "prismjs/components/prism-jsx.min";
-
-// ** React Perfect Scrollbar
-import "react-perfect-scrollbar/dist/css/styles.css";
-
-// ** React Hot Toast Styles
-import "@styles/react/libs/react-hot-toasts/react-hot-toasts.scss";
-
-// ** Core styles
-import "./@core/assets/fonts/feather/iconfont.css";
-import "./@core/scss/core.scss";
-import "./assets/scss/style.scss";
-
+import Spinner from './@core/components/spinner/Fallback-spinner';
+// ** ThemeConfig
+import themeConfig from './configs/themeConfig';
+// ** Redux Imports
+import { store } from './redux/store';
 // ** Service Worker
-import * as serviceWorker from "./serviceWorker";
+import * as serviceWorker from './serviceWorker';
+// ** ThemeColors Context
+import { ThemeContext } from './utility/context/ThemeColors';
 
 // ** Lazy load app
 const LazyApp = lazy(() => import("./App"));

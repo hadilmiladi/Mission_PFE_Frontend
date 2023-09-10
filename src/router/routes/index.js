@@ -28,7 +28,7 @@ const TemplateTitle = "";
 // ** Default Route
 const DefaultRoute = "/";
 // ** Auth imports   ------------------------------------------------------------------------
-const Login = lazy(() => import("../../views/Auth/Loginn"));
+const Login = lazy(() => import("../../views/Auth/Login"));
 // ** admin imports ------------------------------------------------------------------------
 // ** companies
 const AdminCompanies = lazy(() =>
@@ -77,6 +77,9 @@ const CeoSettings = lazy(()=>import("../../views/ceo/CeopassportVisa/Settings"))
 const EmployeeSettings = lazy(()=>import("../../views/user/settings/Settings"))
 
 const Invoice=lazy(()=>import("../../views/admin/factureMission/invoices"))
+
+//Email config
+const Mailconfig=lazy(()=>import("../../views/admin/mailconfig/index"))
 // ** Catching imports ----------------------------------------------------------------------
 const Error = lazy(() => import("../../views/Error"));
 
@@ -104,6 +107,10 @@ const Routes = [
   {
     path: "/admin/ranks",
     element: <AdminRank />,
+  },
+  {
+    path: "/admin/mailconfig",
+    element: <Mailconfig />,
   },
   {
     path: "/admin/employees",

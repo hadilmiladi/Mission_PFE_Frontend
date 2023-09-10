@@ -4,16 +4,13 @@ import React, {
   useState,
 } from 'react';
 
+import jwt_decode from 'jwt-decode';
 import {
   Check,
   X,
 } from 'react-feather';
 // ** toast
 import toast from 'react-hot-toast';
-import {
-  useNavigate,
-  useParams,
-} from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Badge,
@@ -31,12 +28,15 @@ import AddNewPassport from './AddNewPassport';
 // ** -------------------------------------------------------------------------------
 function Employees({ employee, refresh, active , user }) {
   // ** router
-  const navigate = useNavigate();
-  const {id} =useParams();
+ 
   // ** access token
   const accesToken = localStorage.getItem(
     "access_token"
   );
+  const token = localStorage.getItem('access_token');
+  console.log('token', token);
+  const decodedToken = jwt_decode(token);
+  const id = decodedToken.id;
    // ** initial state
    const initialQueries = {
     p: 1,
@@ -50,63 +50,62 @@ function Employees({ employee, refresh, active , user }) {
   const [loading, setLoading] = useState(false);
   const [queries, setQueries] = useState({ ...initialQueries });
 
-   // modals
-   const [showAddNewPassport, setShowAddNewPassport] =
-   useState(false);
-
+    // modals
+    const [showAddNewPassport, setShowAddNewPassport] =
+    useState(false);
   // ** fetching data
   useEffect(() => {
-    if ( active === "profile") {
-      fetchEmployees();
-    }
-  }, [user, active]);
-  // ** fetch function
-  const fetchEmployees = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`/passport/employee`, {
-        headers: {
-          authorization: `Bearer ${accesToken}`,
-        },
-      });
-      if (res?.status === 200) {
-        setPassports([...res?.data?.items]);
-        console.log(res)
-        setSize(res?.data?.size);
-      }
-    } catch (error) {
-      console.log(error)
-      // not token
-      if (error?.response?.status === 401) {
-       /*  cleanUserLocalStorage();
-        navigate("/login"); */
-        toast.error(sessionExpired, {
-          duration: 5000,
-        });
-      }
-      // expired
-      else if (error?.response?.status === 403) {
-        /* cleanUserLocalStorage();
-        navigate("/login"); */
-        toast.error(sessionExpired, {
-          duration: 5000,
-        });
-      }
-      //  server error
-      else if (error?.response?.status === 500) {
-        toast.error(serverErrorMessage, {
-          duration: 5000,
-        });
-      }
-    }
-    setLoading(false);
-  };
-  /* console.log(passports?.items?.id */
-  // ** Pagination
-  const pagination = [];
-  for (let i = 0; i < size / queries.l; i++) {
-    pagination.push(i);
-  }
+   if ( active === "profile") {
+     fetchEmployees();
+   }
+ }, [user, active]);
+ // ** fetch function
+ const fetchEmployees = async () => {
+   setLoading(true);
+   try {
+     const res = await axios.get(`/passport/employee/${id}`, {
+       headers: {
+         authorization: `Bearer ${accesToken}`,
+       },
+     });
+     if (res?.status === 200) {
+       setPassports([...res?.data?.items]);
+       console.log(res)
+       setSize(res?.data?.size);
+     }
+   } catch (error) {
+     console.log(error)
+     // not token
+     if (error?.response?.status === 401) {
+      /*  cleanUserLocalStorage();
+       navigate("/login"); */
+       toast.error(sessionExpired, {
+         duration: 5000,
+       });
+     }
+     // expired
+     else if (error?.response?.status === 403) {
+       /* cleanUserLocalStorage();
+       navigate("/login"); */
+       toast.error(sessionExpired, {
+         duration: 5000,
+       });
+     }
+     //  server error
+     else if (error?.response?.status === 500) {
+       toast.error(serverErrorMessage, {
+         duration: 5000,
+       });
+     }
+   }
+   setLoading(false);
+ };
+ /* console.log(passports?.items?.id */
+ // ** Pagination
+ const pagination = [];
+ for (let i = 0; i < size / queries.l; i++) {
+   pagination.push(i);
+ }
   return (
     <>
       <AddCompanySection
@@ -149,6 +148,7 @@ function Employees({ employee, refresh, active , user }) {
                       {row?.expiresAt}
                     </span>
                   </td>
+                  {console.log("row?.employee?.currentPassport",row?.employee?.currentPassport)}
                   <td>
                     {row?.employee?.currentPassport  === row?.id  ? (
                       <Badge color="light-success" className="p-50">

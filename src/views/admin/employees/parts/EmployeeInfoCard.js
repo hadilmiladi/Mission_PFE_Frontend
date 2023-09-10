@@ -4,13 +4,7 @@ import '@styles/react/libs/react-select/_react-select.scss';
 import { useState } from 'react';
 
 // ** icons
-import {
-  Check,
-  Clock,
-  Edit,
-  Slash,
-  Trash,
-} from 'react-feather';
+import { Edit } from 'react-feather';
 // ** Reactstrap Imports
 import {
   Badge,
@@ -85,14 +79,14 @@ function EmployeeInfoCard(props) {
             </ul>
           </div>
           <div className="d-flex justify-content-center pt-2 gap-1">
-            <Button
+           {/*  <Button
               id="openCancelOrderModal"
               color="danger"
               className="btn-icon rounded-circle"
             >
               <Slash size={18} />
             </Button>
-           
+            */}
               <Button
                 id="openEditOrderModal"
                 color="primary"
@@ -103,7 +97,7 @@ function EmployeeInfoCard(props) {
               </Button>
             
 
-            <Button
+           {/*  <Button
               id="openDeleteOrderModal"
               color="danger"
               className="btn-icon rounded-circle"
@@ -123,7 +117,7 @@ function EmployeeInfoCard(props) {
               className="btn-icon rounded-circle"
             >
               <Clock size={18} />
-            </Button>
+            </Button> */}
           </div>
         </CardBody>
       </Card>

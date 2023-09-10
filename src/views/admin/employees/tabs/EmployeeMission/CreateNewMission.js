@@ -149,7 +149,7 @@ const CreateMissionModal = (props) => {
           }
         );
       }
-      // this email already exist
+      /* // this email already exist
       else if (
         error?.response?.status === 409 &&
         error?.response?.data?.code === "visa"
@@ -160,7 +160,7 @@ const CreateMissionModal = (props) => {
             duration: 5000,
           }
         );
-      }
+      } */
       // this email already exist
       else if (
         error?.response?.status === 409 &&

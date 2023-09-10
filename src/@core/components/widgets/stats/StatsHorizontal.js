@@ -1,9 +1,11 @@
+import classnames from 'classnames';
 // ** Third Party Components
-import PropTypes from "prop-types"
-import classnames from "classnames"
-
+import PropTypes from 'prop-types';
 // ** Reactstrap Imports
-import { Card, CardBody } from "reactstrap"
+import {
+  Card,
+  CardBody,
+} from 'reactstrap';
 
 const StatsHorizontal = ({
   icon,

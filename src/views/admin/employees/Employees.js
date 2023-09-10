@@ -3,7 +3,6 @@ import React, {
   useState,
 } from 'react';
 
-import jwt_decode from 'jwt-decode';
 // ** Toast
 import toast from 'react-hot-toast';
 import {
@@ -48,11 +47,7 @@ function Employees() {
    const accesToken = localStorage.getItem(
     "access_token"
   );
-  const token = localStorage.getItem('access_token');
-  console.log('token', token);
-  const decodedToken = jwt_decode(token);
-  const id = decodedToken.id;
-  console.log('id :', id);
+  
   // ** initial state
   const initialQueries = {
     p: 1,
@@ -77,7 +72,7 @@ function Employees() {
   const fetchEmplyees = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`employee/all/${id}`, {
+      const res = await axios.get(`employee/all`, {
        
         headers: {
           authorization: `Bearer ${accesToken}`,

@@ -70,7 +70,7 @@ function Employees({ employee, passports, refresh }) {
   const fetchEmplyees = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`passport/one/${id}`, {
+      const res = await axios.get(`passport/employee/${id}`, {
         
          headers: {
         authorization: `Bearer ${accesToken}`,

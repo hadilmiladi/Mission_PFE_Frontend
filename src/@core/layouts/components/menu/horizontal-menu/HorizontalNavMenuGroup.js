@@ -1,19 +1,21 @@
 // ** React Imports
-import { useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { useState } from 'react';
 
 // ** Third Party Components
-import classnames from "classnames"
-import { usePopper } from "react-popper"
-
-// ** Utils
-import { hasActiveChild } from "@layouts/utils"
+import classnames from 'classnames';
+import { usePopper } from 'react-popper';
+import {
+  Link,
+  useLocation,
+} from 'react-router-dom';
 
 // ** Hooks
-import { useRTL } from "@hooks/useRTL"
+import { useRTL } from '@hooks/useRTL';
+// ** Utils
+import { hasActiveChild } from '@layouts/utils';
 
 // ** Horizontal Menu Items Component
-import HorizontalNavMenuItems from "./HorizontalNavMenuItems"
+import HorizontalNavMenuItems from './HorizontalNavMenuItems';
 
 const applyHeight = {
   enabled: true,

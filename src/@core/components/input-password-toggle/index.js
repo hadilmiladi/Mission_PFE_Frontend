@@ -1,13 +1,24 @@
 // ** React Imports
-import { Fragment, useState, forwardRef } from "react"
+import {
+  forwardRef,
+  Fragment,
+  useState,
+} from 'react';
 
+import classnames from 'classnames';
 // ** Third Party Components
-import PropTypes from "prop-types"
-import classnames from "classnames"
-import { Eye, EyeOff } from "react-feather"
-
+import PropTypes from 'prop-types';
+import {
+  Eye,
+  EyeOff,
+} from 'react-feather';
 // ** Reactstrap Imports
-import { InputGroup, Input, InputGroupText, Label } from "reactstrap"
+import {
+  Input,
+  InputGroup,
+  InputGroupText,
+  Label,
+} from 'reactstrap';
 
 const InputPasswordToggle = forwardRef((props, ref) => {
   // ** Props

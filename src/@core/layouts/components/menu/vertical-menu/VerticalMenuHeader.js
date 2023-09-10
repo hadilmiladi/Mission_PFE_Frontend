@@ -1,15 +1,16 @@
 // ** React Imports
-import { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useEffect } from 'react';
 
 // ** Icons Imports
-import { Disc, X, Circle } from "react-feather";
-
-// ** Config
-import themeConfig from "@configs/themeConfig";
+import {
+  Circle,
+  Disc,
+  X,
+} from 'react-feather';
+import { NavLink } from 'react-router-dom';
 
 // ** Utils
-import { getUserData, getHomeRouteForLoggedInUser } from "@utils";
+import { getUserData } from '@utils';
 
 const VerticalMenuHeader = (props) => {
   // ** Props
@@ -62,8 +63,9 @@ const VerticalMenuHeader = (props) => {
           >
             <span className="brand-logo">
               {/* <img src={themeConfig.app.appLogoImage} alt="logo" /> */}
+              
             </span>
-            <h2 className="brand-text mb-0 text-uppercase">Logo</h2>
+            <h2 className="brand-text mb-0 text-uppercase">logo</h2>
           </NavLink>
         </li>
         <li className="nav-item nav-toggle">

@@ -1,18 +1,26 @@
 // ** React Imports
-import { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect } from 'react';
 
 // ** Third Party Components
-import classnames from "classnames";
-
+import classnames from 'classnames';
+import {
+  Link,
+  useLocation,
+} from 'react-router-dom';
 // ** Reactstrap Imports
-import { Collapse, Badge } from "reactstrap";
-
-// ** Vertical Menu Items Component
-import VerticalNavMenuItems from "./VerticalNavMenuItems";
+import {
+  Badge,
+  Collapse,
+} from 'reactstrap';
 
 // ** Utils
-import { hasActiveChild, removeChildren } from "@layouts/utils";
+import {
+  hasActiveChild,
+  removeChildren,
+} from '@layouts/utils';
+
+// ** Vertical Menu Items Component
+import VerticalNavMenuItems from './VerticalNavMenuItems';
 
 const VerticalNavMenuGroup = ({
   item,
@@ -144,7 +152,7 @@ const VerticalNavMenuGroup = ({
         onClick={(e) => onCollapseClick(e, item)}
       >
         {item.icon}
-        <span className="menu-title text-truncate">{item.title}</span>
+        <span className="menu-title text-truncate">{item.title} </span>
 
         {item.badge && item.badgeText ? (
           <Badge className="ms-auto me-1" color={item.badge} pill>

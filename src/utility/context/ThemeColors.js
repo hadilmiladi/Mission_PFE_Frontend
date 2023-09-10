@@ -22,7 +22,7 @@ const ThemeContext = ({ children }) => {
       const obj = {
         primary: {
           light: getHex("--bs-primary").concat("1a"),
-          main: getHex("--bs-primary")
+          main: getHex("--bs-primary"),
         },
         secondary: {
           light: getHex("--bs-secondary").concat("1a"),

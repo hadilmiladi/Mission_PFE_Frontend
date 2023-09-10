@@ -3,6 +3,7 @@ import {
   BarChart,
   BarChart2,
   FileText,
+  Mail,
   Settings,
   User,
   Users,
@@ -15,6 +16,13 @@ export default [
     title:"Missions",
     icon: <Archive />,
     navLink: "/admin/missions",
+    role: "admin",
+  },
+  {
+    id:"mailconfig",
+    title:"mailconfig",
+    icon: <Mail />,
+    navLink: "/admin/mailconfig",
     role: "admin",
   },
   {

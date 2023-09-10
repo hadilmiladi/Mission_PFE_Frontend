@@ -50,6 +50,7 @@ function CreatePassportModal(props) {
     nationality: "",
     createdAt: "",
     expiresAt: "",
+    employeeId: id
   };
   // ** states
   const [spinning, setSpinning] = useState(false);

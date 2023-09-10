@@ -1,12 +1,11 @@
 // ** React Imports
-import { forwardRef } from "react"
+import { forwardRef } from 'react';
 
+import classnames from 'classnames';
 // ** Third Party Components
-import Proptypes from "prop-types"
-import classnames from "classnames"
-
+import Proptypes from 'prop-types';
 // ** Reactstrap Imports
-import { Badge } from "reactstrap"
+import { Badge } from 'reactstrap';
 
 const Avatar = forwardRef((props, ref) => {
   // ** Props
