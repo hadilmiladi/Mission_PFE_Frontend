@@ -16,6 +16,7 @@ import {
 } from 'reactstrap';
 
 import axios from '../../../service/axios';
+import ConfirmValidationModal from './validate';
 import ViewMission from './ViewMission';
 
 function Mission() {
@@ -44,7 +45,8 @@ function Mission() {
   const [selectedMission, setSelectedMission] = useState({});
   const navigate= useNavigate();
   const [showViewMission, setShowViewMission] = useState(false);
- 
+  const [showConfirmValidationModal, setShowConfirmValidationModal] = useState(false);
+
   // ** fetch data
   useEffect(() => {
     {
@@ -180,10 +182,14 @@ function Mission() {
         visibility={showViewMission}
         closeModal={() => setShowViewMission(false)}
         row={selectedMission}
-       /*  openDeleteMissionModal={() => setShowDeleteMission(true)}
-        openCancelMissionModal={() => setShowCancelMissionModal(true)}
-        openConfirmMissionModal={() => setShowAcceptMissionModal(true)}
-        openEditMissionModal={() => setShowEditMissionModal(true)} */
+        openConfirmValidationModal={()=> setShowConfirmValidationModal(true)}
+      />
+      <ConfirmValidationModal
+      visibility={showConfirmValidationModal}
+      closeModal={() => setShowConfirmValidationModal(false)}
+      closeMainModal={() => setShowConfirmValidationModal(false)}
+      row={selectedMission}
+      refresh={fetchMissions}
       />
     </>
   );

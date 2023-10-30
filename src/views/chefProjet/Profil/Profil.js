@@ -26,8 +26,6 @@ import {
 } from '../../../utility/messages';
 import Tabs from './tabs/tabs';
 import ViewChefMission from './tabs/ViewChefMission';
-import ViewPassport from './tabs/ViewPassport';
-import ViewVisa from './tabs/ViewVisa';
 
 // ** ------------------------------------------------------------------------
 function Settings({refresh}) {
@@ -75,28 +73,24 @@ function Settings({refresh}) {
         console.log("err: ",error)
         // not token
         if (error?.response?.status === 401) {
-          /* cleanUserLocalStorage();
-          navigate("/login"); */
+          cleanUserLocalStorage();
+          navigate("/login");
           toast.error(badRequestMessage, {
             duration: 5000,
           });
         }
-        // not token
-        /* else if (error?.response?.status === 401) {
+        else if(error?.response?.status === 403){
           cleanUserLocalStorage();
           navigate("/login");
-          toast.error(sessionExpired, {
+          toast.error(badRequestMessage, {
             duration: 5000,
           });
         }
-        // expired
-        else if (error?.response?.status === 403) {
-          cleanUserLocalStorage();
-          navigate("/login");
-          toast.error(sessionExpired, {
+        else if(error?.response?.status === 404){
+          toast.error("employee doesn't exist", {
             duration: 5000,
           });
-        } */
+        }
         //  server error
         else if (error?.response?.status === 500) {
           toast.error(serverErrorMessage, {
@@ -128,19 +122,7 @@ function Settings({refresh}) {
                   active={active}
                 />
               </TabPane>
-              <TabPane tabId="profile">
-                <ViewPassport
-                  user={profile}
-                  refresh={fetchProfile}
-                  active={active}
-                />
-              </TabPane>
-              <TabPane tabId="visa">
-                <ViewVisa 
-                 active={active}
-                 currentPassport={profile?.currentPassport}
-                 />
-              </TabPane>
+              
             </TabContent>
           </Col>
         </Row>

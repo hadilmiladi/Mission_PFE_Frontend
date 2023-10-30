@@ -44,15 +44,13 @@ const AdminEmployees = lazy(() =>
 const AdminViewEmployee = lazy(() =>
   import("../../views/admin/employees/ViewEmployee")
 );
-/* const ChefViewEmployee = lazy(() =>
-  import("../../views/chefProjet/mission/employees/Employees")
-); */
+
 // ** ranks
 const AdminRank = lazy(() =>
   import("../../views/admin/ranks/Ranks")
 );
 // ** invoices 
-const AdminInvoices = lazy(()=>import("../../views/admin/factureMission/AdminInvoices"))
+const ListGloablInv = lazy(()=>import("../../views/admin/factureMission/ListGloablInv"))
 // ** invoice
 const AdminInvoice = lazy(() =>
   import("../../views/admin/factureMission/previewInvoice/index")
@@ -71,10 +69,11 @@ const MissionCeo = lazy(()=>import("../../views/ceo/missionCeo/CeoMission"))
 const ChefAccueil = lazy(()=>import("../../views/chefProjet/mission/Mission"))
 // ** user settings
 const CeoDashboard = lazy(()=>import("../../views/ceo/dashboard/CeoDashboard"))
+const Accueil =lazy(()=>import("../../views/admin/accueil/index"))
 // ** ceo passportvisa
-const CeoSettings = lazy(()=>import("../../views/ceo/CeopassportVisa/Settings"))
+
 // ** cliient imports ----------------------------------------------------------------------
-const EmployeeSettings = lazy(()=>import("../../views/user/settings/Settings"))
+/* const EmployeeSettings = lazy(()=>import("../../views/user/settings/Settings")) */
 
 const Invoice=lazy(()=>import("../../views/admin/factureMission/invoices"))
 
@@ -105,6 +104,10 @@ const Routes = [
     element: <AdminCompanies />,
   },
   {
+    path: "/admin/acceuil",
+    element: <Accueil />,
+  },
+  {
     path: "/admin/ranks",
     element: <AdminRank />,
   },
@@ -120,13 +123,9 @@ const Routes = [
     path: "/admin/employees/:id",
     element: <AdminViewEmployee />,
   },
-  /* {
-    path: "/chef/employees/:id",
-    element: <ChefViewEmployee />,
-  }, */
   {
     path:"/admin/invoice",
-    element:<AdminInvoices />
+    element:<ListGloablInv />
   },
   {
     path:"/admin/globalinvoice/:id",
@@ -157,10 +156,10 @@ const Routes = [
     path:"/employee/missions",
     element:<EmployeeMission />
   },
-  {
+  /* {
     path: "/employee/settings",
     element: <EmployeeSettings />,
-  },
+  }, */
   // ** ceo settings routes -------------------------------------------------------
   {
     path: "/ceo/dashboard",
@@ -174,10 +173,10 @@ const Routes = [
     path: "/chef/accueil",
     element: <ChefAccueil />,
   },
-  {
+  /* {
     path: "/ceo/settings",
     element: <CeoSettings />,
-  },
+  }, */
   {
     path:"/chef/settings",
     element:<ChefProfil />

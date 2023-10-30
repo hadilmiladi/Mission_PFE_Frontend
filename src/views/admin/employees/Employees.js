@@ -13,10 +13,6 @@ import {
 import {
   Badge,
   Card,
-  Col,
-  Form,
-  Input,
-  Row,
   Table,
 } from 'reactstrap';
 
@@ -31,20 +27,17 @@ import {
   serverErrorMessage,
   sessionExpired,
 } from '../../../utility/messages';
-import { paginationOptions } from '../../../utility/Static';
-// ** sections
-import AddCompanySection from '../companies/section/AddCompanySection';
-import CompaniesCountDashboard
-  from '../companies/section/CompaniesCountDashboard';
 // ** modals
 import CreateEmployeeModal from './modals/CreateEmployeeModal';
+import AddSection from './supplements/section/AddSection';
+import CountDashboard from './supplements/section/CountDashboard';
 
 // ** -----------------------------------------------------------------------
 function Employees() {
   // ** router
   const navigate = useNavigate();
    // ** access token
-   const accesToken = localStorage.getItem(
+   const accessToken = localStorage.getItem(
     "access_token"
   );
   
@@ -75,12 +68,12 @@ function Employees() {
       const res = await axios.get(`employee/all`, {
        
         headers: {
-          authorization: `Bearer ${accesToken}`,
+          authorization: `Bearer ${accessToken}`,
         },
       });
       if (res?.status === 200) {
         setEmployees([...res?.data?.items]);
-        setSize(res?.data?.size);
+        setSize(res?.data?.items?.length);
       }
     } catch (error) {
       // not token
@@ -99,6 +92,11 @@ function Employees() {
           duration: 5000,
         });
       }
+      else if (error?.response?.status === 400) {
+        toast.error("failed to retrieve", {
+          duration: 5000,
+        });
+      }
       //  server error
       else if (error?.response?.status === 500) {
         toast.error(serverErrorMessage, {
@@ -108,6 +106,7 @@ function Employees() {
     }
     setLoading(false);
   };
+  console.log('this size', size)
   // ** Pagination
   const pagination = [];
   for (let i = 0; i < size / queries.l; i++) {
@@ -131,83 +130,19 @@ function Employees() {
     setQueries((prev) => ({ ...prev, p: index }));
   };
   // ** ==>
+ 
   return (
     <>
       <Breadcrumbs
         title="Employees management"
         data={[{ title: "Employees" }]}
       />
-      <CompaniesCountDashboard size={size} />
-      <AddCompanySection
+      <CountDashboard size={size} />
+      <AddSection
         refresh={fetchEmplyees}
         openModal={() => setShowCreateEmployeesModal(true)}
       />
-      <Card>
-        <div className="invoice-list-table-header w-100 py-2 px-2">
-          <Row>
-            <Col lg="8"></Col>
-            <Col
-              lg="4"
-              className="d-flex align-items-center justify-content-lg-end px-0 px-lg-1"
-            >
-              {/* <Button
-                className="btn-icon rounded-circle me-1"
-                color="success"
-                type="button"
-                onClick={fetchCompanies}
-              >
-                <RefreshCcw size={15} />
-              </Button> */}
-              <Form className="d-flex align-items-center">
-                <div className="d-flex align-items-center me-2">
-                  <label htmlFor="rows-per-page">Show</label>
-                  <Input
-                    type="select"
-                    id="rows-per-page"
-                    className="form-control ms-50 pe-3"
-                    /* onChange={onChangeQueries} */
-                    name="l"
-                  >
-                    {paginationOptions.map((option, index) => {
-                      return (
-                        <option value={option} key={`option-${index}`}>
-                          {option}
-                        </option>
-                      );
-                    })}
-                  </Input>
-                </div>
-                {/* <div className="d-flex align-items-center">
-                  <Label htmlFor="rows-per-page">Sort</Label>
-                  <Input
-                    type="select"
-                    id="rows-per-page"
-                    className="form-control ms-50 pe-3"
-                    onChange={onChangeQueries}
-                    name="sortBy"
-                  >
-                    {sortingOptions.map((option, index) => {
-                      return (
-                        <option value={option.value} key={`option-${index}`}>
-                          {option.name}
-                        </option>
-                      );
-                    })}
-                  </Input>
-                </div> */}
-              </Form>
-              {/* <Button
-                className="btn-icon rounded-circle me-1"
-                color="danger"
-                type="button"
-                onClick={cancelQueries}
-              >
-                <X size={15} />
-              </Button> */}
-            </Col>
-          </Row>
-        </div>
-      </Card>
+     
       <Card className={`${employees.length === 0 && "pb-2"} pb-1`}>
         <Table responsive>
           <thead>
@@ -215,7 +150,6 @@ function Employees() {
               <th>Full Name</th>
               <th>Contacts</th>
               <th>Rank</th>
-              <th>Current Passport</th>
               <th>status</th>
               <th></th>
             </tr>
@@ -258,24 +192,6 @@ function Employees() {
                       </small>
                     </div>
                   </td>
-                  <td classname="pe-0 me-0">
-                    <Link to={`/admin/employees/${row?.id}`}>
-                      <div className="d-flex flex-column">
-                        <span className="user_name text-truncate text-body fw-bolder">
-                          {row?.currentPassport ? (
-                            <Badge color="light-success" className="p-50 w-100">
-                              Passport valid
-                            </Badge>
-                          ) : (
-                            <Badge color="light-danger" className="p-50 w-100">
-                              Passport invalid
-                            </Badge>
-                          )}
-                        </span>
-                      </div>
-                    </Link>
-                  </td>
-
                   <td>
                     {row?.activated === true ? (
                       <Badge color="light-success" className="p-50 w-100">

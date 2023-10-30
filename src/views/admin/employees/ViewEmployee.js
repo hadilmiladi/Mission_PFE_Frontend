@@ -24,10 +24,7 @@ import Breadcrumbs from '@components/breadcrumbs';
 
 // ** api link
 import axios from '../../../service/axios';
-import {
-  notFoundMessage,
-  serverErrorMessage,
-} from '../../../utility/messages';
+import { serverErrorMessage } from '../../../utility/messages';
 // ** Parts
 import EmployeeInfoCard from './parts/EmployeeInfoCard';
 import EmployeeTabs from './parts/EmployeeTabs';
@@ -45,8 +42,6 @@ function ViewEmployee() {
   // ** states
   const [active, setActive] = useState("missions");
   const [employee, setEmployee] = useState(null);
-  const [currentPassport, setCurrentPassport]=useState(null)
-  const [passports, setPassports] = useState([]);
   const [match, setMatch] = useState(true);
   // ** fetching data
   useEffect(() => {
@@ -64,16 +59,31 @@ function ViewEmployee() {
       });
       if (res?.status === 200) {
         setEmployee({ ...res?.data?.item });
-        setCurrentPassport({...res?.data?.currentPassport})
-        setPassports([...res?.data?.passports]);
+        
       }
     } catch (error) {
       // not found
       if (error?.response?.status === 404) {
-        toast.error(notFoundMessage, {
+        toast.error("employee doesn't exist", {
           duration: 5000,
         });
         setMatch(false);
+      }
+      // not token
+      else if (error?.response?.status === 401) {
+        cleanUserLocalStorage();
+        navigate("/login");
+        toast.error(sessionExpired, {
+          duration: 5000,
+        });
+      }
+      // token invalide
+      else if (error?.response?.status === 403) {
+        cleanUserLocalStorage();
+        navigate("/login");
+        toast.error(sessionExpired, {
+          duration: 5000,
+        });
       }
       //  server error
       else if (error?.response?.status === 500) {
@@ -108,7 +118,7 @@ function ViewEmployee() {
         {employee !== null ? (
           <Row>
             <Col xl="4" lg="5" xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
-              <EmployeeInfoCard employee={employee} refresh={fetchEmployee} currentPassport={currentPassport} />
+              <EmployeeInfoCard employee={employee} refresh={fetchEmployee} />
             </Col>
             <Col xl="8" lg="7" xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
               <EmployeeTabs
@@ -116,8 +126,7 @@ function ViewEmployee() {
                 toggleTab={toggleTab}
                 employee={employee}
                 refresh={fetchEmployee}
-                passports={passports}
-                currentPassport={currentPassport}
+               
               />
             </Col>
           </Row>

@@ -19,9 +19,9 @@ import EditEmployeeModal from '../modals/EditEmployee';
 function EmployeeInfoCard(props) {
   // props
   const [showEditEmployeeModal, setShowEditEmployeeModal] = useState(false);
- // ** selected Employee
- const [selectedEmployee, setSelectedEmployee] = useState({});
-  const { employee, refresh,currentPassport } = props;
+
+
+  const { employee, refresh } = props;
   // ** ==>
   return (
     <>
@@ -64,29 +64,11 @@ function EmployeeInfoCard(props) {
                   )}
                 </span>
               </li>
-              <li className="mb-75">
-                <span className="fw-bolder me-25">Current Passport :</span>
-                {currentPassport ? (
-                  <span className="text-capitalize">
-                    {currentPassport?.registration}
-                  </span>
-                ) : (
-                  <Badge color="light-danger" className="p-50 text-capitalize">
-                    no passport currently
-                  </Badge>
-                )}
-              </li>
+             
             </ul>
           </div>
           <div className="d-flex justify-content-center pt-2 gap-1">
-           {/*  <Button
-              id="openCancelOrderModal"
-              color="danger"
-              className="btn-icon rounded-circle"
-            >
-              <Slash size={18} />
-            </Button>
-            */}
+         
               <Button
                 id="openEditOrderModal"
                 color="primary"
@@ -97,27 +79,7 @@ function EmployeeInfoCard(props) {
               </Button>
             
 
-           {/*  <Button
-              id="openDeleteOrderModal"
-              color="danger"
-              className="btn-icon rounded-circle"
-            >
-              <Trash size={18} />
-            </Button>
-            <Button
-              id="openSetOrderDeliveredModal"
-              color="success"
-              className="btn-icon rounded-circle"
-            >
-              <Check size={18} />
-            </Button>
-            <Button
-              id="openSetOrderDeliveredLateModal"
-              color="warning"
-              className="btn-icon rounded-circle"
-            >
-              <Clock size={18} />
-            </Button> */}
+           
           </div>
         </CardBody>
       </Card>

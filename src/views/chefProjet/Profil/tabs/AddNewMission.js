@@ -7,7 +7,10 @@ import {
 import jwt_decode from 'jwt-decode';
 // ** toast
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Button,
@@ -23,7 +26,6 @@ import {
 
 import axios from '../../../../service/axios';
 import {
-  badRequestMessage,
   serverErrorMessage,
   sessionExpired,
 } from '../../../../utility/messages';
@@ -38,6 +40,7 @@ function AddNewMission(props){
     const accesToken = localStorage.getItem(
       "access_token"
     );
+
     const token = localStorage.getItem('access_token');
     console.log('token', token);
     const decodedToken = jwt_decode(token);
@@ -57,7 +60,7 @@ function AddNewMission(props){
     hotelLink: "",
     hotelPrice: "",
     clientId: "",
-    employeeId: id,
+    employeeId: id
   };
    // ** states
    const [mission, setMission] = useState({ ...initialMission });
@@ -72,7 +75,7 @@ function AddNewMission(props){
   // fetc client
   const fetchClients = async () => {
     try {
-      const res = await axios.get("client/all",{ headers: {
+      const res = await axios.get("client/active",{ headers: {
         authorization: `Bearer ${accesToken}`,
       },});
       if (res?.status === 200) {
@@ -92,10 +95,11 @@ function AddNewMission(props){
     event.preventDefault();
     setLoading(true);
     try {
-        const res = await axios.post("mission/createbychef", mission,{
+        const res = await axios.post(`mission/createbychef/${id}`, mission,{
           headers: {
             authorization: `Bearer ${accesToken}`,
-          },});
+          },
+        });
         if (res?.status === 201) {
           toast.success(`New mission was created successfully`);
           refresh();
@@ -105,22 +109,25 @@ function AddNewMission(props){
         console.log("err: ", error);
         // failed to create for some reason
         if (error?.response?.status === 400) {
-          toast.error(badRequestMessage, {
+          toast.error("failed to create", {
             duration: 5000,
           });
         }
    // not token
    else if (error?.response?.status === 401) {
-    /*  cleanUserLocalStorage();
-     navigate("/login"); */
+     cleanUserLocalStorage();
+     navigate("/login");
      toast.error(sessionExpired, {
        duration: 5000,
      });
    }
+   else if (error?.response?.status === 404) {
+   console.log(error)
+  }
    // token invalide
    else if (error?.response?.status === 403) {
-    /*  cleanUserLocalStorage();
-     navigate("/login"); */
+     cleanUserLocalStorage();
+     navigate("/login");
      toast.error(sessionExpired, {
        duration: 5000,
      });
@@ -131,36 +138,23 @@ function AddNewMission(props){
      error?.response?.data?.code === "activated"
    ) {
      toast.error(
-       "we're sorry bit it seems to be that this employee is currently deactivated and we can't create a mission for him.",
+       "we're sorry bit it seems to be that this employee is currently has already and we can't create a mission for him.",
        {
          duration: 5000,
        }
      );
    }
-   // this email already exist
-   else if (
-     error?.response?.status === 409 &&
-     error?.response?.data?.code === "passport"
-   ) {
-     toast.error(
-       "we're sorry bit it seems to be that this employee passport is currently unavailable for this mission.",
-       {
-         duration: 5000,
-       }
-     );
-   }
-   // this email already exist
-   else if (
-     error?.response?.status === 409 &&
-     error?.response?.data?.code === "visa"
-   ) {
-     toast.error(
-       "we're sorry bit it seems to be that this employee doesn't have a visa to this country",
-       {
-         duration: 5000,
-       }
-     );
-   }
+  else if (
+    error?.response?.status === 409 &&
+    error?.response?.data?.code === "client"
+  ) {
+    toast.error(
+      "we're sorry bit it seems to be that client doesn't exist .",
+      {
+        duration: 5000,
+      }
+    );
+  }
    // this email already exist
    else if (
      error?.response?.status === 409 &&
@@ -188,9 +182,6 @@ const resetForm = () => {
  setMission({ ...initialMission });
  setClients([]);
  setLoading(false);
-};
-const handleClick = () => {
- window.location.href = "https://www.skyscanner.fr/";
 };
 // ** ==>
 return (
@@ -298,6 +289,14 @@ return (
            </Col>
          </Row>
          <Row className="mb-1">
+                  
+            <Col className="d-flex mt-1" md={{ size: 9, offset: 3 }}>
+  <Link to="https://www.skyscanner.fr/"  style={{ textDecoration: 'underline'}}>
+  https://www.skyscanner.fr/
+  </Link>
+</Col>
+            </Row>
+         <Row className="mb-1">
            <Label sm="3" for="planeId">
              Plane:
            </Label>
@@ -311,13 +310,8 @@ return (
                placeholder="3513zex13zzdx"
              />
            </Col>
-           
-           <Col className="d-flex mt-1" md={{ size: 9, offset: 3 }}>
-             <Button className="me-2" color="primary" type="button" onClick={handleClick}>
-               Search
-             </Button>
-             </Col>
-         </Row>
+           </Row>
+         
          <Row className="mb-1">
            <Label sm="3" for="planeLink">
              Link to plane:
@@ -332,7 +326,7 @@ return (
                placeholder="vol Link"
              />
            </Col> </Row>
-           <Row className="mb-1">
+          {/*  <Row className="mb-1">
            <Label sm="3" for="planePrice">
              Pricing:
            </Label>
@@ -345,7 +339,7 @@ return (
                onChange={onChange}
                placeholder="planePrice"
              />
-           </Col>  </Row>    
+           </Col>  </Row>     */}
      
          <Row className="mb-1">
            <Label sm="3" for="hotelLink">
@@ -361,7 +355,7 @@ return (
                placeholder="hotel Link"
              />
            </Col> </Row>
-           <Row className="mb-1">
+          {/*  <Row className="mb-1">
            <Label sm="3" for="hotelPrice">
              Pricing:
            </Label>
@@ -374,7 +368,7 @@ return (
                onChange={onChange}
                placeholder="hotelPrice"
              />
-           </Col>  </Row>    
+           </Col>  </Row>     */}
          <Row>
            <Col className="d-flex mt-1" md={{ size: 9, offset: 3 }}>
              <Button className="me-1" color="primary" type="submit">

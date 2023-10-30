@@ -63,7 +63,7 @@ import {
       } */
       setSpinning(true);
       try {
-          const res = await axios.post("mailconfig/createConfigmail", config, {
+          const res = await axios.post("mailing/createConfigmail", config, {
             headers: {
               authorization: `Bearer ${accesToken}`,
             },
@@ -128,11 +128,12 @@ import {
   </Label>
   <Input
     type="select"
-    name="typeofmail" // Use the correct name attribute
+    name="typeofmail" 
     value={config.typeofmail}
     onChange={onChange}
     id="typeofmail"
     placeholder="Select Mail Type"
+    required
     
   >
     <option value="">Select</option>
@@ -143,7 +144,7 @@ import {
               {console.log("sssssss",config.typeofmail)}
             <Col md={6} xs={12}>
               <Label className="form-label text-capitalize" for="from">
-                from{": "} <span className="text-danger">*</span>
+                email{": "} <span className="text-danger">*</span>
               </Label>
               <Input
                 id="from"
@@ -206,46 +207,8 @@ import {
   </Col>
   
   
-            <Col md={12} xs={12}>
-              <Label className="form-label text-capitalize" for="body">
-                body {": "} <span className="text-danger">*</span>
-              </Label>
-              <Input
-                id="body"
-                type="textarea"
-                name="body"
-                value={config.body}
-                onChange={onChange}
-                invalid={true && errors.body}
-                placeholder="Example: ESB ..."
-               
-              />
-               {errors.body && (
-                <FormFeedback className="d-block text-capitalize fw-bold">
-                  {errors.body}
-                </FormFeedback>
-              )}
-            </Col>
-            <Col md={12} xs={12}>
-              <Label className="form-label text-capitalize" for="configname">
-                configname {": "} <span className="text-danger">*</span>
-              </Label>
-              <Input
-                id="configname"
-                type="text"
-                name="configname"
-                value={config.configname}
-                onChange={onChange}
-                invalid={true && errors.configname}
-                placeholder="Example: ESB ..."
-                required
-              />
-               {errors.configname && (
-                <FormFeedback className="d-block text-capitalize fw-bold">
-                  {errors.configname}
-                </FormFeedback>
-              )}
-            </Col>
+        
+            
             <Col xs={12} className="text-center mt-0 pt-50 mb-1 mt-2">
               <Button type="submit" className="me-1" color="primary">
                 {!spinning ? (
@@ -257,9 +220,7 @@ import {
                   </>
                 )}
               </Button>
-              {/* <Button type="reset" color="danger" outline onClick={closeModal}>
-                Cancel
-              </Button> */}
+              
             </Col>
           </Row>
         </ModalBody>

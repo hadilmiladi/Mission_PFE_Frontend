@@ -1,0 +1,27 @@
+html {
+    background-color: white;
+  }
+  section {
+    margin-top: 40px;
+  }
+  section:last-of-type {
+    margin-bottom: 40px;
+  }
+  .bsk-container {
+    margin-top: 15px;
+  }
+  
+  .x-icon {
+    height: 1em;
+    width: 1em;
+    top: .125em;
+    position: relative;
+  }
+  .x-alt {
+    color: #777;
+  }
+  .bsk-btn-default {
+    width: 250px; 
+    height: 60px; 
+    font-size: 18px;
+  }

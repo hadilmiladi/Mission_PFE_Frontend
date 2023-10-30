@@ -11,7 +11,6 @@ import {
 } from 'react-feather';
 import {
   Link,
-  useNavigate,
   useParams,
 } from 'react-router-dom';
 // ** reactstrap
@@ -37,7 +36,7 @@ import ViewMissionModal from './ViewMissionModal';
 // -------------------------------------------------------------------------
 function EmployeeMissionsTab({ active }) {
   // ** router
-  const navigate = useNavigate();
+ 
   const { id } = useParams();
 
   // ** access token
@@ -85,7 +84,7 @@ function EmployeeMissionsTab({ active }) {
       });
       if (res?.status === 200) {
         setMissions([...res?.data?.items]);
-        setSize(res?.data?.size);
+        setSize(res?.data?.items?.length);
       }
     } catch (error) {
       console.log('err: ', error);
@@ -117,11 +116,11 @@ function EmployeeMissionsTab({ active }) {
   const selectPagination = (index) => {
     setQueries((prev) => ({ ...prev, p: index }));
   };
-
+console.log('size',size)
   return (
     <>
       <AddCompanySection refresh={fetchMissions} openModal={() => setShowCreateMissionModal(true)} />
-
+      {size!==0 ? (
       <Card className={`${missions?.length === 0 && 'pb-2'} pb-1`}>
         <Table responsive>
           <thead>
@@ -146,7 +145,7 @@ function EmployeeMissionsTab({ active }) {
                   </td>
                   <td>
                     <span className="user_name text-truncate text-body fw-bolder">
-                      {`${String(row?.start).slice(0, 16)}-${String(row?.finish).slice(0, 16)}`}
+                      {`${String(row?.start).slice(0, 16)} / ${String(row?.finish).slice(0, 16)}`}
                     </span>
                   </td>
                   <td>
@@ -198,6 +197,32 @@ function EmployeeMissionsTab({ active }) {
           </tbody>
         </Table>
       </Card>
+      
+ ) : (
+  <>
+  <Card className={`${missions?.length === 0 ? 'pb-2' : ''} pb-1`}>
+    <Table responsive>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Client</th>
+          <th>Date</th>
+          <th>Destination</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colSpan="5" className="text-center">
+            No data found
+          </td>
+        </tr>
+      </tbody>
+    </Table>
+  </Card>
+</>
+)}
 
       <CreateMissionModal
         visibility={showCreateMissionModal}
@@ -255,6 +280,7 @@ function EmployeeMissionsTab({ active }) {
         row={selectedMission}
         refresh={fetchMissions}
       />
+     
     </>
   );
 }

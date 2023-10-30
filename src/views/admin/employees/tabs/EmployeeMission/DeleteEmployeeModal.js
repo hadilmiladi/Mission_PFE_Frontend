@@ -45,10 +45,13 @@ function DeleteEmployeeModal(props) {
         closeMainModal();
       }
     } catch (error) {
-      console.log("err: ", error);
-      // server error
       if (error?.response?.status === 500) {
         toast.error(serverErrorMessage, {
+          duration: 5000,
+        });
+      }
+      else if(error?.response?.status ===400){
+        toast.error("can not delete a non declined mission", {
           duration: 5000,
         });
       }

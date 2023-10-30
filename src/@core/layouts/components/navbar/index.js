@@ -1,14 +1,16 @@
 // ** React Imports
-import { Fragment } from "react";
-
-// ** Custom Components
-import NavbarUser from "./NavbarUser";
+import { Fragment } from 'react';
 
 // ** Third Party Components
-import { Sun, Moon, Menu } from "react-feather";
-
+import { Menu } from 'react-feather';
 // ** Reactstrap Imports
-import { NavItem, NavLink } from "reactstrap";
+import {
+  NavItem,
+  NavLink,
+} from 'reactstrap';
+
+// ** Custom Components
+import NavbarUser from './NavbarUser';
 
 const ThemeNavbar = (props) => {
   // ** Props
@@ -16,11 +18,11 @@ const ThemeNavbar = (props) => {
 
   // ** Function to toggle Theme (Light/Dark)
   const ThemeToggler = () => {
-    if (skin === "dark") {
-      return <Sun className="ficon" onClick={() => setSkin("light")} />;
+    skin === "dark"
+      /* return <Sun className="ficon" onClick={() => setSkin("light")} />;
     } else {
       return <Moon className="ficon" onClick={() => setSkin("dark")} />;
-    }
+    } */
   };
 
   return (

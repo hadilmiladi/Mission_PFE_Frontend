@@ -24,7 +24,6 @@ import axios from '../../../../service/axios';
 import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
-  badRequestMessage,
   serverErrorMessage,
   sessionExpired,
 } from '../../../../utility/messages';
@@ -58,7 +57,7 @@ function DeleteCompanyModal(props) {
         },
       });
       if (res?.status === 202) {
-        toast.success(`${row?.CompanyName} was deleted successfully`, {
+        toast.success(`${row?.company_name} was deleted successfully`, {
           duration: 5000,
         });
         refresh();
@@ -67,7 +66,7 @@ function DeleteCompanyModal(props) {
     } catch (error) {
       // errors
       if (error?.response?.status === 400) {
-        toast.error(badRequestMessage, {
+        toast.error("failed to delete", {
           duration: 5000,
         });
       }
@@ -86,10 +85,6 @@ function DeleteCompanyModal(props) {
         toast.error(sessionExpired, {
           duration: 5000,
         });
-      }
-      // gender is not valid
-      else if (error?.response?.status === 409) {
-        setShowALert(true);
       }
       // server error
       else if (error?.response?.status === 500) {

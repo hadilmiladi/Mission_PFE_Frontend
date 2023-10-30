@@ -17,7 +17,7 @@ import {
   Row,
 } from 'reactstrap';
 
-import axios from '../../../service/axios';
+import axios from '../../../../service/axios';
 
 const GoalOverview = props => {
     // ** State

@@ -13,7 +13,7 @@ import {
 import StatsHorizontal from '@components/widgets/stats/StatsHorizontal';
 
 // ** ----------------------------------------------------------------------------------
-function CompaniesCountDashboard(props) {
+function CountDashboard(props) {
   // ** props
   const { size = 0 } = props;
   // ** ==>
@@ -22,7 +22,7 @@ function CompaniesCountDashboard(props) {
       <Col lg="3" sm="6">
         <StatsHorizontal
           color="primary"
-          statTitle="Total clients"
+          statTitle="Total employees"
           icon={<Users size={20} />}
           renderStats={<h3 className="fw-bolder mb-75">{size}</h3>}
         />
@@ -31,4 +31,4 @@ function CompaniesCountDashboard(props) {
   );
 }
 
-export default CompaniesCountDashboard;
+export default CountDashboard;

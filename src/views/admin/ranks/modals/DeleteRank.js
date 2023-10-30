@@ -36,7 +36,7 @@ function DeleteRankModal(props) {
      // ** router
   const navigate = useNavigate();
   // ** access token
-  const accesToken = localStorage.getItem(
+  const accessToken = localStorage.getItem(
     "access_token"
   );
    // ** states
@@ -54,7 +54,7 @@ function DeleteRankModal(props) {
     try {
       const res = await axios.delete(`rank/delete/${row?.id}`, {
         headers: {
-          authorization: `Bearer ${accesToken}`,
+          authorization: `Bearer ${accessToken}`,
         },
       });
       if (res?.status === 202) {
@@ -78,18 +78,23 @@ function DeleteRankModal(props) {
       toast.error(sessionExpired, {
         duration: 5000,
       });
+    } //token invalid 
+    else if (error?.response?.status === 403) {
+      cleanUserLocalStorage();
+      navigate("/login");
+      toast.error(sessionExpired, {
+        duration: 5000,
+      });
     }
-     // token invalide
-     else if (error?.response?.status === 403) {
-        cleanUserLocalStorage();
-        navigate("/login");
-        toast.error(sessionExpired, {
-          duration: 5000,
-        });
-      }
-      // gender is not valid
+    else if (error?.response?.status === 400) {
+      toast.error("failed to delete", {
+        duration: 5000,
+      });
+    }
+      // name already used
       else if (error?.response?.status === 409) {
-        setShowALert(true);
+        toast.error("already used",
+        { duration: 5000})
       }
       // server error
       else if (error?.response?.status === 500) {

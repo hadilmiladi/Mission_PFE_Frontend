@@ -19,6 +19,7 @@ import axios from '../../../../service/axios';
 import AddCompanySection
   from '../../../ceo/companies/section/AddCompanySection';
 import AddNewMission from './AddNewMission';
+import ViewMission from './MissionDetails';
 
 function EmployeeMission({active, user}) {
       // ** access token
@@ -163,10 +164,10 @@ function EmployeeMission({active, user}) {
                         <td>  <Button
                           color="primary"
                           className="btn-icon rounded-circle"
-                         /*  onClick={() => {
+                          onClick={() => {
                             setSelectedMission({ ...row });
                             setShowViewMission(true);
-                          }} */
+                          }}
                         >
                           <Eye size={16} />
                         </Button></td>
@@ -176,10 +177,10 @@ function EmployeeMission({active, user}) {
               </tbody>
             </Table>
           </Card>
-          {/* <ViewMission
+          <ViewMission
             visibility={showViewMission}
             closeModal={() => setShowViewMission(false)}
-            row={selectedMission}/> */}
+            row={selectedMission}/>
             {/* openDeleteMissionModal={() => setShowDeleteMission(true)}
             openCancelMissionModal={() => setShowCancelMissionModal(true)}
             openConfirmMissionModal={() => setShowAcceptMissionModal(true)}

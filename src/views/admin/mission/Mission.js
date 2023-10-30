@@ -17,7 +17,7 @@ import axios from '../../../service/axios';
 
 function Mission() {
    // ** access token
-   const accesToken = localStorage.getItem(
+   const accessToken = localStorage.getItem(
     "access_token"
   );
   const token = localStorage.getItem('access_token');
@@ -56,9 +56,9 @@ const handleClick = (id) => {
   console.log("called");
   setLoading(true);
    try {
-    const res = await axios.get(`mission/all/${id}`,{
+    const res = await axios.get(`mission/all`,{
       headers: {
-        authorization: `Bearer ${accesToken}`,
+        authorization: `Bearer ${accessToken}`,
       },})
     if (res?.status === 200) {
       setMissions([...res?.data?.items]);

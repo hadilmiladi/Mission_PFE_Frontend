@@ -14,7 +14,6 @@ import {
 } from 'reactstrap';
 
 import axios from '../../../service/axios';
-import { badRequestMessage } from '../../../utility/messages';
 
 const AccountTabs = () => {
   // Access token
@@ -85,10 +84,41 @@ const AccountTabs = () => {
         /* refresh(); */
       }
     } catch (error) {
-      console.log('Error:', error);
-      toast.error(badRequestMessage, {
-        duration: 5000,
-      });
+      if (error?.response?.status === 400) {
+        toast.error("failed to update for some reason", {
+          duration: 5000,
+        });
+      }
+      // not token
+      else if (error?.response?.status === 401) {
+        cleanUserLocalStorage();
+        navigate("/login");
+        toast.error(sessionExpired, {
+          duration: 5000,
+        });
+      }
+      // token invalide
+      else if (error?.response?.status === 403) {
+        cleanUserLocalStorage();
+        navigate("/login");
+        toast.error(sessionExpired, {
+          duration: 5000,
+        });
+      }
+      // this email already exist
+      else if (
+        error?.response?.status === 409
+      ) {
+        toast.error("email already exists", {
+          duration: 5000,
+        });
+      }
+      // server error
+      else if (error?.response?.status === 500) {
+        toast.error(serverErrorMessage, {
+          duration: 5000,
+        });
+      }
     } finally {
       setSpinning(false);
     }

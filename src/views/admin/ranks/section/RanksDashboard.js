@@ -1,8 +1,7 @@
 // ** React Imports
 import React from 'react';
 
-// ** Icons Imports
-import { Users } from 'react-feather';
+import { Activity } from 'react-feather/dist';
 // ** Reactstrap Imports
 import {
   Col,
@@ -23,7 +22,7 @@ function CompaniesCountDashboard(props) {
         <StatsHorizontal
           color="primary"
           statTitle="Total clients"
-          icon={<Users size={20} />}
+          icon={<Activity size={20} />}
           renderStats={<h3 className="fw-bolder mb-75">{size}</h3>}
         />
       </Col>

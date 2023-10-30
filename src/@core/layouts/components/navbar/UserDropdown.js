@@ -6,7 +6,10 @@ import {
 
 import jwt_decode from 'jwt-decode';
 // ** Third Party Components
-import { Power } from 'react-feather';
+import {
+  LogOut,
+  Power,
+} from 'react-feather';
 import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
 import {
@@ -37,7 +40,7 @@ const UserDropdown = () => {
     try {
       const res = await axios.get(`employee/name/${id}`);
       if (res.status === 200) {
-        setUserData(res.data); // Assuming the data you need is in response.data
+        setUserData(res.data); 
       } else {
         navigate("/login");
       }
@@ -46,7 +49,6 @@ const UserDropdown = () => {
       navigate("/login");
     }
   };
-  console.log(userData)
 
   
   // ** log out
@@ -54,6 +56,7 @@ const UserDropdown = () => {
     event.preventDefault();
     cleanUserLocalStorage();
     navigate("/login");
+    console.log('logged out')
   };
   // ** ==>
   return (
@@ -64,17 +67,14 @@ const UserDropdown = () => {
         className="nav-link dropdown-user-link"
         onClick={(e) => e.preventDefault()}
       >
+        
         <div className="user-nav d-sm-flex d-none">
           <span className="user-status text-capitalize fw-bold">
             {userData}
           </span>
+         
         </div>
-       {/*  <Avatar
-          img={defaultAvatar}
-          imgHeight="40"
-          imgWidth="40"
-          status="online"
-        /> */}
+        <LogOut />
       </DropdownToggle>
       <DropdownMenu end>
         <DropdownItem divider />

@@ -1,39 +1,48 @@
-// ** React Imports
-import { Link } from "react-router-dom"
-import { useState, useEffect } from "react"
+// ** Styles
+import '@styles/base/core/menu/menu-types/horizontal-menu.scss';
 
-// ** Store & Actions
-import { useSelector, useDispatch } from "react-redux"
-import { handleMenuHidden, handleContentWidth } from "@store/layout"
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 // ** Third Party Components
-import classnames from "classnames"
-import { ArrowUp } from "react-feather"
-
+import classnames from 'classnames';
+import { ArrowUp } from 'react-feather';
+// ** Store & Actions
+import {
+  useDispatch,
+  useSelector,
+} from 'react-redux';
+// ** React Imports
+import { Link } from 'react-router-dom';
 // ** Reactstrap Imports
-import { Navbar, NavItem, Button } from "reactstrap"
-
-// ** Configs
-import themeConfig from "@configs/themeConfig"
+import {
+  Button,
+  Navbar,
+  NavItem,
+} from 'reactstrap';
 
 // ** Custom Components
-
-import Customizer from "@components/customizer"
-import ScrollToTop from "@components/scrolltop"
-import NavbarComponent from "./components/navbar"
-import FooterComponent from "./components/footer"
-import MenuComponent from "./components/menu/horizontal-menu"
-
+import Customizer from '@components/customizer';
+import ScrollToTop from '@components/scrolltop';
+// ** Configs
+import themeConfig from '@configs/themeConfig';
+import { useFooterType } from '@hooks/useFooterType';
+import { useLayout } from '@hooks/useLayout';
+import { useNavbarColor } from '@hooks/useNavbarColor';
+import { useNavbarType } from '@hooks/useNavbarType';
 // ** Custom Hooks
-import { useRTL } from "@hooks/useRTL"
-import { useSkin } from "@hooks/useSkin"
-import { useLayout } from "@hooks/useLayout"
-import { useNavbarType } from "@hooks/useNavbarType"
-import { useFooterType } from "@hooks/useFooterType"
-import { useNavbarColor } from "@hooks/useNavbarColor"
+import { useRTL } from '@hooks/useRTL';
+import { useSkin } from '@hooks/useSkin';
+import {
+  handleContentWidth,
+  handleMenuHidden,
+} from '@store/layout';
 
-// ** Styles
-import "@styles/base/core/menu/menu-types/horizontal-menu.scss"
+import FooterComponent from './components/footer';
+import MenuComponent from './components/menu/horizontal-menu';
+import NavbarComponent from './components/navbar';
 
 const HorizontalLayout = (props) => {
   // ** Props
@@ -220,7 +229,7 @@ const HorizontalLayout = (props) => {
         )}
       </footer>
 
-      {themeConfig.layout.scrollTop === true ? (
+      {themeConfig.layout.scrollTop === false ? (
         <div className="scroll-to-top">
           <ScrollToTop showOffset={300} className="scroll-top d-block">
             <Button className="btn-icon" color="primary">

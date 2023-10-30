@@ -16,7 +16,7 @@ import {
   Table,
 } from 'reactstrap';
 
-import axios from '../../../service/axios';
+import axios from '../../../../service/axios';
 
 function CeoInvoices(){
     // ** access token
@@ -109,7 +109,6 @@ return (
             <th> <TrendingUp size={14} /></th>
             <th>Client</th>
             <th>Date</th>
-            <th>Total</th>
             <th>Status</th> 
             
             
@@ -148,22 +147,12 @@ return (
                         {row?.client?.company_name}
                       </span>
                       </td>
-                    {/*  <td>
-                      <span className="user_name text-truncate text-body fw-bolder">
-                        {row?.mission?.employee?.firstname + ' ' + row?.mission?.employee?.lastname}
-                      </span>
-                    </td>  */}
+                    
                     <td>
                       <span className="user_name text-truncate text-body fw-bolder">
                         {`${String(row?.start?.substring(0, 10)).slice(0, 16)}-${String(row?.end?.substring(0, 10)).slice(0, 16)}`}
                       </span>
                     </td>
-                    <td>
-                    <span className="user_name text-truncate text-body fw-bolder">
-                     
-                    </span>
-                   
-                  </td>
                     <td >
                       
                     <span className="user_name text-truncate text-body fw-bolder">
@@ -181,7 +170,6 @@ return (
     </Badge>
   ) : null}
 </span>
-             {/*  {console.log('paid is', row?.paid)} */}
 </td>
 
 

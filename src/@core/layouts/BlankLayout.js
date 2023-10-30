@@ -1,12 +1,15 @@
-// ** React Imports
-import { Outlet } from "react-router-dom"
-import { useEffect, useState } from "react"
-
-// ** Custom Hooks
-import { useSkin } from "@hooks/useSkin"
+import {
+  useEffect,
+  useState,
+} from 'react';
 
 // ** Third Party Components
-import classnames from "classnames"
+import classnames from 'classnames';
+// ** React Imports
+import { Outlet } from 'react-router-dom';
+
+// ** Custom Hooks
+import { useSkin } from '@hooks/useSkin';
 
 const BlankLayout = () => {
   // ** States
@@ -17,6 +20,7 @@ const BlankLayout = () => {
 
   useEffect(() => {
     setIsMounted(true)
+    
     return () => setIsMounted(false)
   }, [])
 

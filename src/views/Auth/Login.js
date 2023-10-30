@@ -5,9 +5,9 @@ import React, {
   useState,
 } from 'react';
 
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import {
-  Button,
   CardText,
   Col,
   Row,
@@ -21,15 +21,24 @@ import {
   cleanUserLocalStorage,
   getUserRoutePerRole,
 } from '../../utility/Auth';
+import { useSkin } from '../../utility/hooks/useSkin';
 import { serverErrorMessage } from '../../utility/messages';
 import { config } from './config';
+import styles, { container } from './login.css';
 
 const Login = () => {
+  /* // ** access token
+  const accesToken = localStorage.getItem(
+    "access_token"
+  ); */
   const [error, setError] = useState(null);
+  const { skin } = useSkin();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const [user,setUser]=useState({});
+  const [msal, setMsal] = useState("");
+
 
   const publicClientApplication = new PublicClientApplication({
     auth: {
@@ -49,14 +58,15 @@ const Login = () => {
         scopes: config.scopes,
         prompt: 'select_account',
       });
-
-      const tokenString = localStorage.getItem(
-        '00000000-0000-0000-bf8e-ce2eb0f284fe.9188040d-6c67-4c5b-b112-36a304b66dad-login.windows.net-298fe323-14d7-4887-81aa-86e61b43e140'
-      );
-
+      
+      const msal = localStorage.getItem('msal.account.keys')
+      const result = msal.substring(2, msal.length - 2);
+      console.log(result) 
+      const tokenString = localStorage.getItem(result);
       try {
         const tokenObject = JSON.parse(tokenString);
         setEmail(tokenObject.username);
+       
       } catch (error) {
         console.error('Error parsing token string:', error);
       }
@@ -68,11 +78,16 @@ const Login = () => {
       navigate('/login');
     }
   };
+  console.log('email', email)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`/Login/${email}`);
+        const res = await axios.get(`/Login/${email}` /* ,{
+          headers: {
+            authorization: `Bearer ${accesToken}`,
+          },
+        }  */);
         if (res?.status === 200) {
           localStorage.setItem('access_token', res?.data?.token);
           localStorage.setItem('access_role', res?.data?.role);
@@ -83,8 +98,13 @@ const Login = () => {
         console.log('Error fetching data:', error);
         const status = error?.response?.status;
         if (status === 404) {
-          setError({
-            email: "This user doesn't exist",
+          toast.error("User doesn't exist", {
+            duration: 5000,
+          });
+        }
+        else if (status===401){
+          toast.error("User unauthoraurized", {
+            duration: 5000,
           });
         } else if (status === 500) {
           toast.error(serverErrorMessage, {
@@ -103,7 +123,7 @@ const Login = () => {
     await handleLogin();
     setIsAuthenticated(true);
   };
-
+  
   return (
     
     <div className="auth-wrapper auth-cover">
@@ -116,16 +136,22 @@ const Login = () => {
       </Col>
       <Col className="d-flex align-items-center auth-bg px-2 p-lg-5" lg="4" sm="12">
         <Col className="px-xl-2 mx-auto" sm="8" md="6" lg="12">
-         {/*  <CardTitle tag="h2" className="fw-bold mb-1">
-                Welcome! 👋
-              </CardTitle> */}
-              <CardText className="mb-2">
-                Please sign in to your account and start the adventure
+        <CardText className="mb-4">
+                Sign in with your Microsoft account
               </CardText>
-              <Button color="primary" onClick={login}>
-                Sign in with Microsoft
-              </Button>
-            </Col>
+        <div className={styles.container}>
+        <div className={styles.bsk-container}>
+          <button className="bsk-btn bsk-btn-default" onClick={login}>
+            <img
+              src="https://s3-eu-west-1.amazonaws.com/cdn-testing.web.bas.ac.uk/scratch/bas-style-kit/ms-pictogram/ms-pictogram.svg"
+              alt="Microsoft Icon"
+              className={styles.xIcon} // Use the class name from your CSS module
+            />
+            Sign in with Microsoft
+          </button>
+        </div>
+      </div>
+          </Col>
           </Col>
         </Row> 
      

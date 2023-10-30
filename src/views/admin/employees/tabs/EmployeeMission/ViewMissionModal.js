@@ -46,6 +46,7 @@ function ViewMissionModal(props) {
   const resetForm = () => {
     setMission({});
   };
+ 
   // ** ==>
   return (
     <Modal
@@ -64,7 +65,7 @@ function ViewMissionModal(props) {
           <ul className="list-unstyled">
             <li className="mb-75">
               <span className="fw-bolder me-25">#:</span>
-              <span className="text-capitalize">{mission?.id}</span>
+              <span className="text-capitalize">{mission?.id} </span>
             </li>
             <li className="mb-75">
               <span className="fw-bolder me-25">Client :</span>
@@ -128,42 +129,10 @@ function ViewMissionModal(props) {
                 </Badge>
               )}
             </li>
-            {mission?.accepted === true && mission?.declined === false && mission?.validated === false && (
-              <>
-                <li className="mb-75">
-                  <span className="fw-bolder me-25">Accepted At :</span>
-                  <span className="text-capitalize">
-                    {String(mission?.acceptedAt).slice(0, 10)}
-                  </span>
-                </li>
-                {/* <li className="mb-75">
-                  <span className="fw-bolder me-25">Reason :</span>
-                  <span className="text-capitalize">{mission?.comment}</span>
-                </li> */}
-              </>
-            )}
-              {mission?.accepted === false && mission?.declined === false && mission?.validated === true && (
-              <>
-                <li className="mb-75">
-                  <span className="fw-bolder me-25">Accepted At :</span>
-                  <span className="text-capitalize">
-                    {String(mission?.validatedAt).slice(0, 10)}
-                  </span>
-                </li>
-                {/* <li className="mb-75">
-                  <span className="fw-bolder me-25">Reason :</span>
-                  <span className="text-capitalize">{mission?.comment}</span>
-                </li> */}
-              </>
-            )}
+           
             {mission?.accepted === false && mission?.declined === true && mission?.validated === false && (
               <>
-                <li className="mb-75">
-                  <span className="fw-bolder me-25">Declined At :</span>
-                  <span className="text-capitalize">
-                    {String(mission?.declinedAt).slice(0, 10)}
-                  </span>
-                </li>
+             
                 <li className="mb-75">
                   <span className="fw-bolder me-25">Reason :</span>
                   <span className="text-capitalize">{mission?.comment}</span>

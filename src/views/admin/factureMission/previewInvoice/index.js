@@ -20,9 +20,6 @@ import {
 
 // ** Third Party Components
 import axios from '../../../../service/axios';
-//import SendInvoiceSidebar from '../shared-sidebar/SidebarSendInvoice';
-//import PreviewActions from './PreviewActions';
-// ** Invoice Preview Components
 import PreviewCard from './preview';
 
 const InvoicePreview = () => {
@@ -73,23 +70,7 @@ return data !== null  ? (
       <Col xl={9} md={8} sm={12}>
         <PreviewCard data={data} />
       </Col>
-     {/*  <Col xl={3} md={4} sm={12}>
-        <PreviewActions
-          id={id}
-          setSendSidebarOpen={setSendSidebarOpen}
-          setAddPaymentOpen={setAddPaymentOpen}
-        />
-      </Col> */}
     </Row>
-    {/* <SendInvoiceSidebar
-      toggleSidebar={toggleSendSidebar}
-      open={sendSidebarOpen}
-      data={data}
-    /> */}
-    {/* <AddPaymentSidebar
-      toggleSidebar={toggleAddSidebar}
-      open={addPaymentOpen}
-    /> */}
   </div>
 ) : notFound===false?   <h4 className="alert-heading">loading ...</h4> :
   <Alert color="danger">

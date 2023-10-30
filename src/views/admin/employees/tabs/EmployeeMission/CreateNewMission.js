@@ -7,6 +7,7 @@ import {
 // ** toast
 import toast from 'react-hot-toast';
 import {
+  Link,
   useNavigate,
   useParams,
 } from 'react-router-dom';
@@ -72,7 +73,7 @@ const CreateMissionModal = (props) => {
   // fetc client
   const fetchClients = async () => {
     try {
-      const res = await axios.get("client/all",{ headers: {
+      const res = await axios.get("client/active",{ headers: {
         authorization: `Bearer ${accesToken}`,
       },});
       if (res?.status === 200) {
@@ -137,30 +138,8 @@ const CreateMissionModal = (props) => {
           }
         );
       }
-      // this email already exist
-      else if (
-        error?.response?.status === 409 &&
-        error?.response?.data?.code === "passport"
-      ) {
-        toast.error(
-          "we're sorry bit it seems to be that this employee passport is currently unavailable for this mission.",
-          {
-            duration: 5000,
-          }
-        );
-      }
-      /* // this email already exist
-      else if (
-        error?.response?.status === 409 &&
-        error?.response?.data?.code === "visa"
-      ) {
-        toast.error(
-          "we're sorry bit it seems to be that this employee doesn't have a visa to this country",
-          {
-            duration: 5000,
-          }
-        );
-      } */
+      
+     
       // this email already exist
       else if (
         error?.response?.status === 409 &&
@@ -298,6 +277,14 @@ const CreateMissionModal = (props) => {
               </Col>
             </Row>
             <Row className="mb-1">
+                  
+            <Col className="d-flex mt-1" md={{ size: 9, offset: 3 }}>
+  <Link to="https://www.skyscanner.fr/"  style={{ textDecoration: 'underline'}}>
+  https://www.skyscanner.fr/
+  </Link>
+</Col>
+            </Row>
+            <Row className="mb-1">
               <Label sm="3" for="planeId">
                 Plane:
               </Label>
@@ -311,12 +298,7 @@ const CreateMissionModal = (props) => {
                   placeholder="3513zex13zzdx"
                 />
               </Col>
-              
-              <Col className="d-flex mt-1" md={{ size: 9, offset: 3 }}>
-                <Button className="me-2" color="primary" type="button" onClick={handleClick}>
-                  Search
-                </Button>
-                </Col>
+          
             </Row>
             <Row className="mb-1">
               <Label sm="3" for="planeLink">

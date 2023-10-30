@@ -7,7 +7,10 @@ import {
 import jwt_decode from 'jwt-decode';
 // ** toast
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import {
+  Link,
+  useNavigate,
+} from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Button,
@@ -78,7 +81,7 @@ const CreateMission= (props) => {
     // fetc client
     const fetchClients = async () => {
       try {
-        const res = await axios.get("client/all",{
+        const res = await axios.get("client/active",{
           headers: {
               authorization: `Bearer ${accesToken}`,
             },
@@ -120,16 +123,16 @@ const CreateMission= (props) => {
         }
         // not token
         else if (error?.response?.status === 401) {
-         /*  cleanUserLocalStorage();
-          navigate("/login"); */
+          cleanUserLocalStorage();
+          navigate("/login");
           toast.error(sessionExpired, {
             duration: 5000,
           });
         }
         // token invalide
         else if (error?.response?.status === 403) {
-          /* cleanUserLocalStorage();
-          navigate("/login"); */
+          cleanUserLocalStorage();
+          navigate("/login");
           toast.error(sessionExpired, {
             duration: 5000,
           });
@@ -146,30 +149,7 @@ const CreateMission= (props) => {
             }
           );
         }
-        // this email already exist
-        else if (
-          error?.response?.status === 409 &&
-          error?.response?.data?.code === "passport"
-        ) {
-          toast.error(
-            "we're sorry bit it seems to be that this employee passport is currently unavailable for this mission.",
-            {
-              duration: 5000,
-            }
-          );
-        }
-        // this email already exist
-        else if (
-          error?.response?.status === 409 &&
-          error?.response?.data?.code === "visa"
-        ) {
-          toast.error(
-            "we're sorry bit it seems to be that this employee doesn't have a visa to this country",
-            {
-              duration: 5000,
-            }
-          );
-        }
+        
         // this email already exist
         else if (
           error?.response?.status === 409 &&
@@ -198,9 +178,7 @@ const CreateMission= (props) => {
       setClients([]);
       setLoading(false);
     };
-    const handleClick = () => {
-        window.open("https://www.skyscanner.fr/", "_blank");
-      };
+  
       
     // ** ==>
     return (
@@ -308,6 +286,15 @@ const CreateMission= (props) => {
                 </Col>
               </Row>
               <Row className="mb-1">
+                  
+                  <Col className="d-flex mt-1" md={{ size: 9, offset: 3 }}>
+        <Link to="https://www.skyscanner.fr/"  style={{ textDecoration: 'underline'}}>
+        https://www.skyscanner.fr/
+        </Link>
+      </Col>
+                  
+              </Row>
+              <Row className="mb-1">
                 <Label sm="3" for="planeId">
                   Plane:
                 </Label>
@@ -321,13 +308,7 @@ const CreateMission= (props) => {
                     placeholder="3513zex13zzdx"
                   />
                 </Col>
-                
-                <Col className="d-flex mt-1" md={{ size: 9, offset: 3 }}>
-                  <Button className="me-2" color="primary" type="button" onClick={handleClick}>
-                    Search
-                  </Button>
-                  </Col>
-              </Row>
+                </Row>
               <Row className="mb-1">
                 <Label sm="3" for="planeLink">
                   Link to plane:

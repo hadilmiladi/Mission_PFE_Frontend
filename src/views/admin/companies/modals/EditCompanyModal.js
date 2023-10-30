@@ -30,7 +30,6 @@ import axios from '../../../../service/axios';
 import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
-  badRequestMessage,
   requiredField,
   serverErrorMessage,
   sessionExpired,
@@ -105,7 +104,7 @@ function EditCompanyModal(props) {
     } catch (error) {
       // failed to create for some reason
       if (error?.response?.status === 400) {
-        toast.error(badRequestMessage, {
+        toast.error("failed to create", {
           duration: 5000,
         });
       }
@@ -141,6 +140,14 @@ function EditCompanyModal(props) {
       ) {
         setErrors((prev) => ({
           code: "Code is used by an other company",
+        }));
+      }
+      else if (
+        error?.response?.status === 500 &&
+        error?.response?.data?.code === "range"
+      ) {
+        setErrors((prev) => ({
+          code: "Code is out of range of 10",
         }));
       }
       // server error

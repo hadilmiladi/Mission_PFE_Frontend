@@ -30,7 +30,6 @@ import axios from '../../../../service/axios';
 import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
-  badRequestMessage,
   requiredField,
   serverErrorMessage,
   sessionExpired,
@@ -132,9 +131,17 @@ function EditEmployeeModal(props) {
       console.log("err: ",error)
       // failed to create for some reason
       if (error?.response?.status === 400) {
-        toast.error(badRequestMessage, {
+        toast.error("failed to update for some reason", {
           duration: 5000,
         });
+      }
+      else if (
+        error?.response?.status === 404 &&
+        error?.response?.data?.code === "rank"
+      ) {
+        setErrors((prev) => ({
+          rank: "Rank doesn't exist",
+        }));
       }
       // not token
       else if (error?.response?.status === 401) {
@@ -305,9 +312,9 @@ function EditEmployeeModal(props) {
               </option>
             })}
           </Input>
-          {errors.email && (
+          {errors.rankId && (
             <FormFeedback className="d-block text-capitalize fw-bold">
-              {errors.email}
+              {errors.rankId}
             </FormFeedback>
           )}
         </Col>

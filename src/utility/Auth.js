@@ -8,8 +8,10 @@ export const isUserLoggedIn = () => {
 
 // ** clean user storage
 export const cleanUserLocalStorage = () => {
- localStorage.removeItem("access_token")
- localStorage.removeItem('access_role')
+ /* localStorage.removeItem("access_token")
+ localStorage.removeItem('access_role') */
+ localStorage.clear()
+
 };
 
 // ** get the redirect user path
@@ -37,7 +39,7 @@ export const getUserHomePageRoute = () => {
 export const getUserRoutePerRole = (role) => {
   switch (String(role)) {
     case "admin":
-      return "/admin/missions";
+      return "/admin/acceuil";
     case "employee":
       return "/employee/missions";
     case "ceo":

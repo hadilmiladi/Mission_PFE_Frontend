@@ -143,30 +143,8 @@ function EditMissionModal(props) {
           }
         );
       }
-      // this email already exist
-      else if (
-        error?.response?.status === 409 &&
-        error?.response?.data?.code === "passport"
-      ) {
-        toast.error(
-          "we're sorry bit it seems to be that this employee passport is currently unavailable for this mission.",
-          {
-            duration: 5000,
-          }
-        );
-      }
-      // this email already exist
-      else if (
-        error?.response?.status === 409 &&
-        error?.response?.data?.code === "visa"
-      ) {
-        toast.error(
-          "we're sorry bit it seems to be that this employee doesn't have a visa to this country",
-          {
-            duration: 5000,
-          }
-        );
-      }
+      
+     
       // this email already exist
       else if (
         error?.response?.status === 409 &&
@@ -211,7 +189,7 @@ function EditMissionModal(props) {
         ></ModalHeader>
         <ModalBody className="px-sm-2 pb-2">
           <div className="text-center mb-1">
-            <h4 className="mb-1">Create a new mission</h4>
+            <h4 className="mb-1">Update the mission</h4>
             <p>Please fill all the required informations.</p>
           </div>
           <Form onSubmit={onSubmit}>

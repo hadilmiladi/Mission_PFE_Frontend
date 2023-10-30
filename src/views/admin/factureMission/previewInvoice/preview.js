@@ -90,7 +90,7 @@ const PreviewCard = ({ data }) => {
                     {console.log("invoice?.mission?.id",invoice?.mission?.id)}
                   </td>
                   <td className="py-1">
-                    <span className="fw-bold">{invoice?.mission?.destination} $</span>
+                    <span className="fw-bold">{invoice?.mission?.destination} </span>
                   </td>
                   <td className="py-1">
                     <span className="fw-bold">{invoice?.employee?.firstname} {invoice?.employee?.lastname}</span>

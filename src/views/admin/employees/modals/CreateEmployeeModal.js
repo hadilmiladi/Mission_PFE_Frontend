@@ -25,7 +25,6 @@ import {
 import axios from '../../../../service/axios';
 // ** utily messages
 import {
-  badRequestMessage,
   requiredField,
   serverErrorMessage,
   sessionExpired,
@@ -107,22 +106,22 @@ function CreateEmployeeModal(props) {
       
       // failed to create for some reason
       if (error?.response?.status === 400) {
-        toast.error(badRequestMessage, {
+        toast.error("failed to create for some reason", {
           duration: 5000,
         });
       }
       // not token
       else if (error?.response?.status === 401) {
-        /* cleanUserLocalStorage();
-        navigate("/login"); */
+        cleanUserLocalStorage();
+        navigate("/login");
         toast.error(sessionExpired, {
           duration: 5000,
         });
       }
       // token invalide
       else if (error?.response?.status === 403) {
-       /*  cleanUserLocalStorage();
-        navigate("/login"); */
+        cleanUserLocalStorage();
+        navigate("/login");
         toast.error(sessionExpired, {
           duration: 5000,
         });
@@ -134,6 +133,14 @@ function CreateEmployeeModal(props) {
       ) {
         setErrors((prev) => ({
           email: "Email already used by an other client",
+        }));
+      }
+      else if (
+        error?.response?.status === 404 &&
+        error?.response?.data?.code === "rank"
+      ) {
+        setErrors((prev) => ({
+          rankId: "rank field is required",
         }));
       }
       // this registration number already exist
@@ -169,6 +176,9 @@ function CreateEmployeeModal(props) {
     if (values.email === "") {
       errors.email = requiredField;
     }
+    /* if (values.rankId === "") {
+      errors.rankId = requiredField;
+    } */
     return errors;
   };
   // ** reset form on close
@@ -194,7 +204,7 @@ function CreateEmployeeModal(props) {
     ></ModalHeader>
     <ModalBody className="px-sm-2 pb-2">
       <div className="text-center mb-1">
-        <h4 className="mb-1">Create a new company</h4>
+        <h4 className="mb-1">Add a new employee</h4>
         <p>Please fill all the required informations.</p>
       </div>
       <Row tag="form" className="gy-1 pt-75" onSubmit={onSubmit}>

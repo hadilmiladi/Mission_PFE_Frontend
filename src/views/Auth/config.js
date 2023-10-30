@@ -1,6 +1,6 @@
 export const config={
     appId:'b8e581c3-ede6-4c70-83da-d1b0876822af',
-    redirctUri:'http://localhost:3001/employee/missions',
+    redirctUri:'http://localhost:3000/admin/acceuil',
     scopes:[
        
             'user.read',

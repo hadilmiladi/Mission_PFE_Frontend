@@ -3,7 +3,6 @@ import { useState } from 'react';
 
 // ** Third Party Components
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 // ** Reactstrap Imports
 import {
   Button,
@@ -15,16 +14,14 @@ import {
 } from 'reactstrap';
 
 // ** api config
-import axios from '../../../../../service/axios';
+import axios from '../../../service/axios';
 // ** utils
-import { serverErrorMessage } from '../../../../../utility/messages';
+import { serverErrorMessage } from '../../../utility/messages';
 
 // ** --------------------------------------------------------------------------
-function ValidMissionModal(props) {
+function ConfirmValidationModal(props) {
   // ** Props
   const { visibility, closeModal, row, refresh, closeMainModal } = props;
-  // ** router
-  const navigate = useNavigate();
   // ** access token
   const accesToken = localStorage.getItem(
     "access_token"
@@ -111,4 +108,4 @@ function ValidMissionModal(props) {
   );
 }
 
-export default ValidMissionModal;
+export default ConfirmValidationModal;

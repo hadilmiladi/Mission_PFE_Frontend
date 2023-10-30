@@ -2,10 +2,7 @@
 import { lazy } from 'react';
 
 // ** Router imports
-import {
-  Navigate,
-  useRoutes,
-} from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
 
 // ** Hooks Imports
 import { useLayout } from '@hooks/useLayout';
@@ -35,13 +32,12 @@ const Router = () => {
     {
       path: "/",
       index: true,
-      element: <Navigate replace to={getHomeRoute()} />,
+      element: <Login replace to={getHomeRoute()} />,
     },
-    {
+   /*  {
       path: "/login",
-      element: <BlankLayout />,
-      children: [{ path: "/login", element: <Login /> }],
-    },
+      element: <Login />,
+    }, */
     {
       path: "*",
       element: <BlankLayout />,

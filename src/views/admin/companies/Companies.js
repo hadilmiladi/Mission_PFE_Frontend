@@ -19,13 +19,9 @@ import {
   Badge,
   Button,
   Card,
-  Col,
-  Form,
-  Input,
   Pagination,
   PaginationItem,
   PaginationLink,
-  Row,
   Table,
 } from 'reactstrap';
 
@@ -38,7 +34,6 @@ import {
   serverErrorMessage,
   sessionExpired,
 } from '../../../utility/messages';
-import { paginationOptions } from '../../../utility/Static';
 // ** Modals
 import CreateCompanyModal from './modals/CreateCompanyModal';
 import DeleteCompanyModal from './modals/DeleteCompanyModal';
@@ -92,8 +87,8 @@ function Companies() {
       });
       if (res?.status === 200) {
         setCompanies([...res?.data?.items]);
-        setSize(res?.data?.size);
-        console.log(size);
+        setSize(res?.data?.items?.length);
+        
       }
     } catch (error) {
       // not token
@@ -105,6 +100,11 @@ function Companies() {
       // expired
       else if (error?.response?.status === 403) {
         toast.error(sessionExpired, {
+          duration: 5000,
+        });
+      }
+      else if (error?.response?.status === 400) {
+        toast.error("failed to retrieve cleints", {
           duration: 5000,
         });
       }
@@ -164,49 +164,19 @@ function Companies() {
     const { name, value } = e.target;
     setQueries((prev) => ({ ...prev, [name]: value }));
   };
-
+console.log('size',size)
   return (
     <>
       {size !== 0 ? (
         <>
           <Breadcrumbs title="Client management" 
           data={[{ title: 'Clients' }]} />
-        {/*   <CompaniesCountDashboard size={size} /> */}
+          <CompaniesCountDashboard size={size} />
           <AddCompanySection
             refresh={fetchCompanies}
             openModal={() => setShowCreateCompanyModal(true)}
           />
-          <Card>
-            <div className="invoice-list-table-header w-100 py-2 px-2">
-              <Row>
-                <Col lg="8" />
-                <Col
-                  lg="4"
-                  className="d-flex align-items-center justify-content-lg-end px-0 px-lg-1"
-                >
-                  <Form className="d-flex align-items-center">
-                    <div className="d-flex align-items-center me-2">
-                      <label htmlFor="rows-per-page">Show</label>
-                      <Input
-                        type="select"
-                        id="rows-per-page"
-                        className="form-control ms-50 pe-3"
-                        name="l"
-                        value={queries.l}
-                        onChange={onChangeQueries}
-                      >
-                        {paginationOptions.map((option, index) => (
-                          <option value={option} key={`option-${index}`}>
-                            {option}
-                          </option>
-                        ))}
-                      </Input>
-                    </div>
-                  </Form>
-                </Col>
-              </Row>
-            </div>
-          </Card>
+     
           <Card className={`${companies.length === 0 && 'pb-2'} pb-1`}>
             <Table responsive>
               <thead>
@@ -350,37 +320,7 @@ function Companies() {
             refresh={fetchCompanies}
             openModal={() => setShowCreateCompanyModal(true)}
           />
-          <Card>
-            <div className="invoice-list-table-header w-100 py-2 px-2">
-              <Row>
-                <Col lg="8" />
-                <Col
-                  lg="4"
-                  className="d-flex align-items-center justify-content-lg-end px-0 px-lg-1"
-                >
-                  <Form className="d-flex align-items-center">
-                    <div className="d-flex align-items-center me-2">
-                      <label htmlFor="rows-per-page">Show</label>
-                      <Input
-                        type="select"
-                        id="rows-per-page"
-                        className="form-control ms-50 pe-3"
-                        name="l"
-                        value={queries.l}
-                        onChange={onChangeQueries}
-                      >
-                        {paginationOptions.map((option, index) => (
-                          <option value={option} key={`option-${index}`}>
-                            {option}
-                          </option>
-                        ))}
-                      </Input>
-                    </div>
-                  </Form>
-                </Col>
-              </Row>
-            </div>
-          </Card>
+        
           <Card className={`${companies.length === 0 && 'pb-2'} pb-1`}>
             <Table responsive>
               <thead>

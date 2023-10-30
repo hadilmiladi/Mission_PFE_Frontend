@@ -25,7 +25,6 @@ import {
 import axios from '../../../../service/axios';
 // ** utily messages
 import {
-  badRequestMessage,
   requiredField,
   serverErrorMessage,
   sessionExpired,
@@ -68,12 +67,37 @@ function CreateRankModal(props) {
         });
         if (res?.status === 200) {
           const rank = res.data;
-          
           setPermission(rank.permission);
-          //console.log(permission)
         }
       } catch (error) {
-        console.log(error);
+         // not token
+      if (error?.response?.status === 401) {
+        cleanUserLocalStorage();
+        navigate("/login");
+        toast.error(sessionExpired, {
+          duration: 5000,
+        });
+      }
+      // token invalid
+      else if (error?.response?.status === 403) {
+        cleanUserLocalStorage();
+        navigate("/login");
+        toast.error(sessionExpired, {
+          duration: 5000,
+        });
+      }
+      //failed to retrieve for some reason
+      else if (error?.response?.status === 400) {
+        toast.error("failed to retirve ranks", {
+          duration: 5000,
+        });
+      }
+       //  server error
+       else if (error?.response?.status === 500) {
+        toast.error(serverErrorMessage, {
+          duration: 5000,
+        });
+      }
       }
     };
   
@@ -105,22 +129,22 @@ function CreateRankModal(props) {
         } catch (error) {
             // failed to create for some reason
             if (error?.response?.status === 400) {
-              toast.error(badRequestMessage, {
+              toast.error("failed to create ", {
                 duration: 5000,
               });
             }
             // not token
             else if (error?.response?.status === 401) {
-                /* cleanUserLocalStorage();
-                navigate("/login"); */
+                cleanUserLocalStorage();
+                navigate("/login");
                 toast.error(sessionExpired, {
                   duration: 5000,
                 });
               }
                // token invalide
       else if (error?.response?.status === 403) {
-       /*  cleanUserLocalStorage();
-        navigate("/login"); */
+        cleanUserLocalStorage();
+        navigate("/login");
         toast.error(sessionExpired, {
           duration: 5000,
         });
@@ -132,15 +156,6 @@ function CreateRankModal(props) {
       ) {
         setErrors((prev) => ({
           name: "Name already exist",
-        }));
-      }
-       // this rank name already exist
-       else if (
-        error?.response?.status === 406 &&
-        error?.response?.data?.code === "permission"
-      ) {
-        setErrors((prev) => ({
-          permission: "Permission is not defined",
         }));
       }
        // server error
@@ -179,9 +194,7 @@ function CreateRankModal(props) {
       isOpen={visibility}
       toggle={closeModal}
       modalClassName="modal-danger"
-      /* className="bg-dark" */
       onClosed={resetForm}
-      /* backdrop={false} */
       backdropClassName="bg-dark"
     >
         <ModalHeader
@@ -225,7 +238,7 @@ function CreateRankModal(props) {
     name="permission"
     value={permission}
     onChange={onChange}
-    invalid={!!errors.permission} // Updated to use boolean conversion
+    invalid={!!errors.permission} 
     placeholder="Example: ESB ..."
     required
   >

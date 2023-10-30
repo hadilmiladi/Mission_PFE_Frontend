@@ -30,7 +30,6 @@ import axios from '../../../../service/axios';
 import { cleanUserLocalStorage } from '../../../../utility/Auth';
 // ** utily messages
 import {
-  badRequestMessage,
   requiredField,
   serverErrorMessage,
   sessionExpired,
@@ -101,7 +100,13 @@ function EditRankModal(props) {
     } catch (error) {
         // failed to create for some reason
         if (error?.response?.status === 400) {
-          toast.error(badRequestMessage, {
+          toast.error("failed to update", {
+            duration: 5000,
+          });
+        }
+        //name already used
+        else if (error?.response?.status === 409) {
+          toast.error("name already used", {
             duration: 5000,
           });
         }
@@ -120,16 +125,6 @@ function EditRankModal(props) {
         toast.error(sessionExpired, {
           duration: 5000,
         });
-      }
-      // this name already exist
-
-      else if (
-        error?.response?.status === 409 &&
-        error?.response?.data?.code === "name"
-      ) {
-        setErrors((prev) => ({
-          name: "Name already used",
-        }));
       }
        // server error
        else if (error?.response?.status === 500) {
@@ -205,14 +200,20 @@ function EditRankModal(props) {
             </Label>
             <Input
               id="permission"
-              type="text"
+              type="select"
               name="permission"
               value={rank.permission}
               onChange={onChange}
               invalid={true && errors.permission}
               placeholder="Example: ESB ..."
               required
-            />
+            >
+               <option value="">Select Permission</option>
+    <option value="user">User</option>
+    <option value="admin">Admin</option>
+    <option value="ceo">CEO</option>
+    <option value="chef du projet">Chef du Projet</option>
+  </Input>
             {errors.permission && (
               <FormFeedback className="d-block text-capitalize fw-bold">
                 {errors.permission}

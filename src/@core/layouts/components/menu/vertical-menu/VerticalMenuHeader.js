@@ -7,7 +7,6 @@ import {
   Disc,
   X,
 } from 'react-feather';
-import { NavLink } from 'react-router-dom';
 
 // ** Utils
 import { getUserData } from '@utils';
@@ -57,16 +56,13 @@ const VerticalMenuHeader = (props) => {
     <div className="navbar-header">
       <ul className="nav navbar-nav flex-row">
         <li className="nav-item me-auto">
-          <NavLink
-            to={user ? "/companies" : "/companies"}
-            className="navbar-brand"
-          >
-            <span className="brand-logo">
-              {/* <img src={themeConfig.app.appLogoImage} alt="logo" /> */}
+         
+            <span className="navbar-brand">
               
+              <h2 className="brand-text mb-0 text-uppercase">Nexus</h2>
             </span>
-            <h2 className="brand-text mb-0 text-uppercase">logo</h2>
-          </NavLink>
+            
+          
         </li>
         <li className="nav-item nav-toggle">
           <div className="nav-link modern-nav-toggle cursor-pointer">
